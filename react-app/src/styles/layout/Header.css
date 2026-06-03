@@ -12,7 +12,7 @@
   z-index: 90;
   transition: var(--transition);
   color: var(--text-primary);
-  border-radius: 0 0 0 0;
+  flex-shrink: 0;
 }
 
 .header-left {
