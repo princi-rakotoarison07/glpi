@@ -1,1 +1,187 @@
 [2026-06-03 10:11:17] glpi.WARNING:   *** Test logger
+[2026-06-03 13:01:33] glpi.WARNING:   *** Test logger
+[2026-06-03 13:01:33] glpi.WARNING:   *** Warning: mkdir(): No such file or directory at filesystem.php line 1276
+  Backtrace :
+  ...gmachine\safe\generated\8.3\filesystem.php:1276 
+  .\src\Toolbox.php:1122                             Safe\mkdir()
+  ...System\Requirement\DirectoryWriteAccess.php:122 Toolbox::testWriteAccessToDirectory()
+  ...\System\Requirement\AbstractRequirement.php:131 Glpi\System\Requirement\DirectoryWriteAccess->check()
+  ...\System\Requirement\AbstractRequirement.php:212 Glpi\System\Requirement\AbstractRequirement->doCheck()
+  ...\twig\twig\src\Extension\CoreExtension.php:1919 Glpi\System\Requirement\AbstractRequirement->isValidated()
+  ...tes\1f\1f98898f553777832f019a238485bc52.php:113 Twig\Extension\CoreExtension::getAttribute()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_34e358dfe94c1516dbdd699fdc3b9fe5->doDisplay()
+  ...ates\15\152acdf2e21d2c95e451068c059d4fe4.php:58 Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_77d10f3afd5c32aefbe37a5e9e55c964->doDisplay()
+  .\vendor\twig\twig\src\Template.php:358            Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:373            Twig\Template->display()
+  .\vendor\twig\twig\src\TemplateWrapper.php:51      Twig\Template->render()
+  ...\Glpi\Application\View\TemplateRenderer.php:170 Twig\TemplateWrapper->render()
+  .\src\Glpi\Controller\AbstractController.php:68    Glpi\Application\View\TemplateRenderer->render()
+  .\src\Glpi\Controller\InstallController.php:160    Glpi\Controller\AbstractController->render()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\InstallController->updateRequired()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 13:02:02] glpi.WARNING:   *** Test logger
+[2026-06-03 13:02:02] glpi.WARNING:   *** Warning: mkdir(): No such file or directory at filesystem.php line 1276
+  Backtrace :
+  ...gmachine\safe\generated\8.3\filesystem.php:1276 
+  .\src\Toolbox.php:1122                             Safe\mkdir()
+  ...System\Requirement\DirectoryWriteAccess.php:122 Toolbox::testWriteAccessToDirectory()
+  ...\System\Requirement\AbstractRequirement.php:131 Glpi\System\Requirement\DirectoryWriteAccess->check()
+  ...\System\Requirement\AbstractRequirement.php:212 Glpi\System\Requirement\AbstractRequirement->doCheck()
+  ...\twig\twig\src\Extension\CoreExtension.php:1919 Glpi\System\Requirement\AbstractRequirement->isValidated()
+  ...tes\1f\1f98898f553777832f019a238485bc52.php:113 Twig\Extension\CoreExtension::getAttribute()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_34e358dfe94c1516dbdd699fdc3b9fe5->doDisplay()
+  ...ates\15\152acdf2e21d2c95e451068c059d4fe4.php:58 Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_77d10f3afd5c32aefbe37a5e9e55c964->doDisplay()
+  .\vendor\twig\twig\src\Template.php:358            Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:373            Twig\Template->display()
+  .\vendor\twig\twig\src\TemplateWrapper.php:51      Twig\Template->render()
+  ...\Glpi\Application\View\TemplateRenderer.php:170 Twig\TemplateWrapper->render()
+  .\src\Glpi\Controller\AbstractController.php:68    Glpi\Application\View\TemplateRenderer->render()
+  .\src\Glpi\Controller\InstallController.php:160    Glpi\Controller\AbstractController->render()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\InstallController->updateRequired()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 13:03:35] glpi.WARNING:   *** Test logger
+[2026-06-03 13:03:35] glpi.WARNING:   *** Warning: mkdir(): No such file or directory at filesystem.php line 1276
+  Backtrace :
+  ...gmachine\safe\generated\8.3\filesystem.php:1276 
+  .\src\Toolbox.php:1122                             Safe\mkdir()
+  ...System\Requirement\DirectoryWriteAccess.php:122 Toolbox::testWriteAccessToDirectory()
+  ...\System\Requirement\AbstractRequirement.php:131 Glpi\System\Requirement\DirectoryWriteAccess->check()
+  ...\System\Requirement\AbstractRequirement.php:212 Glpi\System\Requirement\AbstractRequirement->doCheck()
+  ...\twig\twig\src\Extension\CoreExtension.php:1919 Glpi\System\Requirement\AbstractRequirement->isValidated()
+  ...tes\1f\1f98898f553777832f019a238485bc52.php:113 Twig\Extension\CoreExtension::getAttribute()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_34e358dfe94c1516dbdd699fdc3b9fe5->doDisplay()
+  ...ates\15\152acdf2e21d2c95e451068c059d4fe4.php:58 Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_77d10f3afd5c32aefbe37a5e9e55c964->doDisplay()
+  .\vendor\twig\twig\src\Template.php:358            Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:373            Twig\Template->display()
+  .\vendor\twig\twig\src\TemplateWrapper.php:51      Twig\Template->render()
+  ...\Glpi\Application\View\TemplateRenderer.php:170 Twig\TemplateWrapper->render()
+  .\src\Glpi\Controller\AbstractController.php:68    Glpi\Application\View\TemplateRenderer->render()
+  .\src\Glpi\Controller\InstallController.php:160    Glpi\Controller\AbstractController->render()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\InstallController->updateRequired()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 13:03:47] glpi.WARNING:   *** Test logger
+[2026-06-03 13:03:47] glpi.WARNING:   *** Warning: mkdir(): No such file or directory at filesystem.php line 1276
+  Backtrace :
+  ...gmachine\safe\generated\8.3\filesystem.php:1276 
+  .\src\Toolbox.php:1122                             Safe\mkdir()
+  ...System\Requirement\DirectoryWriteAccess.php:122 Toolbox::testWriteAccessToDirectory()
+  ...\System\Requirement\AbstractRequirement.php:131 Glpi\System\Requirement\DirectoryWriteAccess->check()
+  ...\System\Requirement\AbstractRequirement.php:212 Glpi\System\Requirement\AbstractRequirement->doCheck()
+  ...\twig\twig\src\Extension\CoreExtension.php:1919 Glpi\System\Requirement\AbstractRequirement->isValidated()
+  ...tes\1f\1f98898f553777832f019a238485bc52.php:113 Twig\Extension\CoreExtension::getAttribute()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_34e358dfe94c1516dbdd699fdc3b9fe5->doDisplay()
+  ...ates\15\152acdf2e21d2c95e451068c059d4fe4.php:58 Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_77d10f3afd5c32aefbe37a5e9e55c964->doDisplay()
+  .\vendor\twig\twig\src\Template.php:358            Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:373            Twig\Template->display()
+  .\vendor\twig\twig\src\TemplateWrapper.php:51      Twig\Template->render()
+  ...\Glpi\Application\View\TemplateRenderer.php:170 Twig\TemplateWrapper->render()
+  .\src\Glpi\Controller\AbstractController.php:68    Glpi\Application\View\TemplateRenderer->render()
+  .\src\Glpi\Controller\InstallController.php:160    Glpi\Controller\AbstractController->render()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\InstallController->updateRequired()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 13:07:50] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\Http\HttpException: "" at CheckDatabaseStatusListener.php line 111
+  Backtrace :
+  ...estListener\CheckDatabaseStatusListener.php:111 
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\RequestListener\CheckDatabaseStatusListener->onKernelRequest()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:157    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 13:08:04] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\Http\HttpException: "" at CheckDatabaseStatusListener.php line 111
+  Backtrace :
+  ...estListener\CheckDatabaseStatusListener.php:111 
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\RequestListener\CheckDatabaseStatusListener->onKernelRequest()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:157    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 13:08:07] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\Http\HttpException: "" at CheckDatabaseStatusListener.php line 111
+  Backtrace :
+  ...estListener\CheckDatabaseStatusListener.php:111 
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\RequestListener\CheckDatabaseStatusListener->onKernelRequest()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:157    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 13:08:15] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\Http\HttpException: "" at CheckDatabaseStatusListener.php line 111
+  Backtrace :
+  ...estListener\CheckDatabaseStatusListener.php:111 
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\RequestListener\CheckDatabaseStatusListener->onKernelRequest()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:157    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 13:08:19] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\Http\HttpException: "" at CheckDatabaseStatusListener.php line 111
+  Backtrace :
+  ...estListener\CheckDatabaseStatusListener.php:111 
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\RequestListener\CheckDatabaseStatusListener->onKernelRequest()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:157    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 13:08:20] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\Http\HttpException: "" at CheckDatabaseStatusListener.php line 111
+  Backtrace :
+  ...estListener\CheckDatabaseStatusListener.php:111 
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\RequestListener\CheckDatabaseStatusListener->onKernelRequest()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:157    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 13:09:53] glpi.WARNING:   *** Test logger
+[2026-06-03 13:09:53] glpi.WARNING:   *** Warning: mkdir(): No such file or directory at filesystem.php line 1276
+  Backtrace :
+  ...gmachine\safe\generated\8.3\filesystem.php:1276 
+  .\src\Toolbox.php:1122                             Safe\mkdir()
+  ...System\Requirement\DirectoryWriteAccess.php:122 Toolbox::testWriteAccessToDirectory()
+  ...\System\Requirement\AbstractRequirement.php:131 Glpi\System\Requirement\DirectoryWriteAccess->check()
+  ...\System\Requirement\AbstractRequirement.php:212 Glpi\System\Requirement\AbstractRequirement->doCheck()
+  ...\twig\twig\src\Extension\CoreExtension.php:1919 Glpi\System\Requirement\AbstractRequirement->isValidated()
+  ...tes\1f\1f98898f553777832f019a238485bc52.php:113 Twig\Extension\CoreExtension::getAttribute()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_34e358dfe94c1516dbdd699fdc3b9fe5->doDisplay()
+  ...ates\15\152acdf2e21d2c95e451068c059d4fe4.php:58 Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_77d10f3afd5c32aefbe37a5e9e55c964->doDisplay()
+  .\vendor\twig\twig\src\Template.php:358            Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:373            Twig\Template->display()
+  .\vendor\twig\twig\src\TemplateWrapper.php:51      Twig\Template->render()
+  ...\Glpi\Application\View\TemplateRenderer.php:170 Twig\TemplateWrapper->render()
+  .\src\Glpi\Controller\AbstractController.php:68    Glpi\Application\View\TemplateRenderer->render()
+  .\src\Glpi\Controller\InstallController.php:160    Glpi\Controller\AbstractController->render()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\InstallController->updateRequired()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
