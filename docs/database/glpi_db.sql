@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mer. 03 juin 2026 à 11:15
+-- Généré le : mer. 03 juin 2026 à 15:55
 -- Version du serveur : 10.6.27-MariaDB
 -- Version de PHP : 8.3.30
 
@@ -1356,7 +1356,7 @@ INSERT INTO `glpi_configs` (`id`, `context`, `name`, `value`) VALUES
 (40, 'core', 'utf8_conv', '1'),
 (41, 'core', 'use_public_faq', '0'),
 (42, 'core', 'allow_unauthenticated_uploads', '0'),
-(43, 'core', 'url_base', ''),
+(43, 'core', 'url_base', 'http://glpi.local'),
 (44, 'core', 'show_link_in_mail', '0'),
 (45, 'core', 'text_login', ''),
 (46, 'core', 'found_new_version', ''),
@@ -1499,7 +1499,7 @@ INSERT INTO `glpi_configs` (`id`, `context`, `name`, `value`) VALUES
 (183, 'core', 'notifications_ajax_sound', NULL),
 (184, 'core', 'notifications_ajax_icon_url', '/pics/glpi.png'),
 (185, 'core', 'notifications_ajax_expiration_delay', '7'),
-(186, 'core', 'dbversion', '11.0.7@a797be2bef86f3888448b141fa810dba6fb67795'),
+(186, 'core', 'dbversion', '11.0.7@81dc68a4ae2688f8600a3313b8d1d486d0f2db9c'),
 (187, 'core', 'smtp_max_retries', '5'),
 (188, 'core', 'smtp_sender', NULL),
 (189, 'core', 'instance_uuid', NULL),
@@ -1876,7 +1876,11 @@ INSERT INTO `glpi_crontasklogs` (`id`, `crontasks_id`, `crontasklogs_id`, `date`
 (13, 15, 0, '2026-06-03 07:47:43', 0, 0, 0, 'Run mode: GLPI'),
 (14, 15, 13, '2026-06-03 07:47:43', 2, 0.0776081, 0, 'Action completed, no processing required'),
 (15, 16, 0, '2026-06-03 08:00:31', 0, 0, 0, 'Run mode: GLPI'),
-(16, 16, 15, '2026-06-03 08:00:31', 2, 0.033756, 0, 'Action completed, no processing required');
+(16, 16, 15, '2026-06-03 08:00:31', 2, 0.033756, 0, 'Action completed, no processing required'),
+(17, 17, 0, '2026-06-03 12:43:33', 0, 0, 0, 'Run mode: GLPI'),
+(18, 17, 17, '2026-06-03 12:43:33', 2, 0.0386631, 0, 'Action completed, no processing required'),
+(19, 18, 0, '2026-06-03 12:51:33', 0, 0, 0, 'Run mode: GLPI'),
+(20, 18, 19, '2026-06-03 12:51:33', 2, 0.038904, 0, 'Action completed, no processing required');
 
 -- --------------------------------------------------------
 
@@ -1922,8 +1926,8 @@ INSERT INTO `glpi_crontasks` (`id`, `itemtype`, `name`, `frequency`, `param`, `s
 (14, 'ReservationItem', 'reservation', 3600, NULL, 1, 1, 3, 0, 24, 30, '2026-06-03 10:41:00', NULL, NULL, NULL, NULL),
 (15, 'Ticket', 'closeticket', 43200, NULL, 1, 1, 3, 0, 24, 30, '2026-06-03 10:47:00', NULL, NULL, NULL, NULL),
 (16, 'Ticket', 'alertnotclosed', 43200, NULL, 1, 1, 3, 0, 24, 30, '2026-06-03 11:00:00', NULL, NULL, NULL, NULL),
-(17, 'SlaLevel_Ticket', 'slaticket', 300, NULL, 1, 1, 3, 0, 24, 30, NULL, NULL, NULL, NULL, NULL),
-(18, 'Ticket', 'createinquest', 86400, NULL, 1, 1, 3, 0, 24, 30, NULL, NULL, NULL, NULL, NULL),
+(17, 'SlaLevel_Ticket', 'slaticket', 300, NULL, 1, 1, 3, 0, 24, 30, '2026-06-03 15:43:00', NULL, NULL, NULL, NULL),
+(18, 'Ticket', 'createinquest', 86400, NULL, 1, 1, 3, 0, 24, 30, '2026-06-03 15:51:00', NULL, NULL, NULL, NULL),
 (19, 'CronTask', 'watcher', 86400, NULL, 1, 1, 3, 0, 24, 30, NULL, NULL, NULL, NULL, NULL),
 (20, 'CommonITILRecurrentCron', 'RecurrentItems', 3600, NULL, 1, 1, 3, 0, 24, 30, NULL, NULL, NULL, NULL, NULL),
 (21, 'PlanningRecall', 'planningrecall', 300, NULL, 1, 1, 3, 0, 24, 30, NULL, NULL, NULL, NULL, NULL),
@@ -3958,7 +3962,9 @@ CREATE TABLE `glpi_events` (
 INSERT INTO `glpi_events` (`id`, `items_id`, `type`, `date`, `service`, `level`, `message`) VALUES
 (1, 0, 'system', '2026-06-03 07:12:25', 'login', 3, 'Connexion échouée de  depuis l\'IP 127.0.0.1'),
 (2, 0, 'system', '2026-06-03 07:12:34', 'login', 3, 'glpi se connecte depuis l\'IP 127.0.0.1'),
-(3, 0, 'system', '2026-06-03 07:15:32', 'login', 3, 'glpi se connecte depuis l\'IP 127.0.0.1');
+(3, 0, 'system', '2026-06-03 07:15:32', 'login', 3, 'glpi se connecte depuis l\'IP 127.0.0.1'),
+(4, 0, 'system', '2026-06-03 12:40:54', 'login', 3, 'Connexion échouée de  depuis l\'IP 127.0.0.1'),
+(5, 0, 'system', '2026-06-03 12:43:37', 'login', 3, 'glpi se connecte depuis l\'IP 127.0.0.1');
 
 -- --------------------------------------------------------
 
@@ -13974,7 +13980,7 @@ CREATE TABLE `glpi_users` (
 --
 
 INSERT INTO `glpi_users` (`id`, `name`, `password`, `password_last_update`, `phone`, `phone2`, `mobile`, `realname`, `firstname`, `locations_id`, `language`, `use_mode`, `list_limit`, `is_active`, `comment`, `auths_id`, `authtype`, `last_login`, `date_mod`, `date_sync`, `is_deleted`, `profiles_id`, `entities_id`, `usertitles_id`, `usercategories_id`, `date_format`, `number_format`, `names_format`, `csv_delimiter`, `is_ids_visible`, `use_flat_dropdowntree`, `use_flat_dropdowntree_on_search_result`, `show_jobs_at_login`, `priority_1`, `priority_2`, `priority_3`, `priority_4`, `priority_5`, `priority_6`, `followup_private`, `task_private`, `default_requesttypes_id`, `password_forget_token`, `password_forget_token_date`, `user_dn`, `user_dn_hash`, `registration_number`, `show_count_on_tabs`, `refresh_views`, `set_default_tech`, `set_followup_tech`, `set_solution_tech`, `personal_token`, `personal_token_date`, `api_token`, `api_token_date`, `cookie_token`, `cookie_token_date`, `display_count_on_home`, `notification_to_myself`, `duedateok_color`, `duedatewarning_color`, `duedatecritical_color`, `duedatewarning_less`, `duedatecritical_less`, `duedatewarning_unit`, `duedatecritical_unit`, `is_deleted_ldap`, `pdffont`, `picture`, `begin_date`, `end_date`, `keep_devices_when_purging_item`, `privatebookmarkorder`, `backcreated`, `task_state`, `planned_task_state`, `palette`, `page_layout`, `fold_menu`, `savedsearches_pinned`, `timeline_order`, `itil_layout`, `richtext_layout`, `set_default_requester`, `lock_autolock_mode`, `lock_directunlock_notification`, `date_creation`, `highcontrast_css`, `plannings`, `sync_field`, `groups_id`, `users_id_supervisor`, `timezone`, `default_dashboard_central`, `default_dashboard_assets`, `default_dashboard_helpdesk`, `default_dashboard_mini_ticket`, `default_central_tab`, `nickname`, `substitution_end_date`, `substitution_start_date`, `toast_location`, `timeline_action_btn_layout`, `timeline_date_format`, `2fa`, `2fa_unenforced`, `password_history`, `is_notif_enable_default`, `show_search_form`, `search_pagination_on_top`) VALUES
-(2, 'glpi', '$2y$10$46Ch1mTuc9zZsqhX.IBSiOif7YE/ACjEOpNF3N96RA6rqUSZJmcdS', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 20, 1, NULL, 0, 1, '2026-06-03 07:15:32', '2026-06-03 07:15:32', NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'fn9xAYxP2rDNJ3xT1rJFifUgqd7hcUYQ2nAm8/ZGABb7Hh9NhWZMFWSrW32ZGttF3wzuLOdUNKx/G3G4APWn8sJBaG6Zk/JEbRpPrLfH8+DvJ2zgPbX6EQ7JDCEjzoSX8W/WPw==', '2026-06-03 07:15:32', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL),
+(2, 'glpi', '$2y$10$46Ch1mTuc9zZsqhX.IBSiOif7YE/ACjEOpNF3N96RA6rqUSZJmcdS', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 20, 1, NULL, 0, 1, '2026-06-03 12:43:37', '2026-06-03 12:43:37', NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'wfH44EaUoce3C6j8GziwSvUApszlHnbx5eULpWoBHrr/HB0DsI/m3lMenYYC0IHk0gDydHUUwr/LV8EoyEQJ8XNTCt6Qrj6z8jFP93hgcMXgD4n+xmMw9aByEsFIc88n98vIJA==', '2026-06-03 12:43:37', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL),
 (3, 'post-only', '$2y$10$m6fnRcMatRMUsxX3yULsPusKP4i9dh.4mXxXkJxsSP1ADBrjLoX2W', NULL, NULL, NULL, NULL, NULL, NULL, 0, 'en_GB', 0, 20, 1, NULL, 0, 1, NULL, NULL, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL),
 (4, 'tech', '$2y$10$fBNVin1zYuBZlgZzlOS92u8TkiCocY4JfJHm.CBtfamg9jk5doMGe', NULL, NULL, NULL, NULL, NULL, NULL, 0, 'en_GB', 0, 20, 1, NULL, 0, 1, NULL, NULL, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL),
 (5, 'normal', '$2y$10$glzW3Xz1di4dM7sezZHtfOcgVJ36ZPbQm5c7kBHDgpmCObDdgGM1i', NULL, NULL, NULL, NULL, NULL, NULL, 0, 'en_GB', 0, 20, 1, NULL, 0, 1, NULL, NULL, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL),
@@ -19743,7 +19749,7 @@ ALTER TABLE `glpi_contracttypes`
 -- AUTO_INCREMENT pour la table `glpi_crontasklogs`
 --
 ALTER TABLE `glpi_crontasklogs`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT pour la table `glpi_crontasks`
@@ -20205,7 +20211,7 @@ ALTER TABLE `glpi_entities_rssfeeds`
 -- AUTO_INCREMENT pour la table `glpi_events`
 --
 ALTER TABLE `glpi_events`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `glpi_fieldblacklists`

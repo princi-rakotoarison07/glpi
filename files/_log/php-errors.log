@@ -73,3 +73,67 @@
   .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
   .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
 
+[2026-06-03 15:21:33] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\Http\HttpException: "" at CheckDatabaseStatusListener.php line 111
+  Backtrace :
+  ...estListener\CheckDatabaseStatusListener.php:111 
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\RequestListener\CheckDatabaseStatusListener->onKernelRequest()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:157    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 15:21:36] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\Http\HttpException: "" at CheckDatabaseStatusListener.php line 111
+  Backtrace :
+  ...estListener\CheckDatabaseStatusListener.php:111 
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\RequestListener\CheckDatabaseStatusListener->onKernelRequest()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:157    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 15:21:39] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\Http\HttpException: "" at CheckDatabaseStatusListener.php line 111
+  Backtrace :
+  ...estListener\CheckDatabaseStatusListener.php:111 
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\RequestListener\CheckDatabaseStatusListener->onKernelRequest()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:157    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 15:21:44] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\Http\HttpException: "" at CheckDatabaseStatusListener.php line 111
+  Backtrace :
+  ...estListener\CheckDatabaseStatusListener.php:111 
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\RequestListener\CheckDatabaseStatusListener->onKernelRequest()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:157    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 15:27:27] glpi.WARNING:   *** Test logger
+[2026-06-03 15:27:43] glpi.CRITICAL:   *** Uncaught PHP Exception RuntimeException: "Empty IN are not allowed" at DBmysqlIterator.php line 619
+  Backtrace :
+  .\src\DBmysqlIterator.php:619                      
+  .\src\DBmysqlIterator.php:585                      DBmysqlIterator->analyseCriterion()
+  .\src\DBmysqlIterator.php:576                      DBmysqlIterator->analyseCrit()
+  .\src\DBmysqlIterator.php:569                      DBmysqlIterator->analyseCrit()
+  .\src\DBmysqlIterator.php:312                      DBmysqlIterator->analyseCrit()
+  .\src\DBmysqlIterator.php:128                      DBmysqlIterator->buildQuery()
+  .\src\DBmysql.php:1088                             DBmysqlIterator->execute()
+  .\src\DBmysql.php:683                              DBmysql->request()
+  ...agnostic\DatabaseSchemaIntegrityChecker.php:318 DBmysql->listTables()
+  .\src\Update.php:156                               Glpi\System\Diagnostic\DatabaseSchemaIntegrityChecker->checkCompleteSchema()
+  .\install\update.php:195                           Update->isUpdatedSchemaConsistent()
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+

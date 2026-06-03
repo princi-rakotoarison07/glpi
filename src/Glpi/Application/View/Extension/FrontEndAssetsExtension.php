@@ -142,7 +142,8 @@ class FrontEndAssetsExtension extends AbstractExtension
             $compiled_file = Html::getScssCompilePath($clean_path, $this->root_dir);
 
             if (!$is_debug && file_exists($compiled_file)) {
-                $path = str_replace($this->root_dir . '/public', '', $compiled_file);
+                $normalized_root_dir = str_replace('\\','/',$this->root_dir);
+                $path = str_replace($normalized_root_dir . '/public', '', $compiled_file);
             } else {
                 $path = '/front/css.php?file=' . $clean_path;
                 if ($is_debug) {
