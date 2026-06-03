@@ -1,0 +1,18 @@
+# PHP / Composer
+/vendor/
+/var/cache/
+
+# Node.js
+/node_modules/
+
+# React app build artifacts
+/react-app/node_modules/
+/react-app/dist/
+/react-app/dist-ssr/
+
+# /react-app/src/components/layout/
+
+# # React app styles
+# /react-app/src/styles/
+# /react-app/src/components/layout/
+# .idea/

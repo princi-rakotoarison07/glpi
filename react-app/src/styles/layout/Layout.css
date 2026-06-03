@@ -1,0 +1,43 @@
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  margin-left: 260px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-content.sidebar-collapsed {
+  margin-left: 72px;
+}
+
+.content-area {
+  flex: 1;
+  padding: 32px;
+  overflow-y: auto;
+}
+
+.card {
+  background: var(--glpi-white);
+  border-radius: var(--glpi-radius-lg);
+  box-shadow: var(--glpi-card-shadow);
+  padding: 32px;
+}
+
+.card-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--glpi-text);
+}
+
+.card-text {
+  color: var(--glpi-text-light);
+  font-size: 16px;
+  line-height: 1.7;
+}
