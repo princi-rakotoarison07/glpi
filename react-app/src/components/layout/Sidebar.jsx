@@ -6,6 +6,7 @@ import {
   ChevronDown,
   LayoutDashboard,
   Box,
+  List,
 } from 'lucide-react';
 import '../../styles/layout/Sidebar.css';
 
@@ -14,6 +15,11 @@ const MENU_ITEMS = [
     icon: <Home size={20} />, 
     label: 'Accueil', 
     path: '/accueil' 
+  },
+  { 
+    icon: <List size={20} />, 
+    label: 'Simple CRUD', 
+    path: '/crud' 
   },
   { 
     icon: <Box size={20} />, 
