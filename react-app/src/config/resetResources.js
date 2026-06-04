@@ -93,4 +93,10 @@ export const DEPENDENCIES_UI = {
 export const getAllGroups = () => [...new Set(RESET_RESOURCES.map(r => r.group))];
 export const getAllNames = () => new Set(RESET_RESOURCES.map(r => r.name));
 export const getParentNames = () => new Set(RESET_RESOURCES.filter(r => r.isParent).map(r => r.name));
-export const getDefaultSelected = () => new Set();
+export const getDefaultSelected = () => {
+  const standardGroups = ['Helpdesk', 'Problèmes', 'Changements', 'Réseau', 'Logiciels', 'Parc Informatique', 'Documents', 'Localisation'];
+  const names = RESET_RESOURCES
+    .filter(r => standardGroups.includes(r.group))
+    .map(r => r.name);
+  return new Set(names);
+};

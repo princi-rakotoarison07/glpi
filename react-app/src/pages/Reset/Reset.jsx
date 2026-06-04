@@ -55,10 +55,6 @@ const Reset = () => {
   const isRunning = globalStatus === 'running';
   const isDone = globalStatus === 'done' || globalStatus === 'error';
 
-  useEffect(() => {
-    selectAll(); // pré-sélectionner tout au chargement
-  }, [selectAll]);
-
   const handleReset = () => {
     if (selectedCount === 0) return;
     if (window.confirm('ATTENTION : Cette action supprime définitivement les données GLPI sélectionnées de la base de données.\n\nCette opération est irréversible. Voulez-vous continuer ?')) {
