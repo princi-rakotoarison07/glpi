@@ -10,6 +10,9 @@
 /react-app/dist/
 /react-app/dist-ssr/
 
+# Express backend
+/express-back/node_modules/
+
 # /react-app/src/components/layout/
 
 # # React app styles

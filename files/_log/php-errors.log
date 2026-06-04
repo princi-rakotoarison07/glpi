@@ -139,3 +139,16 @@
 
 [2026-06-04 07:19:43] glpi.WARNING:   *** Test logger
 [2026-06-04 07:20:05] glpi.WARNING:   *** Test logger
+[2026-06-04 11:55:16] glpi.WARNING:   *** Test logger
+[2026-06-04 11:55:25] glpi.WARNING:   *** Warning: rmdir(./files/_cache/11.0.7-4a40feec-production/templates/47): Directory not empty at filesystem.php line 1575
+  Backtrace :
+  ...gmachine\safe\generated\8.3\filesystem.php:1575 
+  .\src\Glpi\Cache\CacheManager.php:344              Safe\rmdir()
+  .\src\Glpi\Controller\InstallController.php:133    Glpi\Cache\CacheManager->resetAllCaches()
+  ...ts\AsyncOperationProgressControllerTrait.php:83 Glpi\Controller\InstallController->Glpi\Controller\{closure}()
+  .\vendor\symfony\http-kernel\HttpKernel.php:101    Glpi\Controller\InstallController->Glpi\Controller\Traits\{closure}()
+  ...ymfony\http-foundation\StreamedResponse.php:106 Symfony\Component\HttpKernel\HttpKernel::Symfony\Component\HttpKernel\{closure}()
+  .\vendor\symfony\http-foundation\Response.php:423  Symfony\Component\HttpFoundation\StreamedResponse->sendContent()
+  .\src\Glpi\Kernel\Kernel.php:295                   Symfony\Component\HttpFoundation\Response->send()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
