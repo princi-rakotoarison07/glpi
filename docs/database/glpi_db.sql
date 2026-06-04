@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mer. 03 juin 2026 à 15:55
+-- Généré le : jeu. 04 juin 2026 à 11:22
 -- Version du serveur : 10.6.27-MariaDB
 -- Version de PHP : 8.3.30
 
@@ -117,7 +117,8 @@ CREATE TABLE `glpi_apiclients` (
 --
 
 INSERT INTO `glpi_apiclients` (`id`, `entities_id`, `is_recursive`, `name`, `date_mod`, `date_creation`, `is_active`, `ipv4_range_start`, `ipv4_range_end`, `ipv6`, `app_token`, `app_token_date`, `dolog_method`, `comment`) VALUES
-(1, 0, 1, 'full access from localhost', NULL, NULL, 1, 2130706433, 2130706433, '::1', NULL, NULL, 0, NULL);
+(1, 0, 1, 'full access from localhost', NULL, NULL, 1, 2130706433, 2130706433, '::1', NULL, NULL, 0, NULL),
+(2, 0, 0, 'ReactApp', '2026-06-04 07:45:11', '2026-06-04 07:45:11', 1, NULL, NULL, NULL, 'WI1hfgLQmnSS5HImOU977YgNzGjyMSBOjKvemsIsZh1c+FlahM+q74XwAGVy1q3tLkDXRxIp/0cFbyh6nDOHiVgZyKQphVf7i+hLg+/DE58=', '2026-06-04 07:45:11', 0, 'ReactApp');
 
 -- --------------------------------------------------------
 
@@ -1487,8 +1488,8 @@ INSERT INTO `glpi_configs` (`id`, `context`, `name`, `value`) VALUES
 (171, 'core', 'highcontrast_css', '0'),
 (172, 'core', 'default_central_tab', '0'),
 (173, 'core', 'smtp_check_certificate', '1'),
-(174, 'core', 'enable_api', '0'),
-(175, 'core', 'enable_hlapi', '0'),
+(174, 'core', 'enable_api', '1'),
+(175, 'core', 'enable_hlapi', '1'),
 (176, 'core', 'enable_api_login_credentials', '0'),
 (177, 'core', 'enable_api_login_external_token', '1'),
 (178, 'core', 'login_remember_time', '604800'),
@@ -1499,7 +1500,7 @@ INSERT INTO `glpi_configs` (`id`, `context`, `name`, `value`) VALUES
 (183, 'core', 'notifications_ajax_sound', NULL),
 (184, 'core', 'notifications_ajax_icon_url', '/pics/glpi.png'),
 (185, 'core', 'notifications_ajax_expiration_delay', '7'),
-(186, 'core', 'dbversion', '11.0.7@81dc68a4ae2688f8600a3313b8d1d486d0f2db9c'),
+(186, 'core', 'dbversion', '11.0.7@a797be2bef86f3888448b141fa810dba6fb67795'),
 (187, 'core', 'smtp_max_retries', '5'),
 (188, 'core', 'smtp_sender', NULL),
 (189, 'core', 'instance_uuid', NULL),
@@ -1557,7 +1558,7 @@ INSERT INTO `glpi_configs` (`id`, `context`, `name`, `value`) VALUES
 (241, 'core', 'is_notif_enable_default', '1'),
 (242, 'core', 'show_search_form', '0'),
 (243, 'core', 'search_pagination_on_top', '0'),
-(244, 'core', 'is_demo_dashboards', '1'),
+(244, 'core', 'is_demo_dashboards', '0'),
 (245, 'core', 'projecttask_unstarted_states_id', '0'),
 (246, 'core', 'projecttask_inprogress_states_id', '0'),
 (247, 'core', 'projecttask_completed_states_id', '0'),
@@ -1880,7 +1881,22 @@ INSERT INTO `glpi_crontasklogs` (`id`, `crontasks_id`, `crontasklogs_id`, `date`
 (17, 17, 0, '2026-06-03 12:43:33', 0, 0, 0, 'Run mode: GLPI'),
 (18, 17, 17, '2026-06-03 12:43:33', 2, 0.0386631, 0, 'Action completed, no processing required'),
 (19, 18, 0, '2026-06-03 12:51:33', 0, 0, 0, 'Run mode: GLPI'),
-(20, 18, 19, '2026-06-03 12:51:33', 2, 0.038904, 0, 'Action completed, no processing required');
+(20, 18, 19, '2026-06-03 12:51:33', 2, 0.038904, 0, 'Action completed, no processing required'),
+(21, 19, 0, '2026-06-04 04:25:38', 0, 0, 0, 'Run mode: GLPI'),
+(22, 19, 21, '2026-06-04 04:25:38', 2, 0.0260999, 0, 'Action completed, fully processed'),
+(23, 20, 0, '2026-06-04 04:32:34', 0, 0, 0, 'Run mode: GLPI'),
+(24, 20, 23, '2026-06-04 04:32:34', 2, 0.0374641, 0, 'Action completed, no processing required'),
+(25, 21, 0, '2026-06-04 07:34:53', 0, 0, 0, 'Run mode: GLPI'),
+(26, 21, 25, '2026-06-04 07:34:53', 2, 0.0275919, 0, 'Action completed, no processing required'),
+(27, 22, 0, '2026-06-04 07:41:43', 0, 0, 0, 'Run mode: GLPI'),
+(28, 22, 27, '2026-06-04 07:41:43', 2, 0.0237651, 0, 'Action completed, no processing required'),
+(29, 24, 0, '2026-06-04 07:46:56', 0, 0, 0, 'Run mode: GLPI'),
+(30, 24, 29, '2026-06-04 07:46:56', 1, 0.0298021, 8, 'Nettoyer 8 fichiers temporaires créés depuis plus de 3600 secondes\n'),
+(31, 24, 29, '2026-06-04 07:46:56', 2, 0.0350311, 8, 'Action completed, fully processed'),
+(32, 25, 0, '2026-06-04 07:51:18', 0, 0, 0, 'Run mode: GLPI'),
+(33, 25, 32, '2026-06-04 07:51:18', 2, 0.0591061, 0, 'Action completed, no processing required'),
+(34, 31, 0, '2026-06-04 08:00:14', 0, 0, 0, 'Run mode: GLPI'),
+(35, 31, 34, '2026-06-04 08:00:14', 2, 0.082129, 0, 'Action completed, no processing required');
 
 -- --------------------------------------------------------
 
@@ -1928,19 +1944,19 @@ INSERT INTO `glpi_crontasks` (`id`, `itemtype`, `name`, `frequency`, `param`, `s
 (16, 'Ticket', 'alertnotclosed', 43200, NULL, 1, 1, 3, 0, 24, 30, '2026-06-03 11:00:00', NULL, NULL, NULL, NULL),
 (17, 'SlaLevel_Ticket', 'slaticket', 300, NULL, 1, 1, 3, 0, 24, 30, '2026-06-03 15:43:00', NULL, NULL, NULL, NULL),
 (18, 'Ticket', 'createinquest', 86400, NULL, 1, 1, 3, 0, 24, 30, '2026-06-03 15:51:00', NULL, NULL, NULL, NULL),
-(19, 'CronTask', 'watcher', 86400, NULL, 1, 1, 3, 0, 24, 30, NULL, NULL, NULL, NULL, NULL),
-(20, 'CommonITILRecurrentCron', 'RecurrentItems', 3600, NULL, 1, 1, 3, 0, 24, 30, NULL, NULL, NULL, NULL, NULL),
-(21, 'PlanningRecall', 'planningrecall', 300, NULL, 1, 1, 3, 0, 24, 30, NULL, NULL, NULL, NULL, NULL),
-(22, 'QueuedNotification', 'queuednotification', 60, 50, 1, 1, 3, 0, 24, 30, NULL, NULL, NULL, NULL, NULL),
+(19, 'CronTask', 'watcher', 86400, NULL, 1, 1, 3, 0, 24, 30, '2026-06-04 07:25:00', NULL, NULL, NULL, NULL),
+(20, 'CommonITILRecurrentCron', 'RecurrentItems', 3600, NULL, 1, 1, 3, 0, 24, 30, '2026-06-04 07:32:00', NULL, NULL, NULL, NULL),
+(21, 'PlanningRecall', 'planningrecall', 300, NULL, 1, 1, 3, 0, 24, 30, '2026-06-04 10:34:00', NULL, NULL, NULL, NULL),
+(22, 'QueuedNotification', 'queuednotification', 60, 50, 1, 1, 3, 0, 24, 30, '2026-06-04 10:41:00', NULL, NULL, NULL, NULL),
 (23, 'QueuedNotification', 'queuednotificationclean', 86400, 30, 1, 1, 3, 0, 6, 30, NULL, NULL, NULL, NULL, NULL),
-(24, 'CronTask', 'temp', 3600, NULL, 1, 1, 3, 0, 24, 30, NULL, NULL, NULL, NULL, NULL),
-(25, 'MailCollector', 'mailgateerror', 86400, NULL, 1, 1, 3, 0, 24, 30, NULL, NULL, NULL, NULL, NULL),
+(24, 'CronTask', 'temp', 3600, NULL, 1, 1, 3, 0, 24, 30, '2026-06-04 10:46:00', NULL, NULL, NULL, NULL),
+(25, 'MailCollector', 'mailgateerror', 86400, NULL, 1, 1, 3, 0, 24, 30, '2026-06-04 10:51:00', NULL, NULL, NULL, NULL),
 (26, 'CronTask', 'circularlogs', 86400, 4, 0, 1, 3, 0, 6, 30, NULL, NULL, NULL, NULL, NULL),
 (27, 'ObjectLock', 'unlockobject', 3600, 4, 0, 1, 3, 0, 24, 30, NULL, NULL, NULL, NULL, NULL),
 (28, 'SavedSearch', 'countAll', 604800, NULL, 0, 1, 3, 0, 24, 30, NULL, NULL, NULL, NULL, NULL),
 (29, 'SavedSearch_Alert', 'savedsearchesalerts', 86400, NULL, 0, 1, 3, 0, 24, 30, NULL, NULL, NULL, NULL, NULL),
 (30, 'Telemetry', 'telemetry', 2592000, NULL, 0, 1, 3, 0, 6, 30, NULL, NULL, NULL, NULL, NULL),
-(31, 'Certificate', 'certificate', 86400, NULL, 1, 1, 3, 0, 24, 30, NULL, NULL, NULL, NULL, NULL),
+(31, 'Certificate', 'certificate', 86400, NULL, 1, 1, 3, 0, 24, 30, '2026-06-04 11:00:00', NULL, NULL, NULL, NULL),
 (32, 'OlaLevel_Ticket', 'olaticket', 300, NULL, 1, 1, 3, 0, 24, 30, NULL, NULL, NULL, NULL, NULL),
 (33, 'PurgeLogs', 'PurgeLogs', 86400, 24, 1, 2, 3, 0, 6, 30, NULL, NULL, NULL, NULL, NULL),
 (34, 'Ticket', 'purgeticket', 86400, NULL, 0, 2, 3, 0, 6, 30, NULL, NULL, NULL, NULL, NULL),
@@ -3964,7 +3980,27 @@ INSERT INTO `glpi_events` (`id`, `items_id`, `type`, `date`, `service`, `level`,
 (2, 0, 'system', '2026-06-03 07:12:34', 'login', 3, 'glpi se connecte depuis l\'IP 127.0.0.1'),
 (3, 0, 'system', '2026-06-03 07:15:32', 'login', 3, 'glpi se connecte depuis l\'IP 127.0.0.1'),
 (4, 0, 'system', '2026-06-03 12:40:54', 'login', 3, 'Connexion échouée de  depuis l\'IP 127.0.0.1'),
-(5, 0, 'system', '2026-06-03 12:43:37', 'login', 3, 'glpi se connecte depuis l\'IP 127.0.0.1');
+(5, 0, 'system', '2026-06-03 12:43:37', 'login', 3, 'glpi se connecte depuis l\'IP 127.0.0.1'),
+(6, 0, 'system', '2026-06-04 04:25:35', 'login', 3, 'Connexion échouée de  depuis l\'IP 127.0.0.1'),
+(7, 0, 'system', '2026-06-04 04:25:40', 'login', 3, 'glpi se connecte depuis l\'IP 127.0.0.1'),
+(8, 0, 'system', '2026-06-04 07:23:47', 'login', 3, ' se connecte depuis l\'IP 127.0.0.1'),
+(9, 2, 'APIClient', '2026-06-04 07:45:11', 'setup', 4, 'glpi exécute l\'action \"add\" sur l\'élément ReactApp'),
+(10, 2, 'users', '2026-06-04 07:46:55', 'setup', 5, 'glpi met à jour un élément'),
+(11, 0, 'system', '2026-06-04 07:51:03', 'login', 3, 'Connexion échouée de  depuis l\'IP ::1'),
+(12, 0, 'system', '2026-06-04 07:51:32', 'login', 3, 'glpi se connecte depuis l\'IP ::1'),
+(13, 0, 'system', '2026-06-04 08:06:30', 'login', 3, ' se connecte depuis l\'IP ::1'),
+(14, 0, 'system', '2026-06-04 08:06:31', 'login', 3, ' se connecte depuis l\'IP ::1'),
+(15, 0, 'system', '2026-06-04 08:09:13', 'login', 3, ' se connecte depuis l\'IP ::1'),
+(16, 0, 'system', '2026-06-04 08:09:13', 'login', 3, ' se connecte depuis l\'IP ::1'),
+(17, 0, 'system', '2026-06-04 08:09:43', 'login', 3, ' se connecte depuis l\'IP ::1'),
+(18, 0, 'system', '2026-06-04 08:09:43', 'login', 3, ' se connecte depuis l\'IP ::1'),
+(19, 0, 'system', '2026-06-04 08:11:03', 'login', 3, ' se connecte depuis l\'IP ::1'),
+(20, 0, 'system', '2026-06-04 08:11:59', 'login', 3, ' se connecte depuis l\'IP ::1'),
+(21, 0, 'system', '2026-06-04 08:12:11', 'login', 3, ' se connecte depuis l\'IP ::1'),
+(22, 0, 'system', '2026-06-04 08:12:12', 'login', 3, ' se connecte depuis l\'IP ::1'),
+(23, 0, 'system', '2026-06-04 08:17:11', 'login', 3, ' se connecte depuis l\'IP ::1'),
+(24, 0, 'system', '2026-06-04 08:17:20', 'login', 3, ' se connecte depuis l\'IP ::1'),
+(25, 0, 'system', '2026-06-04 08:17:20', 'login', 3, ' se connecte depuis l\'IP ::1');
 
 -- --------------------------------------------------------
 
@@ -8368,7 +8404,11 @@ INSERT INTO `glpi_logs` (`id`, `itemtype`, `items_id`, `itemtype_link`, `linked_
 (835, 'RuleAction', 91, '0', 20, '', '2026-06-03 07:11:38', 0, '', '', NULL, NULL),
 (836, 'RuleDictionnaryOperatingSystemEdition', 91, 'RuleAction', 17, '', '2026-06-03 07:11:38', 0, '', 'Édition Ajouter le résultat de l&#039;expression régulière #4 (91)', NULL, NULL),
 (837, 'Config', 1, '', 0, '', '2026-06-03 07:11:38', 1, 'initialized_rules_collections [\"RuleImportAssetCollection\",\"RuleMailCollectorCollection\",\"RuleRightCollection\",\"RuleSoftwareCategoryCollection\",\"RuleTicketCollection\",\"RuleAssetCollection\",\"RuleDictionnaryOperatingSystemCollection\",\"RuleDictionnaryOperati', '{...}', NULL, NULL),
-(838, 'Config', 1, '', 0, '', '2026-06-03 07:12:13', 1, 'registration_uuid ', 'u6jDiBj68oamCCHlYwC8Oln48qxhbFb59xb6YiYW', NULL, NULL);
+(838, 'Config', 1, '', 0, '', '2026-06-03 07:12:13', 1, 'registration_uuid ', 'u6jDiBj68oamCCHlYwC8Oln48qxhbFb59xb6YiYW', NULL, NULL),
+(839, 'Config', 1, '', 0, 'glpi (2)', '2026-06-04 04:26:06', 1, 'is_demo_dashboards 1', '0', NULL, NULL),
+(840, 'Config', 1, '', 0, 'glpi (2)', '2026-06-04 07:42:24', 1, 'enable_hlapi 0', '1', NULL, NULL),
+(841, 'Config', 1, '', 0, 'glpi (2)', '2026-06-04 07:42:24', 1, 'enable_api 0', '1', NULL, NULL),
+(842, 'APIClient', 2, '0', 20, 'glpi (2)', '2026-06-04 07:45:11', 0, '', '', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -13980,7 +14020,7 @@ CREATE TABLE `glpi_users` (
 --
 
 INSERT INTO `glpi_users` (`id`, `name`, `password`, `password_last_update`, `phone`, `phone2`, `mobile`, `realname`, `firstname`, `locations_id`, `language`, `use_mode`, `list_limit`, `is_active`, `comment`, `auths_id`, `authtype`, `last_login`, `date_mod`, `date_sync`, `is_deleted`, `profiles_id`, `entities_id`, `usertitles_id`, `usercategories_id`, `date_format`, `number_format`, `names_format`, `csv_delimiter`, `is_ids_visible`, `use_flat_dropdowntree`, `use_flat_dropdowntree_on_search_result`, `show_jobs_at_login`, `priority_1`, `priority_2`, `priority_3`, `priority_4`, `priority_5`, `priority_6`, `followup_private`, `task_private`, `default_requesttypes_id`, `password_forget_token`, `password_forget_token_date`, `user_dn`, `user_dn_hash`, `registration_number`, `show_count_on_tabs`, `refresh_views`, `set_default_tech`, `set_followup_tech`, `set_solution_tech`, `personal_token`, `personal_token_date`, `api_token`, `api_token_date`, `cookie_token`, `cookie_token_date`, `display_count_on_home`, `notification_to_myself`, `duedateok_color`, `duedatewarning_color`, `duedatecritical_color`, `duedatewarning_less`, `duedatecritical_less`, `duedatewarning_unit`, `duedatecritical_unit`, `is_deleted_ldap`, `pdffont`, `picture`, `begin_date`, `end_date`, `keep_devices_when_purging_item`, `privatebookmarkorder`, `backcreated`, `task_state`, `planned_task_state`, `palette`, `page_layout`, `fold_menu`, `savedsearches_pinned`, `timeline_order`, `itil_layout`, `richtext_layout`, `set_default_requester`, `lock_autolock_mode`, `lock_directunlock_notification`, `date_creation`, `highcontrast_css`, `plannings`, `sync_field`, `groups_id`, `users_id_supervisor`, `timezone`, `default_dashboard_central`, `default_dashboard_assets`, `default_dashboard_helpdesk`, `default_dashboard_mini_ticket`, `default_central_tab`, `nickname`, `substitution_end_date`, `substitution_start_date`, `toast_location`, `timeline_action_btn_layout`, `timeline_date_format`, `2fa`, `2fa_unenforced`, `password_history`, `is_notif_enable_default`, `show_search_form`, `search_pagination_on_top`) VALUES
-(2, 'glpi', '$2y$10$46Ch1mTuc9zZsqhX.IBSiOif7YE/ACjEOpNF3N96RA6rqUSZJmcdS', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 20, 1, NULL, 0, 1, '2026-06-03 12:43:37', '2026-06-03 12:43:37', NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'wfH44EaUoce3C6j8GziwSvUApszlHnbx5eULpWoBHrr/HB0DsI/m3lMenYYC0IHk0gDydHUUwr/LV8EoyEQJ8XNTCt6Qrj6z8jFP93hgcMXgD4n+xmMw9aByEsFIc88n98vIJA==', '2026-06-03 12:43:37', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL),
+(2, 'glpi', '$2y$10$46Ch1mTuc9zZsqhX.IBSiOif7YE/ACjEOpNF3N96RA6rqUSZJmcdS', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 20, 1, NULL, 0, 1, '2026-06-04 08:17:20', '2026-06-04 07:51:32', NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'd9nWlVHtNtd6/v8gxjwNljfuHHOyxR3EQeryyTszvyFEgSn6z+7S2l8hWMqYGM/V+bS0H0Me+0IVYJYmtz9+rQnKQzi6BmMvhot2LNmsDAU=', '2026-06-04 07:46:55', 'ydGQ1MFRJP0qoNuI0TRowlwY1IM8I9Bk8LdbhlIBh8wdUS2YzbK+I4k5x4lzQFXh1mEuUhcFfRoYfrVR1tcSHSHhRt+ZcxCv28WNvsP1YYx7HckQkGc4YShq6UeEqX2DYCq41A==', '2026-06-04 07:51:32', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL),
 (3, 'post-only', '$2y$10$m6fnRcMatRMUsxX3yULsPusKP4i9dh.4mXxXkJxsSP1ADBrjLoX2W', NULL, NULL, NULL, NULL, NULL, NULL, 0, 'en_GB', 0, 20, 1, NULL, 0, 1, NULL, NULL, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL),
 (4, 'tech', '$2y$10$fBNVin1zYuBZlgZzlOS92u8TkiCocY4JfJHm.CBtfamg9jk5doMGe', NULL, NULL, NULL, NULL, NULL, NULL, 0, 'en_GB', 0, 20, 1, NULL, 0, 1, NULL, NULL, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL),
 (5, 'normal', '$2y$10$glzW3Xz1di4dM7sezZHtfOcgVJ36ZPbQm5c7kBHDgpmCObDdgGM1i', NULL, NULL, NULL, NULL, NULL, NULL, 0, 'en_GB', 0, 20, 1, NULL, 0, 1, NULL, NULL, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL),
@@ -19335,7 +19375,7 @@ ALTER TABLE `glpi_alerts`
 -- AUTO_INCREMENT pour la table `glpi_apiclients`
 --
 ALTER TABLE `glpi_apiclients`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `glpi_applianceenvironments`
@@ -19749,7 +19789,7 @@ ALTER TABLE `glpi_contracttypes`
 -- AUTO_INCREMENT pour la table `glpi_crontasklogs`
 --
 ALTER TABLE `glpi_crontasklogs`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT pour la table `glpi_crontasks`
@@ -20211,7 +20251,7 @@ ALTER TABLE `glpi_entities_rssfeeds`
 -- AUTO_INCREMENT pour la table `glpi_events`
 --
 ALTER TABLE `glpi_events`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT pour la table `glpi_fieldblacklists`
@@ -20835,7 +20875,7 @@ ALTER TABLE `glpi_lockedfields`
 -- AUTO_INCREMENT pour la table `glpi_logs`
 --
 ALTER TABLE `glpi_logs`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=839;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=843;
 
 --
 -- AUTO_INCREMENT pour la table `glpi_mailcollectors`
