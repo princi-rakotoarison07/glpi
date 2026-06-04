@@ -5,6 +5,7 @@ import Accueil from '../pages/Accueil';
 import AutrePage from '../pages/AutrePage';
 import SimpleCrud from '../pages/SimpleCrud';
 import Dashboard from '../pages/parc/Dashboard';
+import Reset from '../pages/Reset/Reset';
 
 const AppRouter = () => {
   return (
@@ -16,6 +17,7 @@ const AppRouter = () => {
           <Route path="/autre-page" element={<AutrePage />} />
           <Route path="/crud" element={<SimpleCrud />} />
           <Route path="/parc/dashboard" element={<Dashboard />} />
+          <Route path="/reset" element={<Reset />} />
         </Route>
       </Routes>
     </BrowserRouter>

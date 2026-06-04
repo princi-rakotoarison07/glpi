@@ -40,15 +40,9 @@ const Dashboard = () => {
 
   if (isLoading) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%', gap: '16px' }}>
-        <RefreshCw className="animate-spin" size={40} style={{ color: 'var(--color-primary)', animation: 'spin 1s linear infinite' }} />
-        <p style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>Chargement des statistiques du parc...</p>
-        <style>{`
-          @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-          }
-        `}</style>
+      <div className="dashboard-loader">
+        <RefreshCw className="loader-icon" size={40} />
+        <p className="loader-text">Chargement des statistiques du parc...</p>
       </div>
     );
   }
@@ -61,7 +55,7 @@ const Dashboard = () => {
           <p>Visualisation globale de l'inventaire matériel et logiciel de GLPI</p>
         </div>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div className="header-actions">
           {error ? (
             <span className="badge-demo" style={{ backgroundColor: 'rgba(224, 84, 83, 0.1)', color: 'var(--color-danger)', borderColor: 'rgba(224, 84, 83, 0.2)' }}>
               Erreur de connexion API
@@ -73,31 +67,13 @@ const Dashboard = () => {
             </span>
           )}
           <button 
+            className="btn-refresh"
             onClick={() => fetchStats(true)} 
             disabled={isRefreshing}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '8px 16px',
-              backgroundColor: 'var(--bg-card)',
-              border: '1px solid var(--color-border)',
-              borderRadius: 'var(--radius-md)',
-              cursor: 'pointer',
-              fontWeight: 600,
-              fontSize: '13px',
-              color: 'var(--text-primary)',
-              transition: 'var(--transition)'
-            }}
-            onMouseOver={(e) => { e.currentTarget.style.borderColor = 'var(--color-primary)'; e.currentTarget.style.backgroundColor = '#f1f5f9'; }}
-            onMouseOut={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)'; e.currentTarget.style.backgroundColor = 'var(--bg-card)'; }}
           >
             <RefreshCw 
               size={15} 
-              style={{ 
-                animation: isRefreshing ? 'spin 1s linear infinite' : 'none',
-                transition: 'transform 0.3s'
-              }} 
+              className={`refresh-icon ${isRefreshing ? 'spinning' : ''}`}
             />
             {isRefreshing ? 'Actualisation...' : 'Actualiser'}
           </button>
@@ -105,24 +81,15 @@ const Dashboard = () => {
       </div>
 
       {error && (
-        <div style={{
-          backgroundColor: 'rgba(224, 84, 83, 0.05)',
-          border: '1px dashed rgba(224, 84, 83, 0.3)',
-          borderRadius: 'var(--radius-lg)',
-          padding: '16px',
-          color: 'var(--color-danger)',
-          fontWeight: 600,
-          fontSize: '14px',
-          marginBottom: '8px'
-        }}>
+        <div className="error-banner">
           {error} Vérifiez vos jetons d'accès dans le fichier `.env` ou la configuration réseau de votre serveur local Apache.
         </div>
       )}
 
       {/* Grid de 6 KPI Cards principales */}
-      <div className="stats-grid" style={{ marginBottom: '24px' }}>
+      <div className="stats-grid stats-grid-dashboard">
         {/* Ordinateurs */}
-        <div className="stat-card computers" style={{ minHeight: '140px' }}>
+        <div className="stat-card computers stat-card-custom">
           <div className="stat-card-header">
             <span className="stat-card-title">Ordinateurs</span>
             <div className="stat-icon-wrapper">
@@ -135,7 +102,7 @@ const Dashboard = () => {
         </div>
 
         {/* Logiciels */}
-        <div className="stat-card software" style={{ minHeight: '140px' }}>
+        <div className="stat-card software stat-card-custom">
           <div className="stat-card-header">
             <span className="stat-card-title">Logiciels</span>
             <div className="stat-icon-wrapper">
@@ -148,7 +115,7 @@ const Dashboard = () => {
         </div>
 
         {/* Moniteurs */}
-        <div className="stat-card monitors" style={{ minHeight: '140px' }}>
+        <div className="stat-card monitors stat-card-custom">
           <div className="stat-card-header">
             <span className="stat-card-title">Moniteurs</span>
             <div className="stat-icon-wrapper">
@@ -161,7 +128,7 @@ const Dashboard = () => {
         </div>
 
         {/* Matériels Réseau */}
-        <div className="stat-card network" style={{ minHeight: '140px' }}>
+        <div className="stat-card network stat-card-custom">
           <div className="stat-card-header">
             <span className="stat-card-title">Matériels Réseau</span>
             <div className="stat-icon-wrapper">
@@ -174,7 +141,7 @@ const Dashboard = () => {
         </div>
 
         {/* Imprimantes */}
-        <div className="stat-card printers" style={{ minHeight: '140px' }}>
+        <div className="stat-card printers stat-card-custom">
           <div className="stat-card-header">
             <span className="stat-card-title">Imprimantes</span>
             <div className="stat-icon-wrapper">
@@ -187,7 +154,7 @@ const Dashboard = () => {
         </div>
 
         {/* Périphériques */}
-        <div className="stat-card peripherals" style={{ minHeight: '140px' }}>
+        <div className="stat-card peripherals stat-card-custom">
           <div className="stat-card-header">
             <span className="stat-card-title">Périphériques</span>
             <div className="stat-icon-wrapper">

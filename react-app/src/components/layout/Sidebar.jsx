@@ -8,6 +8,7 @@ import {
   Box,
   List,
   Monitor,
+  RefreshCw,
 } from 'lucide-react';
 import '../../styles/layout/Sidebar.css';
 
@@ -33,6 +34,11 @@ const MENU_ITEMS = [
     icon: <Box size={20} />, 
     label: 'Autre Page', 
     path: '/autre-page' 
+  },
+  { 
+    icon: <RefreshCw size={20} />, 
+    label: 'Réinitialisation', 
+    path: '/reset' 
   },
 ];
 
