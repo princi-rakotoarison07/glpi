@@ -12,3 +12,17 @@ CSRF check failed for User ID:  at /install/update.php
   .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
   .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
   .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+2026-06-04 07:20:02 [@DESKTOP-IGPSA86]
+CSRF check failed for User ID:  at /index.php
+[2026-06-04 07:20:02] User ID: `Anonymous` tried to execute an invalid request on `/`.
+
+  Backtrace :
+  .\src\Session.php:1817                             
+  ...ner\ControllerListener\CheckCsrfListener.php:89 Session::checkCSRF()
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\ControllerListener\CheckCsrfListener->onKernelController()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:169    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
