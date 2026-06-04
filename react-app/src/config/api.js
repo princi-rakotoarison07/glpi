@@ -6,7 +6,8 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
     'App-Token': import.meta.env.VITE_APP_TOKEN,
-    'Authorization': `user_token ${import.meta.env.VITE_USER_TOKEN}`
+    'Authorization': `user_token ${import.meta.env.VITE_USER_TOKEN}`,
+    'User-Token': import.meta.env.VITE_USER_TOKEN
   }
 });
 
@@ -18,8 +19,13 @@ export const initSession = async () => {
   if (sessionToken) return sessionToken; // Si on l'a déjà, on ne refait pas l'appel
 
   try {
-    // Axios met automatiquement la réponse dans 'data'
-    const response = await api.get('/initSession');
+    // On ajoute explicitement le user_token en paramètre de requête pour contourner 
+    // la suppression de l'entête Authorization par certaines configurations Apache.
+    const response = await api.get('/initSession', {
+      params: {
+        user_token: import.meta.env.VITE_USER_TOKEN
+      }
+    });
     sessionToken = response.data.session_token;
     
     // 3. MAGIE D'AXIOS : On injecte automatiquement ce Session-Token

@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Box,
   List,
+  Monitor,
 } from 'lucide-react';
 import '../../styles/layout/Sidebar.css';
 
@@ -15,6 +16,13 @@ const MENU_ITEMS = [
     icon: <Home size={20} />, 
     label: 'Accueil', 
     path: '/accueil' 
+  },
+  {
+    icon: <Monitor size={20} />,
+    label: 'Parc',
+    submenu: [
+      { label: 'Tableau de bord', path: '/parc/dashboard' }
+    ]
   },
   { 
     icon: <List size={20} />, 
