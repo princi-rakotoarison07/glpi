@@ -8,6 +8,7 @@ import Dashboard from '../pages/backoffice/parc/Dashboard';
 import Reset from '../pages/backoffice/Reset/Reset';
 import TicketList from '../pages/backoffice/TicketList';
 import TicketDetail from '../pages/backoffice/TicketDetail';
+import GLPIImportPage from '../pages/backoffice/Import/GLPIImportPage';
 import Login from '../pages/Auth/Login';
 import ProtectedRoute from '../components/ProtectedRoute';
 
@@ -29,6 +30,7 @@ const AppRouter = () => {
             <Route path="/reset" element={<Reset />} />
             <Route path="/tickets" element={<TicketList />} />
             <Route path="/tickets/:id" element={<TicketDetail />} />
+            <Route path="/import" element={<GLPIImportPage />} />
           </Route>
         </Route>
 

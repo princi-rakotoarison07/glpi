@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock, User } from 'lucide-react';
-import TicketService from '../../services/TicketService';
+import TicketService from '../../services/Ticket/TicketService';
 import '../../styles/pages/TicketDetail.css';
 
 const TicketDetail = () => {

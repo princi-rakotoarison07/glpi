@@ -38,6 +38,11 @@ const MENU_ITEMS = [
     label: 'Réinitialisation', 
     path: '/reset' 
   },
+  {
+    icon: <Box size={20} />,
+    label: 'Import',
+    path: '/import'
+  }
 ];
 
 const Sidebar = ({ isCollapsed, toggleSidebar }) => {
