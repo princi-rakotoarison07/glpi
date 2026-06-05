@@ -26,3 +26,120 @@ CSRF check failed for User ID:  at /index.php
   .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
   .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
   .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+[2026-06-05 10:41:29] User ID: `2` tried to execute an invalid request on `/ajax/dashboard.php?action=get_card&args%5Bcolor%5D=%23d5e1ec&args%5Bwidgettype%5D=bigNumber&args%5Buse_gradient%5D=0&args%5Blimit%5D=7&args%5Bcard_id%5D=bn_count_Phone&args%5Bgridstack_id%5D=bn_count_Phone_f70c489f-02c1-46e5-978b-94a95b5038ee&c_cache_key=&card_id=bn_count_Phone&d_cache_key=69a57c4b79e0f5fe32dca1f62d083167cbffc2b6&dashboard=central&force=0`.
+
+  Backtrace :
+  .\ajax\dashboard.php:227                           
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+[2026-06-05 10:41:29] User ID: `2` tried to execute an invalid request on `/ajax/dashboard.php?action=get_card&args%5Bcolor%5D=%23cae3c4&args%5Bwidgettype%5D=bigNumber&args%5Buse_gradient%5D=0&args%5Blimit%5D=7&args%5Bcard_id%5D=bn_count_Change&args%5Bgridstack_id%5D=bn_count_Change_ab950dbd-cd25-466d-8dff-7dcaca386564&c_cache_key=&card_id=bn_count_Change&d_cache_key=69a57c4b79e0f5fe32dca1f62d083167cbffc2b6&dashboard=central&force=0`.
+
+  Backtrace :
+  .\ajax\dashboard.php:227                           
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+[2026-06-05 10:41:29] User ID: `2` tried to execute an invalid request on `/ajax/dashboard.php?action=get_card&args%5Bcolor%5D=%23e0e0e0&args%5Bwidgettype%5D=bigNumber&args%5Buse_gradient%5D=0&args%5Blimit%5D=7&args%5Bcard_id%5D=bn_count_Group&args%5Bgridstack_id%5D=bn_count_Group_b84a93f2-a26c-49d7-82a4-5446697cc5b0&c_cache_key=&card_id=bn_count_Group&d_cache_key=69a57c4b79e0f5fe32dca1f62d083167cbffc2b6&dashboard=central&force=0`.
+
+  Backtrace :
+  .\ajax\dashboard.php:227                           
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+[2026-06-05 10:41:29] User ID: `2` tried to execute an invalid request on `/ajax/dashboard.php?action=get_card&args%5Bcolor%5D=%23c9c9c9&args%5Bwidgettype%5D=bigNumber&args%5Buse_gradient%5D=0&args%5Blimit%5D=7&args%5Bcard_id%5D=bn_count_Supplier&args%5Bgridstack_id%5D=bn_count_Supplier_36ff9011-e4cf-4d89-b9ab-346b9857d734&c_cache_key=&card_id=bn_count_Supplier&d_cache_key=69a57c4b79e0f5fe32dca1f62d083167cbffc2b6&dashboard=central&force=0`.
+
+  Backtrace :
+  .\ajax\dashboard.php:227                           
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+[2026-06-05 10:41:30] User ID: `2` tried to execute an invalid request on `/ajax/dashboard.php?action=get_card&args%5Bcolor%5D=%23e0e0e0&args%5Bwidgettype%5D=bigNumber&args%5Buse_gradient%5D=0&args%5Blimit%5D=7&args%5Bcard_id%5D=bn_count_Profile&args%5Bgridstack_id%5D=bn_count_Profile_770b35e8-68e9-4b4f-9e09-5a11058f069f&c_cache_key=&card_id=bn_count_Profile&d_cache_key=69a57c4b79e0f5fe32dca1f62d083167cbffc2b6&dashboard=central&force=0`.
+
+  Backtrace :
+  .\ajax\dashboard.php:227                           
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+[2026-06-05 10:41:30] User ID: `2` tried to execute an invalid request on `/ajax/dashboard.php?action=get_card&args%5Bcolor%5D=%23c9c9c9&args%5Bwidgettype%5D=bigNumber&args%5Buse_gradient%5D=0&args%5Blimit%5D=7&args%5Bcard_id%5D=bn_count_KnowbaseItem&args%5Bgridstack_id%5D=bn_count_KnowbaseItem_a3785a56-bed4-4a30-8387-f251f5365b3b&c_cache_key=&card_id=bn_count_KnowbaseItem&d_cache_key=69a57c4b79e0f5fe32dca1f62d083167cbffc2b6&dashboard=central&force=0`.
+
+  Backtrace :
+  .\ajax\dashboard.php:227                           
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+[2026-06-05 10:41:30] User ID: `2` tried to execute an invalid request on `/ajax/dashboard.php?action=get_card&args%5Bcolor%5D=%23f9f9f9&args%5Bwidgettype%5D=bigNumber&args%5Buse_gradient%5D=0&args%5Blimit%5D=7&args%5Bcard_id%5D=bn_count_Entity&args%5Bgridstack_id%5D=bn_count_Entity_9b82951a-ba52-45cc-a2d3-1d238ec37adf&c_cache_key=&card_id=bn_count_Entity&d_cache_key=69a57c4b79e0f5fe32dca1f62d083167cbffc2b6&dashboard=central&force=0`.
+
+  Backtrace :
+  .\ajax\dashboard.php:227                           
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+[2026-06-05 10:41:30] User ID: `2` tried to execute an invalid request on `/ajax/dashboard.php?action=get_card&args%5Bcolor%5D=%23b4b4b4&args%5Bwidgettype%5D=bigNumber&args%5Buse_gradient%5D=0&args%5Blimit%5D=7&args%5Bcard_id%5D=bn_count_Document&args%5Bgridstack_id%5D=bn_count_Document_7dc7f4b8-61ff-4147-b994-5541bddd7b66&c_cache_key=&card_id=bn_count_Document&d_cache_key=69a57c4b79e0f5fe32dca1f62d083167cbffc2b6&dashboard=central&force=0`.
+
+  Backtrace :
+  .\ajax\dashboard.php:227                           
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+[2026-06-05 10:41:30] User ID: `2` tried to execute an invalid request on `/ajax/dashboard.php?action=get_card&args%5Bcolor%5D=%23bfe7ea&args%5Bwidgettype%5D=bigNumber&args%5Buse_gradient%5D=0&args%5Blimit%5D=7&args%5Bcard_id%5D=bn_count_NetworkEquipment&args%5Bgridstack_id%5D=bn_count_NetworkEquipment_c537e334-d584-43bc-b6de-b4a939143e89&c_cache_key=&card_id=bn_count_NetworkEquipment&d_cache_key=69a57c4b79e0f5fe32dca1f62d083167cbffc2b6&dashboard=central&force=0`.
+
+  Backtrace :
+  .\ajax\dashboard.php:227                           
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+[2026-06-05 10:41:30] User ID: `2` tried to execute an invalid request on `/ajax/dashboard.php?action=get_card&args%5Bcolor%5D=%23b3b3b3&args%5Bwidgettype%5D=bigNumber&args%5Buse_gradient%5D=0&args%5Blimit%5D=7&args%5Bcard_id%5D=bn_count_Project&args%5Bgridstack_id%5D=bn_count_Project_4d412ee2-8b79-469b-995f-4c0a05ab849d&c_cache_key=&card_id=bn_count_Project&d_cache_key=69a57c4b79e0f5fe32dca1f62d083167cbffc2b6&dashboard=central&force=0`.
+
+  Backtrace :
+  .\ajax\dashboard.php:227                           
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+[2026-06-05 10:41:30] User ID: `2` tried to execute an invalid request on `/ajax/dashboard.php?action=get_card&args%5Bcolor%5D=%23fafafa&args%5Bwidgettype%5D=bigNumber&args%5Buse_gradient%5D=0&args%5Blimit%5D=7&args%5Bcard_id%5D=bn_count_User&args%5Bgridstack_id%5D=bn_count_User_ac0cbe52-3593-43c1-8ecc-0eb115de494d&c_cache_key=&card_id=bn_count_User&d_cache_key=69a57c4b79e0f5fe32dca1f62d083167cbffc2b6&dashboard=central&force=0`.
+
+  Backtrace :
+  .\ajax\dashboard.php:227                           
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+[2026-06-05 10:41:30] User ID: `2` tried to execute an invalid request on `/ajax/dashboard.php?action=get_card&args%5Bcolor%5D=%23f5fafa&args%5Bwidgettype%5D=donut&args%5Buse_gradient%5D=1&args%5Blimit%5D=5&args%5Bcard_id%5D=count_Monitor_MonitorModel&args%5Bgridstack_id%5D=count_Monitor_MonitorModel_5a476ff9-116e-4270-858b-c003c20841a9&c_cache_key=&card_id=count_Monitor_MonitorModel&d_cache_key=69a57c4b79e0f5fe32dca1f62d083167cbffc2b6&dashboard=central&force=0`.
+
+  Backtrace :
+  .\ajax\dashboard.php:227                           
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+[2026-06-05 10:41:30] User ID: `2` tried to execute an invalid request on `/ajax/dashboard.php?action=get_card&args%5Bcolor%5D=%23f5f3ef&args%5Bwidgettype%5D=donut&args%5Buse_gradient%5D=1&args%5Blimit%5D=5&args%5Bcard_id%5D=count_NetworkEquipment_State&args%5Bgridstack_id%5D=count_NetworkEquipment_State_81f2ae35-b366-4065-ac26-02ea4e3704a6&c_cache_key=&card_id=count_NetworkEquipment_State&d_cache_key=69a57c4b79e0f5fe32dca1f62d083167cbffc2b6&dashboard=central&force=0`.
+
+  Backtrace :
+  .\ajax\dashboard.php:227                           
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
