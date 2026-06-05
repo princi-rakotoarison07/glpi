@@ -10,7 +10,16 @@ import {
   Database,
   Smartphone,
   Cpu,
-  ShieldCheck
+  ShieldCheck,
+  AlertCircle,
+  Clock,
+  AlertTriangle,
+  ClipboardList,
+  Users,
+  CheckCircle,
+  PauseCircle,
+  Calendar,
+  Trash2
 } from 'lucide-react';
 import ParcService from '../../../services/ParcService';
 import '../../../styles/ParcDashboard.css';
@@ -20,6 +29,21 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState(null);
+
+  const getTicketIcon = (iconName) => {
+    switch (iconName) {
+      case 'alert': return <AlertCircle size={32} />;
+      case 'clock': return <Clock size={32} />;
+      case 'warning': return <AlertTriangle size={32} />;
+      case 'clipboard': return <ClipboardList size={32} />;
+      case 'users': return <Users size={32} />;
+      case 'check': return <CheckCircle size={32} />;
+      case 'pause': return <PauseCircle size={32} />;
+      case 'calendar': return <Calendar size={32} />;
+      case 'trash': return <Trash2 size={32} />;
+      default: return <AlertCircle size={32} />;
+    }
+  };
 
   const fetchStats = async (isManual = false) => {
     if (isManual) setIsRefreshing(true);
@@ -241,12 +265,17 @@ const Dashboard = () => {
           <div className="total-tickets-value">{stats?.tickets?.total || 0}</div>
         </div>
 
-        {/* Détails par statut (style GLPI) */}
-        <div className="ticket-status-grid">
-          {Object.values(stats?.tickets?.byStatus || {}).map((status, index) => (
-            <div key={`ticket-status-${status.id || index}`} className="ticket-status-card" style={{ backgroundColor: status.color }}>
-              <div className="ticket-status-count">{status.count}</div>
-              <div className="ticket-status-name">{status.name}</div>
+        {/* Détails par carte (style GLPI) */}
+        <div className="ticket-cards-grid">
+          {Object.values(stats?.tickets?.cards || {}).map((card, index) => (
+            <div key={`ticket-card-${card.id || index}`} className="ticket-card" style={{ backgroundColor: card.color }}>
+              <div className="ticket-card-top">
+                <div className="ticket-card-count">{card.count}</div>
+                <div className="ticket-card-icon">
+                  {getTicketIcon(card.icon)}
+                </div>
+              </div>
+              <div className="ticket-card-name">{card.name}</div>
             </div>
           ))}
         </div>

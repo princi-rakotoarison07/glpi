@@ -1,5 +1,20 @@
 import api, { initSession } from '../config/api';
 
+// Helper to extract count from Content-Range header
+const extractCountFromResponse = (response) => {
+  let total = 0;
+  const contentRange = response.headers['content-range'] || response.headers['Content-Range'];
+  if (contentRange) {
+    const parts = contentRange.split('/');
+    if (parts.length > 1) {
+      total = parseInt(parts[1], 10);
+    }
+  } else if (Array.isArray(response.data)) {
+    total = response.data.length;
+  }
+  return total;
+};
+
 const ParcService = {
   // Récupérer uniquement les statistiques globales réelles via l'API GLPI
   getStats: async () => {
@@ -76,59 +91,87 @@ const ParcService = {
               totalTickets = ticketResponse.data.length;
             }
 
-            // Définir les statuts GLPI standard (comme dans l'image)
-            const ticketStatuses = [
-              { id: 1, name: 'Ticket', color: '#fcd34d' },          // jaune
-              { id: 2, name: 'Tickets entrants', color: '#86efac' }, // vert
-              { id: 3, name: 'Tickets en attente', color: '#fdba74' }, // orange
-              { id: 4, name: 'Tickets assignés', color: '#93c5fd' }, // bleu
-              { id: 5, name: 'Tickets planifiés', color: '#c4b5fd' }, // violet
-              { id: 6, name: 'Tickets résolus', color: '#d1d5db' }, // gris clair
-              { id: 7, name: 'Tickets fermés', color: '#9ca3af' }  // gris foncé
+            // Définir les cartes tickets GLPI (comme dans l'image)
+            const ticketCards = [
+              { id: 'ticket', name: 'Ticket', color: '#fcd34d', icon: 'alert' }, // jaune
+              { id: 'overdue', name: 'Tickets en retard', color: '#fb923c', icon: 'clock' }, // orange
+              { id: 'problem', name: 'Problème', color: '#fca5a5', icon: 'warning' }, // rouge
+              { id: 'change', name: 'Changement', color: '#bbf7d0', icon: 'clipboard' }, // vert clair
+              { id: 'incoming', name: 'Tickets entrants', color: '#86efac', icon: 'alert' }, // vert
+              { id: 'assigned', name: 'Tickets assignés', color: '#bae6fd', icon: 'users' }, // bleu clair
+              { id: 'solved', name: 'Tickets résolus', color: '#d1d5db', icon: 'check' }, // gris clair
+              { id: 'recurrent', name: 'Tickets récurrents', color: '#f3f4f6', icon: 'clock' }, // gris très clair
+              { id: 'waiting', name: 'Tickets en attente', color: '#fed7aa', icon: 'pause' }, // orange clair
+              { id: 'planned', name: 'Tickets planifiés', color: '#60a5fa', icon: 'calendar' }, // bleu
+              { id: 'closed', name: 'Tickets fermés', color: '#6b7280', icon: 'trash' } // gris foncé
             ];
 
-            // Pour chaque statut, compter le nombre de tickets
-            const byStatus = {};
-            for (const status of ticketStatuses) {
+            // Pour chaque carte ticket, compter le nombre
+            const cards = {};
+            for (const card of ticketCards) {
+              let count = 0;
+
               try {
-                const statusResponse = await api.get(`/Ticket?searchText[status]=${status.id}&range=0-0`);
-                let statusTotal = 0;
-                const statusContentRange = statusResponse.headers['content-range'] || statusResponse.headers['Content-Range'];
-                
-                if (statusContentRange) {
-                  const parts = statusContentRange.split('/');
-                  if (parts.length > 1) {
-                    statusTotal = parseInt(parts[1], 10);
-                  }
-                } else if (Array.isArray(statusResponse.data)) {
-                  statusTotal = statusResponse.data.length;
+                // Logique pour chaque type de carte
+                if (card.id === 'ticket') {
+                  count = totalTickets;
+                } else if (card.id === 'incoming') {
+                  // Nouveaux tickets (status 1)
+                  const response = await api.get('/Ticket?searchText[status]=1&range=0-0');
+                  count = extractCountFromResponse(response);
+                } else if (card.id === 'assigned') {
+                  // En cours (Attribué) (status 2)
+                  const response = await api.get('/Ticket?searchText[status]=2&range=0-0');
+                  count = extractCountFromResponse(response);
+                } else if (card.id === 'waiting') {
+                  // En attente (status 3)
+                  const response = await api.get('/Ticket?searchText[status]=3&range=0-0');
+                  count = extractCountFromResponse(response);
+                } else if (card.id === 'planned') {
+                  // Planifiés (si vous utilisez un statut spécifique)
+                  count = 0;
+                } else if (card.id === 'solved') {
+                  // Résolus (status 4)
+                  const response = await api.get('/Ticket?searchText[status]=4&range=0-0');
+                  count = extractCountFromResponse(response);
+                } else if (card.id === 'closed') {
+                  // Fermés (status 5)
+                  const response = await api.get('/Ticket?searchText[status]=5&range=0-0');
+                  count = extractCountFromResponse(response);
+                } else {
+                  // Autres cartes (en retard, problème, changement, récurrents)
+                  count = 0;
                 }
-                
-                byStatus[status.id] = { name: status.name, count: statusTotal, color: status.color };
               } catch (e) {
-                console.warn(`Erreur lors de la récupération des tickets pour le statut ${status.id}:`, e);
-                byStatus[status.id] = { name: status.name, count: 0, color: status.color };
+                console.warn(`Erreur lors de la récupération des tickets pour ${card.id}:`, e);
+                count = 0;
               }
+
+              cards[card.id] = { ...card, count };
             }
 
-            return { key: 'tickets', data: { total: totalTickets, byStatus }, success: true };
+            return { key: 'tickets', data: { total: totalTickets, cards }, success: true };
           } catch (e) {
             console.warn('Erreur lors de la récupération des tickets:', e);
-            // Retourner les statuts par défaut avec 0
-            const defaultStatuses = [
-              { id: 1, name: 'Ticket', color: '#fcd34d' },
-              { id: 2, name: 'Tickets entrants', color: '#86efac' },
-              { id: 3, name: 'Tickets en attente', color: '#fdba74' },
-              { id: 4, name: 'Tickets assignés', color: '#93c5fd' },
-              { id: 5, name: 'Tickets planifiés', color: '#c4b5fd' },
-              { id: 6, name: 'Tickets résolus', color: '#d1d5db' },
-              { id: 7, name: 'Tickets fermés', color: '#9ca3af' }
+            // Retourner les cartes par défaut avec 0
+            const defaultCards = [
+              { id: 'ticket', name: 'Ticket', color: '#fcd34d', icon: 'alert' },
+              { id: 'overdue', name: 'Tickets en retard', color: '#fb923c', icon: 'clock' },
+              { id: 'problem', name: 'Problème', color: '#fca5a5', icon: 'warning' },
+              { id: 'change', name: 'Changement', color: '#bbf7d0', icon: 'clipboard' },
+              { id: 'incoming', name: 'Tickets entrants', color: '#86efac', icon: 'alert' },
+              { id: 'assigned', name: 'Tickets assignés', color: '#bae6fd', icon: 'users' },
+              { id: 'solved', name: 'Tickets résolus', color: '#d1d5db', icon: 'check' },
+              { id: 'recurrent', name: 'Tickets récurrents', color: '#f3f4f6', icon: 'clock' },
+              { id: 'waiting', name: 'Tickets en attente', color: '#fed7aa', icon: 'pause' },
+              { id: 'planned', name: 'Tickets planifiés', color: '#60a5fa', icon: 'calendar' },
+              { id: 'closed', name: 'Tickets fermés', color: '#6b7280', icon: 'trash' }
             ];
-            const byStatus = {};
-            for (const s of defaultStatuses) {
-              byStatus[s.id] = { ...s, count: 0 };
+            const cards = {};
+            for (const c of defaultCards) {
+              cards[c.id] = { ...c, count: 0 };
             }
-            return { key: 'tickets', data: { total: 0, byStatus }, success: false };
+            return { key: 'tickets', data: { total: 0, cards }, success: false };
           }
         })()
       );

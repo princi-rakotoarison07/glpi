@@ -9,6 +9,7 @@ import {
   List,
   Monitor,
   RefreshCw,
+  Ticket,
 } from 'lucide-react';
 import '../../styles/layout/Sidebar.css';
 
@@ -17,6 +18,13 @@ const MENU_ITEMS = [
     icon: <Home size={20} />, 
     label: 'Accueil', 
     path: '/accueil' 
+  },
+  {
+    icon: <Ticket size={20} />,
+    label: 'Assistance',
+    submenu: [
+      { label: 'Tickets', path: '/tickets' }
+    ]
   },
   {
     icon: <Monitor size={20} />,

@@ -6,6 +6,8 @@ import AutrePage from '../pages/backoffice/AutrePage';
 import SimpleCrud from '../pages/backoffice/SimpleCrud';
 import Dashboard from '../pages/backoffice/parc/Dashboard';
 import Reset from '../pages/backoffice/Reset/Reset';
+import TicketList from '../pages/backoffice/TicketList';
+import TicketDetail from '../pages/backoffice/TicketDetail';
 import Login from '../pages/Auth/Login';
 import ProtectedRoute from '../components/ProtectedRoute';
 
@@ -25,6 +27,8 @@ const AppRouter = () => {
             <Route path="/crud" element={<SimpleCrud />} />
             <Route path="/parc/dashboard" element={<Dashboard />} />
             <Route path="/reset" element={<Reset />} />
+            <Route path="/tickets" element={<TicketList />} />
+            <Route path="/tickets/:id" element={<TicketDetail />} />
           </Route>
         </Route>
 
