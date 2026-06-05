@@ -152,3 +152,4 @@
   .\src\Glpi\Kernel\Kernel.php:295                   Symfony\Component\HttpFoundation\Response->send()
   .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
 
+[2026-06-05 08:58:46] glpi.WARNING:   *** Test logger
