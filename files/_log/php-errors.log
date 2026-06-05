@@ -152,3 +152,43 @@
   .\src\Glpi\Kernel\Kernel.php:295                   Symfony\Component\HttpFoundation\Response->send()
   .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
 
+[2026-06-05 10:31:08] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\ItemLinkException: "Post data must contain a valid value for: profiles_id" at CommonDBRelation.php line 2198
+  Backtrace :
+  .\src\CommonDBRelation.php:2198                    
+  .\front\profile_user.form.php:46                   CommonDBRelation->check()
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-05 10:31:27] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\ItemLinkException: "Post data must contain a valid value for: profiles_id" at CommonDBRelation.php line 2198
+  Backtrace :
+  .\src\CommonDBRelation.php:2198                    
+  .\front\profile_user.form.php:46                   CommonDBRelation->check()
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-05 10:31:42] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\ItemLinkException: "Post data must contain a valid value for: profiles_id" at CommonDBRelation.php line 2198
+  Backtrace :
+  .\src\CommonDBRelation.php:2198                    
+  .\front\profile_user.form.php:46                   CommonDBRelation->check()
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-05 10:33:31] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\ItemLinkException: "Post data must contain a valid value for: profiles_id" at CommonDBRelation.php line 2198
+  Backtrace :
+  .\src\CommonDBRelation.php:2198                    
+  .\front\profile_user.form.php:46                   CommonDBRelation->check()
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
