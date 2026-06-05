@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { RefreshCcw } from 'lucide-react';
-import { RESET_RESOURCES } from '../../config/resetResources';
-import useResetResources from '../../hooks/useResetResources';
-import '../../styles/Reset.css';
+import { RESET_RESOURCES } from '../../../config/resetResources';
+import useResetResources from '../../../hooks/useResetResources';
+import '../../../styles/Reset.css';
 
 const StatusCell = ({ name, progress }) => {
   const state = progress.get(name);

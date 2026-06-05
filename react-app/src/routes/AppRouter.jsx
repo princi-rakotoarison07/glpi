@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
-import Accueil from '../pages/Accueil';
-import AutrePage from '../pages/AutrePage';
-import SimpleCrud from '../pages/SimpleCrud';
-import Dashboard from '../pages/parc/Dashboard';
-import Reset from '../pages/Reset/Reset';
+import Accueil from '../pages/backoffice/Accueil';
+import AutrePage from '../pages/backoffice/AutrePage';
+import SimpleCrud from '../pages/backoffice/SimpleCrud';
+import Dashboard from '../pages/backoffice/parc/Dashboard';
+import Reset from '../pages/backoffice/Reset/Reset';
 import Login from '../pages/Auth/Login';
-import PrivateRoute from '../components/PrivateRoute';
+import ProtectedRoute from '../components/ProtectedRoute';
 
 const AppRouter = () => {
   return (
@@ -16,8 +16,8 @@ const AppRouter = () => {
         {/* Route publique */}
         <Route path="/login" element={<Login />} />
 
-        {/* Routes protégées par PrivateRoute */}
-        <Route element={<PrivateRoute />}>
+        {/* Routes protégées par ProtectedRoute */}
+        <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
             <Route path="/" element={<Navigate to="/accueil" replace />} />
             <Route path="/accueil" element={<Accueil />} />

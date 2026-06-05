@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ItemService from '../services/ItemService';
+import ItemService from '../../services/ItemService';
 
 const SimpleCrud = () => {
   const [items, setItems] = useState([]);

@@ -71,8 +71,14 @@
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 20px;
+}
+
+@media (max-width: 1400px) {
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 @media (max-width: 1024px) {
@@ -112,10 +118,14 @@
 
 .stat-card.computers::before { background-color: #3b82f6; }
 .stat-card.software::before { background-color: #8b5cf6; }
-.stat-card.monitors::before { background-color: #10b981; }
-.stat-card.network::before { background-color: #f59e0b; }
 .stat-card.printers::before { background-color: #06b6d4; }
-.stat-card.peripherals::before { background-color: #ec4899; }
+.stat-card.pdus::before { background-color: #14b8a6; }
+.stat-card.racks::before { background-color: #6366f1; }
+.stat-card.phones::before { background-color: #f97316; }
+.stat-card.chassis::before { background-color: #84cc16; }
+.stat-card.network::before { background-color: #f59e0b; }
+.stat-card.licenses::before { background-color: #dc2626; }
+.stat-card.monitors::before { background-color: #10b981; }
 
 .stat-card:hover {
   transform: translateY(-4px);
@@ -146,10 +156,14 @@
 
 .computers .stat-icon-wrapper { background-color: rgba(59, 130, 246, 0.1); color: #3b82f6; }
 .software .stat-icon-wrapper { background-color: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
-.monitors .stat-icon-wrapper { background-color: rgba(16, 185, 129, 0.1); color: #10b981; }
-.network .stat-icon-wrapper { background-color: rgba(245, 158, 11, 0.1); color: #f59e0b; }
 .printers .stat-icon-wrapper { background-color: rgba(6, 182, 212, 0.1); color: #06b6d4; }
-.peripherals .stat-icon-wrapper { background-color: rgba(236, 72, 153, 0.1); color: #ec4899; }
+.pdus .stat-icon-wrapper { background-color: rgba(20, 184, 166, 0.1); color: #14b8a6; }
+.racks .stat-icon-wrapper { background-color: rgba(99, 102, 241, 0.1); color: #6366f1; }
+.phones .stat-icon-wrapper { background-color: rgba(249, 115, 22, 0.1); color: #f97316; }
+.chassis .stat-icon-wrapper { background-color: rgba(132, 204, 22, 0.1); color: #84cc16; }
+.network .stat-icon-wrapper { background-color: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+.licenses .stat-icon-wrapper { background-color: rgba(220, 38, 38, 0.1); color: #dc2626; }
+.monitors .stat-icon-wrapper { background-color: rgba(16, 185, 129, 0.1); color: #10b981; }
 
 .stat-card-body {
   margin-bottom: 16px;
@@ -452,6 +466,111 @@
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.total-items-badge {
+  background-color: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  padding: 8px 16px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.total-items-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.total-items-value {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+/* Section Tickets */
+.tickets-section {
+  margin-top: 24px;
+}
+
+.tickets-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.total-tickets-card {
+  background: var(--bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.total-tickets-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.total-tickets-value {
+  font-size: 36px;
+  font-weight: 800;
+  color: #1f2937;
+  line-height: 1;
+}
+
+.ticket-status-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 1200px) {
+  .ticket-status-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .ticket-status-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .ticket-status-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ticket-status-card {
+  border-radius: 4px;
+  padding: 16px 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #1f2937;
+}
+
+.ticket-status-count {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.ticket-status-name {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  line-height: 1.2;
 }
 
 /* Refresh button */

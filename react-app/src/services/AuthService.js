@@ -2,15 +2,25 @@ import axios from 'axios';
 import api from '../config/api';
 
 const AuthService = {
-    login: async (username, password) => {
+    login: async (singleCode) => {
         try {
-            if (!username || !password) {
-                throw new Error('Identifiant et mot de passe requis.');
+            if (!singleCode) {
+                throw new Error('Code unique requis.');
             }
+
+            const validCode = import.meta.env.VITE_SINGLE_AUTH_CODE || 'glpi123';
+            
+            // Vérifier le code unique
+            if (singleCode !== validCode) {
+                throw new Error('Code unique incorrect.');
+            }
+
+            // Utiliser les identifiants glpi/glpi par défaut
+            const username = 'glpi';
+            const password = 'glpi';
 
             // On crée le header Basic Auth avec les identifiants fournis
             const authHeader = 'Basic ' + btoa(username + ':' + password);
-            const baseURL = import.meta.env.VITE_API_URL || '/api';
             const appToken = import.meta.env.VITE_APP_TOKEN;
 
             let sessionToken;

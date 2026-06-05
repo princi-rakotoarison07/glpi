@@ -26,16 +26,6 @@ const MENU_ITEMS = [
     ]
   },
   { 
-    icon: <List size={20} />, 
-    label: 'Simple CRUD', 
-    path: '/crud' 
-  },
-  { 
-    icon: <Box size={20} />, 
-    label: 'Autre Page', 
-    path: '/autre-page' 
-  },
-  { 
     icon: <RefreshCw size={20} />, 
     label: 'Réinitialisation', 
     path: '/reset' 
