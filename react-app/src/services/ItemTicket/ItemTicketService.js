@@ -28,7 +28,7 @@ const ItemTicketService = {
           searchText: {
             tickets_id: ticketId
           },
-          expand: ['item'] // Expand the linked item to get its details
+          expand: ['item', 'item.State', 'item.Location'] // Expand more related data
         }
       });
       return response.data;

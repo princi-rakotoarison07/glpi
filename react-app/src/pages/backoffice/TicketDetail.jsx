@@ -3,6 +3,21 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock, User, Layers, ArrowUpRight } from 'lucide-react';
 import TicketService from '../../services/Ticket/TicketService';
 import ItemTicketService from '../../services/ItemTicket/ItemTicketService';
+import ComputerService from '../../services/Computer/ComputerService';
+import MonitorService from '../../services/Monitor/MonitorService';
+import SoftwareService from '../../services/Software/SoftwareService';
+import PrinterService from '../../services/Printer/PrinterService';
+import PDUService from '../../services/PDU/PDUService';
+import RackService from '../../services/Rack/RackService';
+import PhoneService from '../../services/Phone/PhoneService';
+import ChassisService from '../../services/Chassis/ChassisService';
+import NetworkEquipmentService from '../../services/NetworkEquipment/NetworkEquipmentService';
+import SoftwareLicenseService from '../../services/SoftwareLicense/SoftwareLicenseService';
+import StateService from '../../services/State/StateService';
+import LocationService from '../../services/Location/LocationService';
+import ManufacturerService from '../../services/Manufacturer/ManufacturerService';
+import ComputerModelService from '../../services/ComputerModel/ComputerModelService';
+import ComputerTypeService from '../../services/ComputerType/ComputerTypeService';
 import '../../styles/pages/TicketDetail.css';
 
 const TicketDetail = () => {
@@ -63,18 +78,94 @@ const TicketDetail = () => {
     return labelMap[itemType] || itemType;
   };
 
+  // Function to fetch a full item by its type and id
+  const fetchFullItem = async (itemType, itemId) => {
+    try {
+      switch (itemType) {
+        case 'Computer':
+          return await ComputerService.getComputerById(itemId);
+        case 'Monitor':
+          return await MonitorService.getMonitorById(itemId);
+        case 'Software':
+          return await SoftwareService.getSoftwareById(itemId);
+        case 'Printer':
+          return await PrinterService.getPrinterById(itemId);
+        case 'PDU':
+          return await PDUService.getPDUById(itemId);
+        case 'Rack':
+          return await RackService.getRackById(itemId);
+        case 'Phone':
+          return await PhoneService.getPhoneById(itemId);
+        case 'Chassis':
+          return await ChassisService.getChassisById(itemId);
+        case 'NetworkEquipment':
+          return await NetworkEquipmentService.getNetworkEquipmentById(itemId);
+        case 'SoftwareLicense':
+          return await SoftwareLicenseService.getSoftwareLicenseById(itemId);
+        default:
+          return null;
+      }
+    } catch (error) {
+      console.error(`Error fetching ${itemType} with id ${itemId}:`, error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     const fetchAllData = async () => {
       try {
         setLoading(true);
-        const [ticketData, itemsData] = await Promise.all([
+        const [ticketData, itemsData, statesData, locationsData, manufacturersData, computerModelsData, computerTypesData] = await Promise.all([
           TicketService.getTicket(id),
-          ItemTicketService.getItemsForTicket(id)
+          ItemTicketService.getItemsForTicket(id),
+          StateService.getAllStates(),
+          LocationService.getAllLocations(),
+          ManufacturerService.getAllManufacturers(),
+          ComputerModelService.getAllComputerModels(),
+          ComputerTypeService.getAllComputerTypes()
         ]);
+        
         console.log('Ticket data:', ticketData);
         console.log('Linked items:', itemsData);
+        
+        // Create maps for related data
+        const statesMap = {};
+        statesData.forEach(state => statesMap[state.id] = state.name);
+        
+        const locationsMap = {};
+        locationsData.forEach(loc => locationsMap[loc.id] = loc.name);
+        
+        const manufacturersMap = {};
+        manufacturersData.forEach(mf => manufacturersMap[mf.id] = mf.name);
+        
+        const computerModelsMap = {};
+        computerModelsData.forEach(model => computerModelsMap[model.id] = model.name);
+        
+        const computerTypesMap = {};
+        computerTypesData.forEach(type => computerTypesMap[type.id] = type.name);
+        
+        // Fetch full details for each linked item
+        const itemsWithDetails = await Promise.all(
+          itemsData.map(async (linkedItem) => {
+            const fullItem = await fetchFullItem(linkedItem.itemtype, linkedItem.items_id);
+            return {
+              ...linkedItem,
+              fullItem: fullItem
+            };
+          })
+        );
+        
+        console.log('Items with full details:', itemsWithDetails);
+        
         setTicket(ticketData);
-        setLinkedItems(itemsData);
+        setLinkedItems({
+          items: itemsWithDetails,
+          statesMap,
+          locationsMap,
+          manufacturersMap,
+          computerModelsMap,
+          computerTypesMap
+        });
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -197,38 +288,77 @@ const TicketDetail = () => {
             <Layers size={18} style={{ marginRight: '8px' }} />
             Éléments liés
           </h2>
-          {linkedItems && linkedItems.length > 0 ? (
-            <div className="linked-items-list">
-              {linkedItems.map((linkedItem) => {
-                const itemLink = getItemLink(linkedItem.itemtype, linkedItem.items_id);
-                return (
-                  <div key={linkedItem.id} className="linked-item-card">
-                    <div className="linked-item-icon">
-                      <Layers size={24} />
-                    </div>
-                    <div className="linked-item-info">
-                      <div className="linked-item-type">
-                        {getItemTypeLabel(linkedItem.itemtype)}
-                      </div>
-                      <div className="linked-item-name">
-                        {linkedItem.item && linkedItem.item.name 
-                          ? linkedItem.item.name 
-                          : `ID: ${linkedItem.items_id}`}
-                      </div>
-                    </div>
-                    {itemLink && (
-                      <Link 
-                        to={itemLink} 
-                        className="view-item-btn"
-                        title="Voir les détails de l'élément"
-                      >
-                        <ArrowUpRight size={16} />
-                        Voir détails
-                      </Link>
-                    )}
-                  </div>
-                );
-              })}
+          {linkedItems.items && linkedItems.items.length > 0 ? (
+            <div className="linked-items-table-container">
+              <table className="linked-items-table">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Nom</th>
+                    <th>Modèle</th>
+                    <th>Numéro de série</th>
+                    <th>Numéro d'inventaire</th>
+                    <th>Statut</th>
+                    <th>Lieu</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {linkedItems.items.map((linkedItem) => {
+                    const itemLink = getItemLink(linkedItem.itemtype, linkedItem.items_id);
+                    const item = linkedItem.fullItem || linkedItem.item || {};
+                    const { statesMap, locationsMap, computerModelsMap } = linkedItems;
+                    
+                    // Get model name based on item type
+                    let modelName = '-';
+                    if (item.computermodels_id) {
+                      modelName = computerModelsMap[item.computermodels_id] || '-';
+                    } else if (item.computermodels_name) {
+                      modelName = item.computermodels_name;
+                    } else if (item.monitormodels_name) {
+                      modelName = item.monitormodels_name;
+                    } else if (item.printermodels_name) {
+                      modelName = item.printermodels_name;
+                    }
+                    
+                    return (
+                      <tr key={linkedItem.id}>
+                        <td>{getItemTypeLabel(linkedItem.itemtype)}</td>
+                        <td className="item-name-cell">
+                          {item.name || item.name || `ID: ${linkedItem.items_id}`}
+                        </td>
+                        <td>{modelName}</td>
+                        <td>{item.serial || '-'}</td>
+                        <td>{item.otherserial || '-'}</td>
+                        <td>
+                          {item.states_name || 
+                           (item.state && item.state.name) || 
+                           (item.states_id && statesMap[item.states_id]) || 
+                           '-'}
+                        </td>
+                        <td>
+                          {item.locations_name || 
+                           (item.location && item.location.name) || 
+                           (item.locations_id && locationsMap[item.locations_id]) || 
+                           '-'}
+                        </td>
+                        <td className="item-actions-cell">
+                          {itemLink && (
+                            <Link 
+                              to={itemLink} 
+                              className="view-item-link"
+                              title="Voir les détails de l'élément"
+                            >
+                              <ArrowUpRight size={14} />
+                              Voir détails
+                            </Link>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           ) : (
             <div className="empty-state">
