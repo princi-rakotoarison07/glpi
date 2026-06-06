@@ -38,3 +38,10 @@ Ces données viennent compléter les tickets existants (Feuille 2).
 **Ordre d'insertion :**
 1. `glpi_ticketcosts` : Table pour enregistrer les coûts fixes (`Fixed_Cost`), les coûts liés au temps (`Time_Cost`) et la durée (`Duration_second`) associés à l'ID du ticket existant (`tickets_id` obtenu à partir de `Num_Ticket`).
 2. `glpi_tickettasks` : (Éventuellement) Si vous souhaitez également créer des tâches spécifiques dans le ticket pour refléter les actions et la durée d'intervention.
+
+## 4. images.zip
+**Contenu :** Fichiers d'images associés aux équipements (ex: MN-FORM-002.png, PC-ADM-001.png, PC-COMPTA-001.png, PC-LAB-002.jpeg).
+
+**Ordre d'insertion :**
+1. `glpi_documents` : Table principale pour enregistrer le fichier (nom du fichier, chemin de stockage, etc.).
+2. `glpi_documents_items` : Table de liaison pour associer l'image (via `documents_id`) à l'équipement concerné (via `items_id` correspondant au PC/Moniteur, et `itemtype` = 'Computer' ou 'Monitor').
