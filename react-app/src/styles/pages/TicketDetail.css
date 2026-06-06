@@ -1,5 +1,7 @@
 .ticket-detail-page {
+  width: 100%;
   padding: 24px;
+  box-sizing: border-box;
 }
 
 .detail-header {
@@ -30,10 +32,12 @@
 }
 
 .detail-card {
+  width: 100%;
   background: var(--bg-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: 24px;
+  box-sizing: border-box;
 }
 
 .detail-card h2 {

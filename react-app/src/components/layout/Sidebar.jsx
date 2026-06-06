@@ -30,7 +30,17 @@ const MENU_ITEMS = [
     icon: <Monitor size={20} />,
     label: 'Parc',
     submenu: [
-      { label: 'Tableau de bord', path: '/parc/dashboard' }
+      { label: 'Tableau de bord', path: '/parc/dashboard' },
+      { label: 'Ordinateurs', path: '/parc/computers' },
+      { label: 'Moniteurs', path: '/parc/monitors' },
+      { label: 'Logiciels', path: '/parc/software' },
+      { label: 'Imprimantes', path: '/parc/printers' },
+      { label: 'PDUs', path: '/parc/pdus' },
+      { label: 'Baies', path: '/parc/racks' },
+      { label: 'Téléphones', path: '/parc/phones' },
+      { label: 'Châssis', path: '/parc/chassis' },
+      { label: 'Matériel réseau', path: '/parc/network' },
+      { label: 'Licences', path: '/parc/licenses' }
     ]
   },
   { 
@@ -47,7 +57,8 @@ const MENU_ITEMS = [
 
 const Sidebar = ({ isCollapsed, toggleSidebar }) => {
   const location = useLocation();
-  const [openSubmenu, setOpenSubmenu] = useState('');
+  // Set "Parc" submenu open by default
+  const [openSubmenu, setOpenSubmenu] = useState('Parc');
 
   const toggleSubmenu = (label) => {
     setOpenSubmenu(openSubmenu === label ? '' : label);
@@ -70,7 +81,8 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
       if (activeItem) {
         setOpenSubmenu(activeItem.label);
       } else {
-        setOpenSubmenu('');
+        // Keep "Parc" open by default
+        setOpenSubmenu('Parc');
       }
     } else {
       setOpenSubmenu('');

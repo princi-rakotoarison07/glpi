@@ -1,5 +1,7 @@
 .ticket-list-page {
+  width: 100%;
   padding: 24px;
+  box-sizing: border-box;
 }
 
 .page-header h1 {
@@ -37,6 +39,7 @@
 }
 
 .ticket-table-container {
+  width: 100%;
   background: var(--bg-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);

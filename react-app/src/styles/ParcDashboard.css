@@ -1,9 +1,10 @@
 .parc-dashboard {
   width: 100%;
-  padding: 4px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  box-sizing: border-box;
   animation: fadeIn 0.4s ease-out;
 }
 

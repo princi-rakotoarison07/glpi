@@ -181,7 +181,7 @@ a.nav-item.active,
 }
 
 .nav-submenu.open {
-  max-height: 300px;
+  max-height: 600px;
 }
 
 .sidebar.collapsed .nav-submenu {
