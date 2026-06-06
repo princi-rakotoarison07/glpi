@@ -1,20 +1,85 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Filter, ArrowUpDown, Eye } from 'lucide-react';
+import { Eye } from 'lucide-react';
 import ComputerService from '../../../../services/Computer/ComputerService';
-import '../../../../styles/pages/TicketList.css';
+import StateService from '../../../../services/State/StateService';
+import ManufacturerService from '../../../../services/Manufacturer/ManufacturerService';
+import LocationService from '../../../../services/Location/LocationService';
+import ComputerModelService from '../../../../services/ComputerModel/ComputerModelService';
+import ComputerTypeService from '../../../../services/ComputerType/ComputerTypeService';
+import OperatingSystemService from '../../../../services/OperatingSystem/OperatingSystemService';
+import '../../../../styles/pages/ParcList.css';
 
 const ComputerList = () => {
   const [computers, setComputers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [relatedData, setRelatedData] = useState({
+    states: {},
+    manufacturers: {},
+    locations: {},
+    computerModels: {},
+    computerTypes: {},
+    operatingSystems: {}
+  });
 
-  const fetchComputers = async () => {
+  const fetchAllData = async () => {
     setLoading(true);
     try {
-      const data = await ComputerService.getAllComputers();
-      setComputers(data);
+      // Fetch all related data in parallel
+      const [
+        computersData,
+        statesData,
+        manufacturersData,
+        locationsData,
+        computerModelsData,
+        computerTypesData,
+        operatingSystemsData
+      ] = await Promise.all([
+        ComputerService.getAllComputers(),
+        StateService.getAllStates(),
+        ManufacturerService.getAllManufacturers(),
+        LocationService.getAllLocations(),
+        ComputerModelService.getAllComputerModels(),
+        ComputerTypeService.getAllComputerTypes(),
+        OperatingSystemService.getAllOperatingSystems()
+      ]);
+
+      // Create maps for quick lookup
+      const statesMap = {};
+      statesData.forEach(state => statesMap[state.id] = state.name);
+
+      const manufacturersMap = {};
+      manufacturersData.forEach(mf => manufacturersMap[mf.id] = mf.name);
+
+      const locationsMap = {};
+      locationsData.forEach(loc => locationsMap[loc.id] = loc.name);
+
+      const computerModelsMap = {};
+      computerModelsData.forEach(model => computerModelsMap[model.id] = model.name);
+
+      const computerTypesMap = {};
+      computerTypesData.forEach(type => computerTypesMap[type.id] = type.name);
+
+      const operatingSystemsMap = {};
+      operatingSystemsData.forEach(os => operatingSystemsMap[os.id] = os.name);
+
+      setRelatedData({
+        states: statesMap,
+        manufacturers: manufacturersMap,
+        locations: locationsMap,
+        computerModels: computerModelsMap,
+        computerTypes: computerTypesMap,
+        operatingSystems: operatingSystemsMap
+      });
+
+      console.log('Computers Data:', computersData);
+      console.log('Related Maps:', {
+        statesMap, manufacturersMap, locationsMap, computerModelsMap, computerTypesMap, operatingSystemsMap
+      });
+
+      setComputers(computersData);
     } catch (error) {
-      console.error('Error fetching computers:', error);
+      console.error('Error fetching data:', error);
       setComputers([]);
     } finally {
       setLoading(false);
@@ -22,7 +87,7 @@ const ComputerList = () => {
   };
 
   useEffect(() => {
-    fetchComputers();
+    fetchAllData();
   }, []);
 
   const formatDate = (dateString) => {
@@ -37,23 +102,32 @@ const ComputerList = () => {
     });
   };
 
+  const getRelatedName = (map, id) => {
+    return id ? map[id] || '-' : '-';
+  };
+
   return (
-    <div className="ticket-list-page">
+    <div className="parc-list-page">
       <div className="page-header">
         <h1>Liste des ordinateurs</h1>
       </div>
 
-      <div className="ticket-table-container">
+      <div className="parc-table-container">
         {loading ? (
           <div className="loading-state">Chargement...</div>
         ) : (
-          <table className="ticket-table">
+          <table className="parc-table">
             <thead>
               <tr>
                 <th>ID</th>
                 <th>Nom</th>
-                <th>Numéro d'inventaire</th>
-                <th>Date de création</th>
+                <th>Statut</th>
+                <th>Fabricant</th>
+                <th>Numéro de série</th>
+                <th>Type</th>
+                <th>Modèle</th>
+                <th>Système d'exploitation - Nom</th>
+                <th>Lieu</th>
                 <th>Dernière modification</th>
                 <th>Actions</th>
               </tr>
@@ -63,14 +137,17 @@ const ComputerList = () => {
                 computers.map((computer) => (
                   <tr key={computer.id}>
                     <td>{computer.id}</td>
-                    <td className="ticket-title">
-                      {computer.name || `Ordinateur #${computer.id}`}
-                    </td>
-                    <td>{computer.otherserial || '-'}</td>
-                    <td>{formatDate(computer.date)}</td>
+                    <td className="item-name">{computer.name || `Ordinateur #${computer.id}`}</td>
+                    <td>{getRelatedName(relatedData.states, computer.states_id)}</td>
+                    <td>{getRelatedName(relatedData.manufacturers, computer.manufacturers_id)}</td>
+                    <td>{computer.serial || '-'}</td>
+                    <td>{getRelatedName(relatedData.computerTypes, computer.computertypes_id)}</td>
+                    <td>{getRelatedName(relatedData.computerModels, computer.computermodels_id)}</td>
+                    <td>{getRelatedName(relatedData.operatingSystems, computer.operatingsystems_id)}</td>
+                    <td>{getRelatedName(relatedData.locations, computer.locations_id)}</td>
                     <td>{formatDate(computer.date_mod)}</td>
                     <td className="action-cell">
-                      <Link to={`/parc/computers/${computer.id}`} className="action-btn view-btn">
+                      <Link to={`/parc/computers/${computer.id}`} className="action-btn">
                         <Eye size={16} />
                         Détails
                       </Link>
@@ -79,7 +156,7 @@ const ComputerList = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" className="empty-state">
+                  <td colSpan="11" className="empty-state">
                     Aucun ordinateur trouvé.
                   </td>
                 </tr>

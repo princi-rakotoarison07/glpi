@@ -17,6 +17,25 @@ const ItemTicketService = {
       console.error('Error linking item to ticket:', error);
       throw error;
     }
+  },
+
+  // Récupérer tous les items liés à un ticket
+  getItemsForTicket: async (ticketId) => {
+    try {
+      await initSession();
+      const response = await api.get(`/Item_Ticket`, {
+        params: {
+          searchText: {
+            tickets_id: ticketId
+          },
+          expand: ['item'] // Expand the linked item to get its details
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching items for ticket:', error);
+      return [];
+    }
   }
 };
 

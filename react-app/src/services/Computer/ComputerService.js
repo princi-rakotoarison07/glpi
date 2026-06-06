@@ -7,7 +7,13 @@ const ComputerService = {
   getAllComputers: async () => {
     try {
       await initSession();
-      const response = await api.get('/Computer');
+      // Expand related objects to get their names
+      const response = await api.get('/Computer', {
+        params: {
+          expand: 'State,Manufacturer,ComputerType,ComputerModel,OperatingSystem,Location',
+          withindexes: true
+        }
+      });
       return response.data;
     } catch (error) {
       console.error('Erreur lors de la récupération des ordinateurs', error);
@@ -21,7 +27,12 @@ const ComputerService = {
   getComputerById: async (id) => {
     try {
       await initSession();
-      const response = await api.get(`/Computer/${id}`);
+      const response = await api.get(`/Computer/${id}`, {
+        params: {
+          expand: 'State,Manufacturer,ComputerType,ComputerModel,OperatingSystem,Location',
+          withindexes: true
+        }
+      });
       return response.data;
     } catch (error) {
       console.error(`Erreur lors de la récupération de l'ordinateur avec l'ID ${id}`, error);

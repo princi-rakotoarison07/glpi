@@ -28,6 +28,7 @@ const TicketList = () => {
     }
     try {
       const result = await TicketService.getTickets(params);
+      console.log('Tickets data:', result.tickets);
       setTickets(result.tickets);
       setTotalItems(result.totalItems);
     } catch (error) {
@@ -53,9 +54,23 @@ const TicketList = () => {
     { value: '5', label: 'Fermé' },
   ];
 
+  const priorityOptions = [
+    { value: 1, label: 'Très basse', color: '#9e9e9e' },
+    { value: 2, label: 'Basse', color: '#4caf50' },
+    { value: 3, label: 'Moyenne', color: '#ff9800' },
+    { value: 4, label: 'Haute', color: '#f44336' },
+    { value: 5, label: 'Très haute', color: '#9c27b0' },
+    { value: 6, label: 'Majeure', color: '#b71c1c' },
+  ];
+
   const getStatusName = (statusId) => {
     const option = statusOptions.find(opt => opt.value === String(statusId));
     return option ? option.label : 'Statut inconnu';
+  };
+
+  const getPriorityInfo = (priorityId) => {
+    const option = priorityOptions.find(opt => opt.value === priorityId);
+    return option || { label: 'Priorité inconnue', color: '#9e9e9e' };
   };
 
   const formatDate = (dateString) => {
@@ -106,6 +121,7 @@ const TicketList = () => {
                 <th>ID</th>
                 <th>Titre</th>
                 <th>Statut</th>
+                <th>Priorité</th>
                 <th>Dernière modification</th>
                 <th>Date d'ouverture</th>
                 <th>Actions</th>
@@ -113,30 +129,41 @@ const TicketList = () => {
             </thead>
             <tbody>
               {tickets.length > 0 ? (
-                tickets.map((ticket) => (
-                  <tr key={ticket.id}>
-                    <td>{ticket.id}</td>
-                    <td className="ticket-title">
-                      {ticket.name || `Ticket #${ticket.id}`}
-                    </td>
-                    <td>
-                      <span className="status-badge">
-                        {getStatusName(ticket.status)}
-                      </span>
-                    </td>
-                    <td>{formatDate(ticket.date_mod)}</td>
-                    <td>{formatDate(ticket.date)}</td>
-                    <td className="action-cell">
-                      <Link to={`/tickets/${ticket.id}`} className="action-btn view-btn">
-                        <Eye size={16} />
-                        Détails
-                      </Link>
-                    </td>
-                  </tr>
-                ))
+                tickets.map((ticket) => {
+                  const priorityInfo = getPriorityInfo(ticket.priority);
+                  return (
+                    <tr key={ticket.id}>
+                      <td>{ticket.id}</td>
+                      <td className="ticket-title">
+                        {ticket.name || `Ticket #${ticket.id}`}
+                      </td>
+                      <td>
+                        <span className="status-badge">
+                          {getStatusName(ticket.status)}
+                        </span>
+                      </td>
+                      <td>
+                        <span 
+                          className="priority-badge"
+                          style={{ backgroundColor: priorityInfo.color + '20', color: priorityInfo.color, borderColor: priorityInfo.color }}
+                        >
+                          {priorityInfo.label}
+                        </span>
+                      </td>
+                      <td>{formatDate(ticket.date_mod)}</td>
+                      <td>{formatDate(ticket.date)}</td>
+                      <td className="action-cell">
+                        <Link to={`/tickets/${ticket.id}`} className="action-btn view-btn">
+                          <Eye size={16} />
+                          Détails
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
-                  <td colSpan="6" className="empty-state">
+                  <td colSpan="7" className="empty-state">
                     Aucun ticket trouvé.
                   </td>
                 </tr>

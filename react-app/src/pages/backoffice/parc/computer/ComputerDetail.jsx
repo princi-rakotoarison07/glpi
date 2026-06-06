@@ -2,28 +2,92 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import ComputerService from '../../../../services/Computer/ComputerService';
-import '../../../../styles/pages/TicketDetail.css';
+import StateService from '../../../../services/State/StateService';
+import ManufacturerService from '../../../../services/Manufacturer/ManufacturerService';
+import LocationService from '../../../../services/Location/LocationService';
+import ComputerModelService from '../../../../services/ComputerModel/ComputerModelService';
+import ComputerTypeService from '../../../../services/ComputerType/ComputerTypeService';
+import OperatingSystemService from '../../../../services/OperatingSystem/OperatingSystemService';
+import '../../../../styles/pages/ParcDetail.css';
 
 const ComputerDetail = () => {
   const { id } = useParams();
   const [computer, setComputer] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [relatedData, setRelatedData] = useState({
+    states: {},
+    manufacturers: {},
+    locations: {},
+    computerModels: {},
+    computerTypes: {},
+    operatingSystems: {}
+  });
+
+  const getRelatedName = (map, id) => {
+    return id ? map[id] || '-' : '-';
+  };
+
+  const fetchAllData = async () => {
+    setLoading(true);
+    try {
+      // Fetch all related data in parallel
+      const [
+        computerData,
+        statesData,
+        manufacturersData,
+        locationsData,
+        computerModelsData,
+        computerTypesData,
+        operatingSystemsData
+      ] = await Promise.all([
+        ComputerService.getComputerById(id),
+        StateService.getAllStates(),
+        ManufacturerService.getAllManufacturers(),
+        LocationService.getAllLocations(),
+        ComputerModelService.getAllComputerModels(),
+        ComputerTypeService.getAllComputerTypes(),
+        OperatingSystemService.getAllOperatingSystems()
+      ]);
+
+      // Create maps for quick lookup
+      const statesMap = {};
+      statesData.forEach(state => statesMap[state.id] = state.name);
+
+      const manufacturersMap = {};
+      manufacturersData.forEach(mf => manufacturersMap[mf.id] = mf.name);
+
+      const locationsMap = {};
+      locationsData.forEach(loc => locationsMap[loc.id] = loc.name);
+
+      const computerModelsMap = {};
+      computerModelsData.forEach(model => computerModelsMap[model.id] = model.name);
+
+      const computerTypesMap = {};
+      computerTypesData.forEach(type => computerTypesMap[type.id] = type.name);
+
+      const operatingSystemsMap = {};
+      operatingSystemsData.forEach(os => operatingSystemsMap[os.id] = os.name);
+
+      setRelatedData({
+        states: statesMap,
+        manufacturers: manufacturersMap,
+        locations: locationsMap,
+        computerModels: computerModelsMap,
+        computerTypes: computerTypesMap,
+        operatingSystems: operatingSystemsMap
+      });
+
+      setComputer(computerData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchComputer = async () => {
-      try {
-        setLoading(true);
-        const data = await ComputerService.getComputerById(id);
-        setComputer(data);
-      } catch (error) {
-        console.error('Error fetching computer:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     if (id) {
-      fetchComputer();
+      fetchAllData();
     }
   }, [id]);
 
@@ -41,7 +105,7 @@ const ComputerDetail = () => {
 
   if (loading) {
     return (
-      <div className="ticket-detail-page">
+      <div className="parc-detail-page">
         <div className="loading-state">Chargement de l'ordinateur...</div>
       </div>
     );
@@ -49,14 +113,14 @@ const ComputerDetail = () => {
 
   if (!computer) {
     return (
-      <div className="ticket-detail-page">
+      <div className="parc-detail-page">
         <div className="empty-state">Ordinateur introuvable</div>
       </div>
     );
   }
 
   return (
-    <div className="ticket-detail-page">
+    <div className="parc-detail-page">
       <div className="detail-header">
         <Link to="/parc/computers" className="back-btn">
           <ArrowLeft size={16} />
@@ -78,20 +142,36 @@ const ComputerDetail = () => {
               <div className="detail-value">{computer.name || 'Non défini'}</div>
             </div>
             <div className="detail-item">
+              <div className="detail-label">Statut</div>
+              <div className="detail-value">{getRelatedName(relatedData.states, computer.states_id)}</div>
+            </div>
+            <div className="detail-item">
+              <div className="detail-label">Fabricant</div>
+              <div className="detail-value">{getRelatedName(relatedData.manufacturers, computer.manufacturers_id)}</div>
+            </div>
+            <div className="detail-item">
+              <div className="detail-label">Numéro de série</div>
+              <div className="detail-value">{computer.serial || '-'}</div>
+            </div>
+            <div className="detail-item">
+              <div className="detail-label">Type</div>
+              <div className="detail-value">{getRelatedName(relatedData.computerTypes, computer.computertypes_id)}</div>
+            </div>
+            <div className="detail-item">
+              <div className="detail-label">Modèle</div>
+              <div className="detail-value">{getRelatedName(relatedData.computerModels, computer.computermodels_id)}</div>
+            </div>
+            <div className="detail-item">
+              <div className="detail-label">Système d'exploitation - Nom</div>
+              <div className="detail-value">{getRelatedName(relatedData.operatingSystems, computer.operatingsystems_id)}</div>
+            </div>
+            <div className="detail-item">
+              <div className="detail-label">Lieu</div>
+              <div className="detail-value">{getRelatedName(relatedData.locations, computer.locations_id)}</div>
+            </div>
+            <div className="detail-item">
               <div className="detail-label">Numéro d'inventaire</div>
-              <div className="detail-value">{computer.otherserial || 'Non défini'}</div>
-            </div>
-            <div className="detail-item">
-              <div className="detail-label">Statut ID</div>
-              <div className="detail-value">{computer.states_id || '-'}</div>
-            </div>
-            <div className="detail-item">
-              <div className="detail-label">Localisation ID</div>
-              <div className="detail-value">{computer.locations_id || '-'}</div>
-            </div>
-            <div className="detail-item">
-              <div className="detail-label">Fabricant ID</div>
-              <div className="detail-value">{computer.manufacturers_id || '-'}</div>
+              <div className="detail-value">{computer.otherserial || '-'}</div>
             </div>
           </div>
         </div>
