@@ -31,6 +31,9 @@ import NetworkList from '../pages/backoffice/parc/network/NetworkList';
 import NetworkDetail from '../pages/backoffice/parc/network/NetworkDetail';
 import LicenseList from '../pages/backoffice/parc/license/LicenseList';
 import LicenseDetail from '../pages/backoffice/parc/license/LicenseDetail';
+// FrontOffice
+import FrontOfficeAccueil from '../pages/frontoffice/Accueil';
+import FrontOfficeElementsList from '../pages/frontoffice/ElementsList';
 
 const AppRouter = () => {
   return (
@@ -38,6 +41,10 @@ const AppRouter = () => {
       <Routes>
         {/* Route publique */}
         <Route path="/login" element={<Login />} />
+
+        {/* FrontOffice Routes (non sécurisées) */}
+        <Route path="/frontoffice" element={<FrontOfficeAccueil />} />
+        <Route path="/frontoffice/elements" element={<FrontOfficeElementsList />} />
 
         {/* Routes protégées par ProtectedRoute */}
         <Route element={<ProtectedRoute />}>

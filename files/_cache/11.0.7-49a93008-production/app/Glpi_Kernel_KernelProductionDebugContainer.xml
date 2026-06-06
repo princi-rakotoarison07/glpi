@@ -23,7 +23,7 @@
     </parameter>
     <parameter key="kernel.charset">UTF-8</parameter>
     <parameter key="kernel.container_class">Glpi_Kernel_KernelProductionDebugContainer</parameter>
-    <parameter key="glpi.default_secret">2c4ecde604b0ccc65e72cfb37658832b4bf3c5100da343078679df174e3b1744</parameter>
+    <parameter key="glpi.default_secret">1cf603ed12241702619ccc95d4e816b923f1f1d2c9391c2b4ed83fd4d29b8c2b</parameter>
     <parameter key="env(APP_SECRET_FILE)">C:\xampp\htdocs\glpi/config/glpicrypt.key</parameter>
     <parameter key="kernel.secret">%env(default:glpi.default_secret:file:APP_SECRET_FILE)%</parameter>
     <parameter key="debug.error_handler.throw_at">4437</parameter>

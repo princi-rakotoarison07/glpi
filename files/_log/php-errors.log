@@ -153,3 +153,5 @@
   .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
 
 [2026-06-05 08:58:46] glpi.WARNING:   *** Test logger
+[2026-06-06 17:41:14] glpi.WARNING:   *** Test logger
+[2026-06-06 17:46:38] glpi.WARNING:   *** Test logger

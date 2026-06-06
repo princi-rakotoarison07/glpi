@@ -1,6 +1,9 @@
 import api, { initSession } from '../../config/api';
 
 const NetworkEquipmentService = {
+  getAllNetworkEquipment: async () => {
+    return await NetworkEquipmentService.getAllNetworkEquipments();
+  },
   getAllNetworkEquipments: async () => {
     try {
       await initSession();

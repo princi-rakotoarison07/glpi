@@ -143,3 +143,42 @@ CSRF check failed for User ID:  at /index.php
   .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
   .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
   .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+[2026-06-06 17:47:01] User ID: `2` tried to execute an invalid request on `/Helpdesk`.
+  Additional information: The current profile does not use the simplified interface
+  Backtrace :
+  .\src\Session.php:1206                             
+  .\src\Glpi\Http\Firewall.php:156                   Session::checkHelpdeskAccess()
+  ...trollerListener\FirewallStrategyListener.php:82 Glpi\Http\Firewall->applyStrategy()
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\ControllerListener\FirewallStrategyListener->onKernelController()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:169    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+[2026-06-06 17:47:07] User ID: `2` tried to execute an invalid request on `/Helpdesk`.
+  Additional information: The current profile does not use the simplified interface
+  Backtrace :
+  .\src\Session.php:1206                             
+  .\src\Glpi\Http\Firewall.php:156                   Session::checkHelpdeskAccess()
+  ...trollerListener\FirewallStrategyListener.php:82 Glpi\Http\Firewall->applyStrategy()
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\ControllerListener\FirewallStrategyListener->onKernelController()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:169    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+[2026-06-06 17:47:11] User ID: `2` tried to execute an invalid request on `/Helpdesk`.
+  Additional information: The current profile does not use the simplified interface
+  Backtrace :
+  .\src\Session.php:1206                             
+  .\src\Glpi\Http\Firewall.php:156                   Session::checkHelpdeskAccess()
+  ...trollerListener\FirewallStrategyListener.php:82 Glpi\Http\Firewall->applyStrategy()
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\ControllerListener\FirewallStrategyListener->onKernelController()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:169    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()

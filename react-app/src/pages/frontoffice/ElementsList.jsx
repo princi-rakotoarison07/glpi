@@ -1,0 +1,266 @@
+import React, { useState, useEffect } from 'react';
+import { Search, Filter } from 'lucide-react';
+import FrontOfficeLayout from '../../layouts/FrontOfficeLayout';
+import ComputerService from '../../services/Computer/ComputerService';
+import MonitorService from '../../services/Monitor/MonitorService';
+import SoftwareService from '../../services/Software/SoftwareService';
+import PrinterService from '../../services/Printer/PrinterService';
+import PDUService from '../../services/PDU/PDUService';
+import RackService from '../../services/Rack/RackService';
+import PhoneService from '../../services/Phone/PhoneService';
+import ChassisService from '../../services/Chassis/ChassisService';
+import NetworkEquipmentService from '../../services/NetworkEquipment/NetworkEquipmentService';
+import SoftwareLicenseService from '../../services/SoftwareLicense/SoftwareLicenseService';
+import StateService from '../../services/State/StateService';
+import LocationService from '../../services/Location/LocationService';
+import ManufacturerService from '../../services/Manufacturer/ManufacturerService';
+import '../../styles/FrontOffice.css';
+
+const ElementsList = () => {
+  const [allElements, setAllElements] = useState([]);
+  const [filteredElements, setFilteredElements] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [relatedData, setRelatedData] = useState({
+    states: {},
+    locations: {},
+    manufacturers: {}
+  });
+  
+  // Filters state
+  const [filters, setFilters] = useState({
+    type: '',
+    searchText: '',
+    location: '',
+    manufacturer: ''
+  });
+
+  const ITEM_TYPES = [
+    { value: '', label: 'Tous les éléments' },
+    { value: 'Computer', label: 'Ordinateur' },
+    { value: 'Monitor', label: 'Moniteur' },
+    { value: 'Software', label: 'Logiciel' },
+    { value: 'Printer', label: 'Imprimante' },
+    { value: 'PDU', label: 'PDU' },
+    { value: 'Rack', label: 'Rack' },
+    { value: 'Phone', label: 'Téléphone' },
+    { value: 'Chassis', label: 'Châssis' },
+    { value: 'NetworkEquipment', label: 'Matériel réseau' },
+    { value: 'SoftwareLicense', label: 'Licence logiciel' }
+  ];
+
+  // Fetch all elements with individual error handling
+  const fetchAllElements = async () => {
+    setLoading(true);
+    try {
+      // Helper to safely fetch data and return empty array on error
+      const safeFetch = async (fetchFn, fallback = []) => {
+        try {
+          return await fetchFn();
+        } catch (error) {
+          return fallback;
+        }
+      };
+
+      const [
+        computers, monitors, software, printers, pdus, racks, phones, chassis, networkEquipment, licenses,
+        states, locations, manufacturers
+      ] = await Promise.all([
+        safeFetch(ComputerService.getAllComputers),
+        safeFetch(MonitorService.getAllMonitors),
+        safeFetch(SoftwareService.getAllSoftware),
+        safeFetch(PrinterService.getAllPrinters),
+        safeFetch(PDUService.getAllPDUs),
+        safeFetch(RackService.getAllRacks),
+        safeFetch(PhoneService.getAllPhones),
+        safeFetch(ChassisService.getAllChassis),
+        safeFetch(NetworkEquipmentService.getAllNetworkEquipments), // Fixed function name
+        safeFetch(SoftwareLicenseService.getAllSoftwareLicenses),
+        safeFetch(StateService.getAllStates),
+        safeFetch(LocationService.getAllLocations),
+        safeFetch(ManufacturerService.getAllManufacturers)
+      ]);
+
+      // Create lookup maps
+      const statesMap = {};
+      (states || []).forEach(state => statesMap[state.id] = state.name);
+
+      const locationsMap = {};
+      (locations || []).forEach(loc => locationsMap[loc.id] = loc.name);
+
+      const manufacturersMap = {};
+      (manufacturers || []).forEach(mf => manufacturersMap[mf.id] = mf.name);
+
+      // Combine all elements with type
+      const elements = [
+        ...(computers || []).map(c => ({ ...c, type: 'Computer' })),
+        ...(monitors || []).map(m => ({ ...m, type: 'Monitor' })),
+        ...(software || []).map(s => ({ ...s, type: 'Software' })),
+        ...(printers || []).map(p => ({ ...p, type: 'Printer' })),
+        ...(pdus || []).map(p => ({ ...p, type: 'PDU' })),
+        ...(racks || []).map(r => ({ ...r, type: 'Rack' })),
+        ...(phones || []).map(p => ({ ...p, type: 'Phone' })),
+        ...(chassis || []).map(c => ({ ...c, type: 'Chassis' })),
+        ...(networkEquipment || []).map(n => ({ ...n, type: 'NetworkEquipment' })),
+        ...(licenses || []).map(l => ({ ...l, type: 'SoftwareLicense' }))
+      ];
+
+      setRelatedData({
+        states: statesMap,
+        locations: locationsMap,
+        manufacturers: manufacturersMap
+      });
+
+      setAllElements(elements);
+      setFilteredElements(elements);
+    } catch (error) {
+      console.error('Error fetching elements:', error);
+      setAllElements([]);
+      setFilteredElements([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Filter elements
+  useEffect(() => {
+    let filtered = [...allElements];
+
+    // Filter by type
+    if (filters.type) {
+      filtered = filtered.filter(el => el.type === filters.type);
+    }
+
+    // Filter by search text (name OR serial)
+    if (filters.searchText) {
+      const searchLower = filters.searchText.toLowerCase();
+      filtered = filtered.filter(el => {
+        return (el.name && el.name.toLowerCase().includes(searchLower)) ||
+          (el.serial && el.serial.toLowerCase().includes(searchLower));
+      });
+    }
+
+    // Filter by location
+    if (filters.location) {
+      filtered = filtered.filter(el => String(el.locations_id) === filters.location);
+    }
+
+    // Filter by manufacturer
+    if (filters.manufacturer) {
+      filtered = filtered.filter(el => String(el.manufacturers_id) === filters.manufacturer);
+    }
+
+    setFilteredElements(filtered);
+  }, [filters, allElements]);
+
+  // Initial load
+  useEffect(() => {
+    fetchAllElements();
+  }, []);
+
+  // Get label for item type
+  const getTypeLabel = (type) => {
+    const typeObj = ITEM_TYPES.find(t => t.value === type);
+    return typeObj ? typeObj.label : type;
+  };
+
+  // Get value with fallback
+  const getValue = (value, id, map) => {
+    if (value) return value;
+    if (id && map[id]) return map[id];
+    return '-';
+  };
+
+  return (
+    <FrontOfficeLayout>
+      <div className="frontoffice-page elements-page">
+        <h1>Recherche multi-critères</h1>
+        
+        <div className="filters-section">
+          <div className="filter-group">
+            <Filter size={16} />
+            <label>Type d'élément</label>
+            <select value={filters.type} onChange={(e) => setFilters({...filters, type: e.target.value})}>
+              {ITEM_TYPES.map(t => (
+                <option key={t.value} value={t.value}>{t.label}</option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="filter-group">
+            <Search size={16} />
+            <label>Recherche (Nom / Numéro de série)</label>
+            <input
+              type="text"
+              placeholder="Rechercher..."
+              value={filters.searchText}
+              onChange={(e) => setFilters({...filters, searchText: e.target.value})}
+            />
+          </div>
+          
+          <div className="filter-group">
+            <Filter size={16} />
+            <label>Emplacement</label>
+            <select value={filters.location} onChange={(e) => setFilters({...filters, location: e.target.value})}>
+              <option value="">Tous les emplacements</option>
+              {Object.entries(relatedData.locations).map(([id, name]) => (
+                <option key={id} value={id}>{name}</option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="filter-group">
+            <Filter size={16} />
+            <label>Fabricant / Éditeur</label>
+            <select value={filters.manufacturer} onChange={(e) => setFilters({...filters, manufacturer: e.target.value})}>
+              <option value="">Tous les fabricants</option>
+              {Object.entries(relatedData.manufacturers).map(([id, name]) => (
+                <option key={id} value={id}>{name}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="results-table-container">
+          {loading ? (
+            <div className="loading-state">Chargement des éléments...</div>
+          ) : (
+            <table className="elements-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Type d'élément</th>
+                  <th>Nom</th>
+                  <th>Numéro de Série / Clé</th>
+                  <th>Fabricant / Éditeur</th>
+                  <th>Emplacement</th>
+                  <th>Statut</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredElements.length > 0 ? (
+                  filteredElements.map((element) => (
+                    <tr key={`${element.type}-${element.id}`}>
+                      <td>{element.id}</td>
+                      <td>{getTypeLabel(element.type)}</td>
+                      <td>{element.name || '-'}</td>
+                      <td>{element.serial || element.otherserial || '-'}</td>
+                      <td>{getValue(relatedData.manufacturers[element.manufacturers_id], element.manufacturers_id, relatedData.manufacturers)}</td>
+                      <td>{getValue(relatedData.locations[element.locations_id], element.locations_id, relatedData.locations)}</td>
+                      <td>{getValue(relatedData.states[element.states_id], element.states_id, relatedData.states)}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={7} className="empty-state">Aucun élément trouvé avec ces critères</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </div>
+    </FrontOfficeLayout>
+  );
+};
+
+export default ElementsList;

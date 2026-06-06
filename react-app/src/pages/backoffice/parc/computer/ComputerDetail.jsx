@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, Clock } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, User } from 'lucide-react';
 import ComputerService from '../../../../services/Computer/ComputerService';
 import StateService from '../../../../services/State/StateService';
 import ManufacturerService from '../../../../services/Manufacturer/ManufacturerService';
@@ -8,6 +8,7 @@ import LocationService from '../../../../services/Location/LocationService';
 import ComputerModelService from '../../../../services/ComputerModel/ComputerModelService';
 import ComputerTypeService from '../../../../services/ComputerType/ComputerTypeService';
 import OperatingSystemService from '../../../../services/OperatingSystem/OperatingSystemService';
+import UserService from '../../../../services/User/UserService';
 import '../../../../styles/pages/ParcDetail.css';
 
 const ComputerDetail = () => {
@@ -20,7 +21,8 @@ const ComputerDetail = () => {
     locations: {},
     computerModels: {},
     computerTypes: {},
-    operatingSystems: {}
+    operatingSystems: {},
+    users: {}
   });
 
   const getRelatedName = (map, id) => {
@@ -38,7 +40,8 @@ const ComputerDetail = () => {
         locationsData,
         computerModelsData,
         computerTypesData,
-        operatingSystemsData
+        operatingSystemsData,
+        usersData
       ] = await Promise.all([
         ComputerService.getComputerById(id),
         StateService.getAllStates(),
@@ -46,7 +49,8 @@ const ComputerDetail = () => {
         LocationService.getAllLocations(),
         ComputerModelService.getAllComputerModels(),
         ComputerTypeService.getAllComputerTypes(),
-        OperatingSystemService.getAllOperatingSystems()
+        OperatingSystemService.getAllOperatingSystems(),
+        UserService.getAllUsers()
       ]);
 
       // Create maps for quick lookup
@@ -68,13 +72,17 @@ const ComputerDetail = () => {
       const operatingSystemsMap = {};
       operatingSystemsData.forEach(os => operatingSystemsMap[os.id] = os.name);
 
+      const usersMap = {};
+      usersData.forEach(user => usersMap[user.id] = user.name || user.firstname + ' ' + user.lastname || '-');
+
       setRelatedData({
         states: statesMap,
         manufacturers: manufacturersMap,
         locations: locationsMap,
         computerModels: computerModelsMap,
         computerTypes: computerTypesMap,
-        operatingSystems: operatingSystemsMap
+        operatingSystems: operatingSystemsMap,
+        users: usersMap
       });
 
       setComputer(computerData);
@@ -168,6 +176,13 @@ const ComputerDetail = () => {
             <div className="detail-item">
               <div className="detail-label">Lieu</div>
               <div className="detail-value">{getRelatedName(relatedData.locations, computer.locations_id)}</div>
+            </div>
+            <div className="detail-item">
+              <div className="detail-label">
+                <User size={16} />
+                Utilisateur
+              </div>
+              <div className="detail-value">{getRelatedName(relatedData.users, computer.users_id)}</div>
             </div>
             <div className="detail-item">
               <div className="detail-label">Numéro d'inventaire</div>
