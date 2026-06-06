@@ -121,17 +121,26 @@ const GLPIImportHelpers = {
       console.warn(e);
     }
     
-    // Essayer de chercher dans les Monitors
+    // Liste des autres types d'équipements possibles dans GLPI
+    const otherTypes = ['Monitor', 'Printer', 'NetworkEquipment', 'Phone', 'Peripheral', 'Enclosure', 'PDU', 'Rack', 'Software'];
+    
     try {
-      // Si nous n'avons pas de MonitorService, on peut utiliser l'api directement,
-      // Mais dans notre contexte on va simuler ou vous pouvez créer le MonitorService
       const { default: api } = await import('../../config/api');
-      const response = await api.get('/Monitor');
-      const items = response.data;
-      const existing = items.find(item => item.name && item.name.toLowerCase() === itemName.toLowerCase());
-      if (existing) return { id: existing.id, type: 'Monitor' };
+      
+      // On boucle sur chaque type d'équipement
+      for (const type of otherTypes) {
+        try {
+          const response = await api.get(`/${type}`);
+          const items = response.data;
+          const existing = items.find(item => item.name && item.name.toLowerCase() === itemName.toLowerCase());
+          if (existing) return { id: existing.id, type: type };
+        } catch (e) {
+          // L'API peut retourner une erreur 400/404 si le endpoint n'existe pas ou s'il n'y a pas de droits, on ignore et on passe au suivant
+          // console.warn(`Erreur lors de la recherche dans ${type}`, e);
+        }
+      }
     } catch(e) {
-      console.warn(e);
+      console.warn('Erreur globale lors de la recherche des autres équipements', e);
     }
     
     return null;

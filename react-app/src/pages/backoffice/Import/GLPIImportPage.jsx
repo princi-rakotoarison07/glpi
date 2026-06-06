@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import GLPIImportServiceFast from '../../../services/import/GLPIImportServiceFast';
-import { Package, Eye, ShoppingCart, CheckCircle2, AlertCircle, Terminal, Upload } from 'lucide-react';
+import GLPIImageImportService from '../../../services/import/GLPIImageImportService';
+import { Package, Eye, ShoppingCart, CheckCircle2, AlertCircle, Terminal, Upload, Image as ImageIcon } from 'lucide-react';
 import '../../../styles/pages/TicketList.css'; // On va utiliser un style proche ou générique
 // Assurez-vous d'avoir form.css ou import.css importé si nécessaire. On se base sur les styles existants.
 
@@ -43,6 +44,7 @@ const GLPIImportPage = () => {
   const [file1, setFile1] = useState(null);
   const [file2, setFile2] = useState(null);
   const [file3, setFile3] = useState(null);
+  const [fileImages, setFileImages] = useState(null);
 
   const [preview1, setPreview1] = useState({ headers: [], rows: [] });
   const [preview2, setPreview2] = useState({ headers: [], rows: [] });
@@ -124,8 +126,13 @@ const GLPIImportPage = () => {
     readAndParseCsv(e.target.files[0], setPreview3, GLPIImportServiceFast.validateCostFile, 'Fichier 3 (Coûts):');
   };
 
+  const handleFileImagesChange = (e) => {
+    if (!e.target.files[0]) return;
+    setFileImages(e.target.files[0]);
+  };
+
   const handleImport = async () => {
-    if (preview1.rows.length === 0 && preview2.rows.length === 0 && preview3.rows.length === 0) return;
+    if (preview1.rows.length === 0 && preview2.rows.length === 0 && preview3.rows.length === 0 && !fileImages) return;
     if (validationErrors.length > 0) return;
 
     setIsImporting(true);
@@ -191,6 +198,27 @@ const GLPIImportPage = () => {
         processed++; setProgress(Math.round((processed / totalRows) * 100));
       }
 
+      // 4. Images (ZIP)
+      if (fileImages) {
+        addMessage("Extraction et importation des images...", 'info');
+        try {
+          const imageResults = await GLPIImageImportService.importImages(fileImages, (prog) => {
+            // onProgress update (optionnel)
+          });
+          newResults.success += imageResults.success;
+          newResults.errors += imageResults.errors;
+          newResults.details.push(...imageResults.details);
+          
+          imageResults.details.forEach(detail => {
+            if (detail.status === 'success') {
+              addMessage(`Image importée : ${detail.message}`, 'success');
+            }
+          });
+        } catch (error) {
+          addMessage(`Erreur lors de l'import des images: ${error.message}`, 'error');
+        }
+      }
+
     } catch (err) {
       addMessage(`Erreur critique: ${err.message}`, 'error');
     }
@@ -213,6 +241,7 @@ const GLPIImportPage = () => {
           <FileField label="1. Équipements (Feuille 1)" icon={Package} file={file1} count={preview1.rows.length} onChange={handleFile1Change} isImporting={isImporting} />
           <FileField label="2. Tickets (Feuille 2)" icon={Eye} file={file2} count={preview2.rows.length} onChange={handleFile2Change} isImporting={isImporting} />
           <FileField label="3. Coûts (Feuille 3)" icon={ShoppingCart} file={file3} count={preview3.rows.length} onChange={handleFile3Change} isImporting={isImporting} />
+          <FileField label="4. Images (.zip)" icon={ImageIcon} file={fileImages} onChange={handleFileImagesChange} accept=".zip" isImporting={isImporting} />
         </div>
 
         {validationErrors.length > 0 && !isImporting && (
@@ -262,7 +291,7 @@ const GLPIImportPage = () => {
           </div>
         )}
 
-        {(file1 || file2 || file3) && !isImporting && (
+        {(file1 || file2 || file3 || fileImages) && !isImporting && (
           <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'flex-end' }}>
             <button 
               onClick={handleImport}
