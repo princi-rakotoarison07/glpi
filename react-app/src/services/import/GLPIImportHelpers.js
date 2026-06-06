@@ -109,15 +109,31 @@ const GLPIImportHelpers = {
     }
   },
   
-  resolveComputer: async (computerName) => {
-    if (!computerName || !computerName.trim()) return null;
+  resolveItem: async (itemName) => {
+    if (!itemName || !itemName.trim()) return null;
+    
+    // Essayer de chercher dans les Computers
     try {
       const items = await ComputerService.getAllComputers();
-      const existing = items.find(item => item.name && item.name.toLowerCase() === computerName.toLowerCase());
-      if (existing) return existing.id;
+      const existing = items.find(item => item.name && item.name.toLowerCase() === itemName.toLowerCase());
+      if (existing) return { id: existing.id, type: 'Computer' };
     } catch(e) {
       console.warn(e);
     }
+    
+    // Essayer de chercher dans les Monitors
+    try {
+      // Si nous n'avons pas de MonitorService, on peut utiliser l'api directement,
+      // Mais dans notre contexte on va simuler ou vous pouvez créer le MonitorService
+      const { default: api } = await import('../../config/api');
+      const response = await api.get('/Monitor');
+      const items = response.data;
+      const existing = items.find(item => item.name && item.name.toLowerCase() === itemName.toLowerCase());
+      if (existing) return { id: existing.id, type: 'Monitor' };
+    } catch(e) {
+      console.warn(e);
+    }
+    
     return null;
   }
 };

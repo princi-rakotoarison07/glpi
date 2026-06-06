@@ -109,7 +109,7 @@ const GLPIImportPage = () => {
   const handleFile1Change = (e) => {
     if (!e.target.files[0]) return;
     setFile1(e.target.files[0]);
-    readAndParseCsv(e.target.files[0], setPreview1, GLPIImportServiceFast.validateComputerFile, 'Fichier 1 (Ordinateurs):');
+    readAndParseCsv(e.target.files[0], setPreview1, GLPIImportServiceFast.validateItemFile, 'Fichier 1 (Équipements):');
   };
 
   const handleFile2Change = (e) => {
@@ -141,14 +141,17 @@ const GLPIImportPage = () => {
     const ticketMap = {};
 
     try {
-      // 1. Ordinateurs (Feuille 1)
-      if (preview1.rows.length > 0) addMessage("Importation des ordinateurs...", 'info');
+      // 1. Équipements (Feuille 1)
+      if (preview1.rows.length > 0) addMessage("Importation des équipements...", 'info');
       for (let i = 0; i < preview1.rows.length; i++) {
         const row = preview1.rows[i];
         try {
-          await GLPIImportServiceFast.importComputerRow(row);
+          const res = await GLPIImportServiceFast.importItemRow(row);
+          // row[4] correspond à l'Item_Type dans le CSV s'il est à l'index 4
+          // Modifions le message pour qu'il soit dynamique
+          const itemType = (row[4] && row[4].trim()) ? row[4].trim() : 'Computer';
           newResults.success++;
-          addMessage(`Ordinateur '${row[0]}' importé.`, 'success');
+          addMessage(`${itemType} '${row[0]}' importé.`, 'success');
         } catch (error) {
           newResults.errors++;
           newResults.details.push({ row: i + 2, status: 'error', name: row[0], message: error.message });
@@ -207,7 +210,7 @@ const GLPIImportPage = () => {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <FileField label="1. Ordinateurs (Feuille 1)" icon={Package} file={file1} count={preview1.rows.length} onChange={handleFile1Change} isImporting={isImporting} />
+          <FileField label="1. Équipements (Feuille 1)" icon={Package} file={file1} count={preview1.rows.length} onChange={handleFile1Change} isImporting={isImporting} />
           <FileField label="2. Tickets (Feuille 2)" icon={Eye} file={file2} count={preview2.rows.length} onChange={handleFile2Change} isImporting={isImporting} />
           <FileField label="3. Coûts (Feuille 3)" icon={ShoppingCart} file={file3} count={preview3.rows.length} onChange={handleFile3Change} isImporting={isImporting} />
         </div>

@@ -7,28 +7,40 @@ Ce document détaille les tables de la base de données GLPI dans lesquelles les
 ## 1. Import-data-juin-26 - Feuille 1.csv
 **Contenu :** Parc informatique / Inventaire du matériel
 
-Avant de pouvoir créer un équipement (ordinateur), toutes ses propriétés doivent d'abord exister dans les tables de configuration.
+Avant de pouvoir créer un équipement, toutes ses propriétés doivent d'abord exister dans les tables de configuration.
 
 **A. Tables de configuration et utilisateurs (À insérer EN PREMIER) :**
-- `glpi_states` : Statut du matériel (ex: "En production", "Maintenance").
-- `glpi_locations` : Lieux d'affectation (ex: "Administration", "Comptabilité").
-- `glpi_manufacturers` : Fabricants (ex: "Dell", "HP", "Lenovo").
-- `glpi_computermodels` : Modèles des équipements (ex: "OptiPlex 7010", "ProDesk 400 G9").
-- `glpi_users` : Usagers du matériel (ex: "Rakoto Jean", "Rasoanaivo Marie").
+- `Status` -> inséré dans `glpi_states` (champ `name`).
+- `Location` -> inséré dans `glpi_locations` (champ `name`).
+- `Manufacturer` -> inséré dans `glpi_manufacturers` (champ `name`).
+- `Model` -> inséré dans la table de modèles correspondante (ex: `glpi_computermodels` pour un PC, `glpi_monitormodels` pour un écran) (champ `name`).
+- `User` -> inséré dans `glpi_users` (champ `name` / `realname`).
 
 **B. Table principale du matériel (À insérer EN SECOND) :**
-- `glpi_computers` : Création de l'équipement (Name, Inventory_Number). Lors de l'insertion, vous devrez utiliser les ID générés à l'étape A pour remplir les clés étrangères (ex: `states_id`, `locations_id`, `manufacturers_id`, `computermodels_id`, `users_id`).
+La colonne **`Item_Type`** ne s'insère pas dans une colonne spécifique, elle **détermine la table cible** (`glpi_computers` pour 'Computer', `glpi_monitors` pour 'Monitor', etc.).
 
-*(Note : Si le champ `Item_Type` contient d'autres types d'équipements, d'autres tables comme `glpi_monitors`, `glpi_printers`, etc. devront être alimentées à cette étape B).*
+Mapping des colonnes vers la table cible (ex: `glpi_computers`) :
+- `Name` -> inséré dans `name`
+- `Inventory_Number` -> inséré dans **`otherserial`** (et non `serial` qui est le n° de série fabricant)
+- Les autres colonnes sont insérées sous forme de clés étrangères (Foreign Keys) pointant vers les tables créées à l'étape A : `states_id`, `locations_id`, `manufacturers_id`, `computermodels_id` (ou `monitormodels_id`), `users_id`.
 
 ## 2. Import-data-juin-26 - Feuille 2.csv
 **Contenu :** Gestion de l'assistance / Création des tickets
 
-L'insertion des tickets nécessite que le matériel (les PC) soit déjà présent dans GLPI.
+L'insertion des tickets nécessite que le matériel soit déjà présent dans GLPI.
 
 **Ordre d'insertion :**
-1. `glpi_tickets` : Table principale pour l'insertion des tickets (Titre, Description, Date, Heure, Type, Status, Priority).
-2. `glpi_items_tickets` : Table de liaison. Une fois le ticket créé, on insère ici une ligne pour lier le ticket (`tickets_id`) à l'équipement concerné (`items_id` correspondant au PC, et `itemtype` = 'Computer').
+1. **`glpi_tickets`** (Table principale) :
+   - `Titre` -> inséré dans `name`
+   - `Description` -> inséré dans `content`
+   - `Date` et `Heure` -> concaténés et insérés dans `date`
+   - `Type` -> inséré dans `type` (1 = Incident, 2 = Demande)
+   - `Status` -> inséré dans `status` (entier de 1 à 6)
+   - `Priority` -> inséré dans `priority` (entier de 1 à 6)
+   - *(Note: `Ref_Ticket` sert uniquement de référence pour l'import des coûts).*
+
+2. **`glpi_items_tickets`** (Table de liaison) :
+   - `Items` -> on cherche l'équipement dans GLPI. On insère l'ID trouvé dans `items_id`, l'ID du ticket dans `tickets_id`, et le type d'équipement exact (ex: `'Computer'` ou `'Monitor'`) dans la colonne texte `itemtype`.
 
 ## 3. Import-data-juin-26 - Feuille 3.csv
 **Contenu :** Coûts et temps d'intervention associés aux tickets
@@ -36,8 +48,11 @@ L'insertion des tickets nécessite que le matériel (les PC) soit déjà présen
 Ces données viennent compléter les tickets existants (Feuille 2).
 
 **Ordre d'insertion :**
-1. `glpi_ticketcosts` : Table pour enregistrer les coûts fixes (`Fixed_Cost`), les coûts liés au temps (`Time_Cost`) et la durée (`Duration_second`) associés à l'ID du ticket existant (`tickets_id` obtenu à partir de `Num_Ticket`).
-2. `glpi_tickettasks` : (Éventuellement) Si vous souhaitez également créer des tâches spécifiques dans le ticket pour refléter les actions et la durée d'intervention.
+1. **`glpi_ticketcosts`** :
+   - `Num_Ticket` -> sert à retrouver l'ID réel du ticket dans GLPI pour remplir `tickets_id`.
+   - `Fixed_Cost` -> inséré dans `cost_fixed`
+   - `Time_Cost` -> inséré dans `cost_time`
+   - `Duration_second` -> inséré dans `actiontime`
 
 ## 4. images.zip
 **Contenu :** Fichiers d'images associés aux équipements (ex: MN-FORM-002.png, PC-ADM-001.png, PC-COMPTA-001.png, PC-LAB-002.jpeg).

@@ -1,3 +1,4 @@
+import api from '../../config/api';
 import ComputerService from '../Computer/ComputerService';
 import TicketService from '../Ticket/TicketService';
 import TicketCostService from '../TicketCost/TicketCostService';
@@ -10,10 +11,10 @@ const GLPIImportServiceFast = {
   ...GLPIImportHelpers,
 
   /**
-   * Importe une ligne de la Feuille 1 (Items / Computers)
+   * Importe une ligne de la Feuille 1 (Items / Équipements)
    * Headers: Name, Status, Location, Manufacturer, Item_Type, Model, Inventory_Number, User
    */
-  importComputerRow: async (row, onProgress = null) => {
+  importItemRow: async (row, onProgress = null) => {
     const [name, status, location, manufacturer, itemType, model, inventoryNumber, user] = row;
     
     // 1. Résoudre les relations
@@ -23,23 +24,28 @@ const GLPIImportServiceFast = {
     const computermodels_id = await GLPIImportServiceFast.resolveComputerModel(model);
     const users_id = await GLPIImportServiceFast.resolveUser(user);
     
-    // 2. Créer l'ordinateur
-    const computerData = {
+    // 2. Créer l'équipement en fonction de son type
+    // On s'assure que le type correspond à la bonne entité GLPI (Computer, Monitor, Printer...)
+    const validItemType = (itemType && itemType.trim()) ? itemType.trim() : 'Computer';
+
+    const itemData = {
       name: name,
       otherserial: inventoryNumber,
       states_id: states_id || 0,
       locations_id: locations_id || 0,
       manufacturers_id: manufacturers_id || 0,
-      computermodels_id: computermodels_id || 0,
+      // Note : les modèles sont gérés différemment selon le type d'équipement dans GLPI (ex: computermodels_id vs monitormodels_id)
+      // Pour simplifier, on envoie la donnée de modèle avec la clé dynamique si ce n'est pas un Computer
+      [`${validItemType.toLowerCase()}models_id`]: computermodels_id || 0,
       users_id: users_id || 0
     };
     
     try {
-      const response = await ComputerService.createComputer(computerData);
-      if (onProgress) onProgress('computer', response.id);
-      return { success: true, id: response.id, name: name };
+      const response = await api.post(`/${validItemType}`, { input: itemData });
+      if (onProgress) onProgress(validItemType.toLowerCase(), response.data.id);
+      return { success: true, id: response.data.id, name: name };
     } catch (error) {
-      console.error(`Erreur lors de l'import de l'ordinateur ${name}:`, error);
+      console.error(`Erreur lors de l'import de l'équipement ${name} (${validItemType}):`, error);
       throw error;
     }
   },
@@ -137,12 +143,12 @@ const GLPIImportServiceFast = {
           const itemsArray = JSON.parse(cleanStr);
           
           for (const itemRef of itemsArray) {
-            // Chercher le PC par son nom
-            const compId = await GLPIImportServiceFast.resolveComputer(itemRef);
-            if (compId) {
-              await ItemTicketService.linkItemToTicket(newTicketId, compId, 'Computer');
+            // Chercher l'équipement par son nom
+            const itemData = await GLPIImportServiceFast.resolveItem(itemRef);
+            if (itemData) {
+              await ItemTicketService.linkItemToTicket(newTicketId, itemData.id, itemData.type);
             } else {
-              console.warn(`Ordinateur non trouvé pour liaison au ticket: ${itemRef}`);
+              console.warn(`Équipement non trouvé pour liaison au ticket: ${itemRef}`);
             }
           }
         } catch (e) {
@@ -192,11 +198,11 @@ const GLPIImportServiceFast = {
   /**
    * Validation des fichiers
    */
-  validateComputerFile: (data) => {
+  validateItemFile: (data) => {
     const errors = [];
     const expectedHeaders = ['Name', 'Status', 'Location', 'Manufacturer', 'Item_Type', 'Model', 'Inventory_Number', 'User'];
     
-    const headersValidation = ImportValidationService.validateCSVHeaders(data.headers, expectedHeaders, 'Fichier Ordinateurs');
+    const headersValidation = ImportValidationService.validateCSVHeaders(data.headers, expectedHeaders, 'Fichier Équipements');
     errors.push(...headersValidation.errors);
     
     for (let i = 0; i < data.rows.length; i++) {
