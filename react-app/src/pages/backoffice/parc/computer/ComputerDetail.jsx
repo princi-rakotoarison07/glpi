@@ -10,7 +10,7 @@ import ComputerTypeService from '../../../../services/ComputerType/ComputerTypeS
 import OperatingSystemService from '../../../../services/OperatingSystem/OperatingSystemService';
 import UserService from '../../../../services/User/UserService';
 import ItemPhotos from '../../../../components/common/ItemPhotos';
-import '../../../../styles/pages/ParcDetail.css';
+import '../../../../styles/detail.css';
 
 const ComputerDetail = () => {
   const { id } = useParams();
@@ -201,7 +201,7 @@ const ComputerDetail = () => {
                 <Calendar size={16} />
                 Date de création
               </div>
-              <div className="detail-value">{formatDate(computer.date)}</div>
+              <div className="detail-value">{formatDate(computer.date_creation || computer.date)}</div>
             </div>
             <div className="detail-item">
               <div className="detail-label">

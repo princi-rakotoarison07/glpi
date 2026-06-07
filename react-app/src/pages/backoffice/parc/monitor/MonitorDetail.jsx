@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import MonitorService from '../../../../services/Monitor/MonitorService';
 import ItemPhotos from '../../../../components/common/ItemPhotos';
-import '../../../../styles/pages/TicketDetail.css';
+import '../../../../styles/detail.css';
 
 const MonitorDetail = () => {
   const { id } = useParams();
@@ -105,7 +105,7 @@ const MonitorDetail = () => {
                 <Calendar size={16} />
                 Date de création
               </div>
-              <div className="detail-value">{formatDate(monitor.date)}</div>
+              <div className="detail-value">{formatDate(monitor.date_creation || monitor.date)}</div>
             </div>
             <div className="detail-item">
               <div className="detail-label">

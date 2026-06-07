@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Eye } from 'lucide-react';
 import ChassisService from '../../../../services/Chassis/ChassisService';
-import '../../../../styles/pages/TicketList.css';
+import '../../../../styles/list.css';
 
 const ChassisList = () => {
   const [chassis, setChassis] = useState([]);
@@ -65,7 +65,7 @@ const ChassisList = () => {
                     <td className="ticket-title">
                       {item.name || `Châssis #${item.id}`}
                     </td>
-                    <td>{formatDate(item.date)}</td>
+                    <td>{formatDate(item.date_creation || item.date)}</td>
                     <td>{formatDate(item.date_mod)}</td>
                     <td className="action-cell">
                       <Link to={`/parc/chassis/${item.id}`} className="action-btn view-btn">

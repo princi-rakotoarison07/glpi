@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Eye } from 'lucide-react';
 import SoftwareLicenseService from '../../../../services/SoftwareLicense/SoftwareLicenseService';
-import '../../../../styles/pages/TicketList.css';
+import '../../../../styles/list.css';
 
 const LicenseList = () => {
   const [licenses, setLicenses] = useState([]);
@@ -65,7 +65,7 @@ const LicenseList = () => {
                     <td className="ticket-title">
                       {license.name || `Licence #${license.id}`}
                     </td>
-                    <td>{formatDate(license.date)}</td>
+                    <td>{formatDate(license.date_creation || license.date)}</td>
                     <td>{formatDate(license.date_mod)}</td>
                     <td className="action-cell">
                       <Link to={`/parc/licenses/${license.id}`} className="action-btn view-btn">

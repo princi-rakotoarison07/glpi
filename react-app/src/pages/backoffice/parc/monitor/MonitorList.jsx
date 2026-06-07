@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Eye } from 'lucide-react';
 import MonitorService from '../../../../services/Monitor/MonitorService';
-import '../../../../styles/pages/TicketList.css';
+import '../../../../styles/list.css';
 
 const MonitorList = () => {
   const [monitors, setMonitors] = useState([]);
@@ -67,7 +67,7 @@ const MonitorList = () => {
                       {monitor.name || `Moniteur #${monitor.id}`}
                     </td>
                     <td>{monitor.otherserial || '-'}</td>
-                    <td>{formatDate(monitor.date)}</td>
+                    <td>{formatDate(monitor.date_creation || monitor.date)}</td>
                     <td>{formatDate(monitor.date_mod)}</td>
                     <td className="action-cell">
                       <Link to={`/parc/monitors/${monitor.id}`} className="action-btn view-btn">

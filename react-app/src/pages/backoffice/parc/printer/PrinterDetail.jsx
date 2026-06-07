@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import PrinterService from '../../../../services/Printer/PrinterService';
 import ItemPhotos from '../../../../components/common/ItemPhotos';
-import '../../../../styles/pages/TicketDetail.css';
+import '../../../../styles/detail.css';
 
 const PrinterDetail = () => {
   const { id } = useParams();
@@ -93,7 +93,7 @@ const PrinterDetail = () => {
                 <Calendar size={16} />
                 Date de création
               </div>
-              <div className="detail-value">{formatDate(printer.date)}</div>
+              <div className="detail-value">{formatDate(printer.date_creation || printer.date)}</div>
             </div>
             <div className="detail-item">
               <div className="detail-label">

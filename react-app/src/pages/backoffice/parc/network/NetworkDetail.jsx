@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import NetworkEquipmentService from '../../../../services/NetworkEquipment/NetworkEquipmentService';
 import ItemPhotos from '../../../../components/common/ItemPhotos';
-import '../../../../styles/pages/TicketDetail.css';
+import '../../../../styles/detail.css';
 
 const NetworkDetail = () => {
   const { id } = useParams();
@@ -89,7 +89,7 @@ const NetworkDetail = () => {
                 <Calendar size={16} />
                 Date de création
               </div>
-              <div className="detail-value">{formatDate(network.date)}</div>
+              <div className="detail-value">{formatDate(network.date_creation || network.date)}</div>
             </div>
             <div className="detail-item">
               <div className="detail-label">

@@ -18,7 +18,7 @@ import LocationService from '../../services/Location/LocationService';
 import ManufacturerService from '../../services/Manufacturer/ManufacturerService';
 import ComputerModelService from '../../services/ComputerModel/ComputerModelService';
 import ComputerTypeService from '../../services/ComputerType/ComputerTypeService';
-import '../../styles/pages/TicketDetail.css';
+import '../../styles/detail.css';
 
 const TicketDetail = () => {
   const { id } = useParams();

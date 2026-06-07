@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Eye } from 'lucide-react';
 import PrinterService from '../../../../services/Printer/PrinterService';
-import '../../../../styles/pages/TicketList.css';
+import '../../../../styles/list.css';
 
 const PrinterList = () => {
   const [printers, setPrinters] = useState([]);
@@ -67,7 +67,7 @@ const PrinterList = () => {
                       {printer.name || `Imprimante #${printer.id}`}
                     </td>
                     <td>{printer.otherserial || '-'}</td>
-                    <td>{formatDate(printer.date)}</td>
+                    <td>{formatDate(printer.date_creation || printer.date)}</td>
                     <td>{formatDate(printer.date_mod)}</td>
                     <td className="action-cell">
                       <Link to={`/parc/printers/${printer.id}`} className="action-btn view-btn">

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Filter, ArrowUpDown, Eye } from 'lucide-react';
 import TicketService from '../../services/Ticket/TicketService';
-import '../../styles/pages/TicketList.css';
+import '../../styles/list.css';
 
 const TicketList = () => {
   const [tickets, setTickets] = useState([]);

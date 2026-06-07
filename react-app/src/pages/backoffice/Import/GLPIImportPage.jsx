@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import GLPIImportServiceFast from '../../../services/import/GLPIImportServiceFast';
 import GLPIImageImportService from '../../../services/import/GLPIImageImportService';
 import { Package, Eye, ShoppingCart, CheckCircle2, AlertCircle, Terminal, Upload, Image as ImageIcon } from 'lucide-react';
-import '../../../styles/pages/TicketList.css'; // On va utiliser un style proche ou générique
+import '../../../styles/list.css'; // On va utiliser un style proche ou générique
 // Assurez-vous d'avoir form.css ou import.css importé si nécessaire. On se base sur les styles existants.
 
 /**

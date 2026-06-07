@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Eye } from 'lucide-react';
 import SoftwareService from '../../../../services/Software/SoftwareService';
-import '../../../../styles/pages/TicketList.css';
+import '../../../../styles/list.css';
 
 const SoftwareList = () => {
   const [software, setSoftware] = useState([]);
@@ -65,7 +65,7 @@ const SoftwareList = () => {
                     <td className="ticket-title">
                       {item.name || `Logiciel #${item.id}`}
                     </td>
-                    <td>{formatDate(item.date)}</td>
+                    <td>{formatDate(item.date_creation || item.date)}</td>
                     <td>{formatDate(item.date_mod)}</td>
                     <td className="action-cell">
                       <Link to={`/parc/software/${item.id}`} className="action-btn view-btn">

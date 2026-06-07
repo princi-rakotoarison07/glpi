@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import SoftwareLicenseService from '../../../../services/SoftwareLicense/SoftwareLicenseService';
 import ItemPhotos from '../../../../components/common/ItemPhotos';
-import '../../../../styles/pages/TicketDetail.css';
+import '../../../../styles/detail.css';
 
 const LicenseDetail = () => {
   const { id } = useParams();
@@ -89,7 +89,7 @@ const LicenseDetail = () => {
                 <Calendar size={16} />
                 Date de création
               </div>
-              <div className="detail-value">{formatDate(license.date)}</div>
+              <div className="detail-value">{formatDate(license.date_creation || license.date)}</div>
             </div>
             <div className="detail-item">
               <div className="detail-label">

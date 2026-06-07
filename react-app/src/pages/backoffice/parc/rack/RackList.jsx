@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Eye } from 'lucide-react';
 import RackService from '../../../../services/Rack/RackService';
-import '../../../../styles/pages/TicketList.css';
+import '../../../../styles/list.css';
 
 const RackList = () => {
   const [racks, setRacks] = useState([]);
@@ -65,7 +65,7 @@ const RackList = () => {
                     <td className="ticket-title">
                       {rack.name || `Baie #${rack.id}`}
                     </td>
-                    <td>{formatDate(rack.date)}</td>
+                    <td>{formatDate(rack.date_creation || rack.date)}</td>
                     <td>{formatDate(rack.date_mod)}</td>
                     <td className="action-cell">
                       <Link to={`/parc/racks/${rack.id}`} className="action-btn view-btn">

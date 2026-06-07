@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import PDUService from '../../../../services/PDU/PDUService';
 import ItemPhotos from '../../../../components/common/ItemPhotos';
-import '../../../../styles/pages/TicketDetail.css';
+import '../../../../styles/detail.css';
 
 const PDUDetail = () => {
   const { id } = useParams();
@@ -89,7 +89,7 @@ const PDUDetail = () => {
                 <Calendar size={16} />
                 Date de création
               </div>
-              <div className="detail-value">{formatDate(pdu.date)}</div>
+              <div className="detail-value">{formatDate(pdu.date_creation || pdu.date)}</div>
             </div>
             <div className="detail-item">
               <div className="detail-label">

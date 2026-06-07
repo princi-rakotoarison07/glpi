@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Eye } from 'lucide-react';
 import PDUService from '../../../../services/PDU/PDUService';
-import '../../../../styles/pages/TicketList.css';
+import '../../../../styles/list.css';
 
 const PDUList = () => {
   const [pdus, setPdus] = useState([]);
@@ -65,7 +65,7 @@ const PDUList = () => {
                     <td className="ticket-title">
                       {pdu.name || `PDU #${pdu.id}`}
                     </td>
-                    <td>{formatDate(pdu.date)}</td>
+                    <td>{formatDate(pdu.date_creation || pdu.date)}</td>
                     <td>{formatDate(pdu.date_mod)}</td>
                     <td className="action-cell">
                       <Link to={`/parc/pdus/${pdu.id}`} className="action-btn view-btn">

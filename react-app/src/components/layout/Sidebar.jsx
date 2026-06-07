@@ -12,7 +12,7 @@ import {
   Ticket,
   ShieldCheck,
 } from 'lucide-react';
-import '../../styles/layout/Sidebar.css';
+import '../../styles/layout.css';
 
 const MENU_ITEMS = [
   { 

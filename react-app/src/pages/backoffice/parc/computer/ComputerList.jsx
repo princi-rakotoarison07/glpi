@@ -8,7 +8,7 @@ import LocationService from '../../../../services/Location/LocationService';
 import ComputerModelService from '../../../../services/ComputerModel/ComputerModelService';
 import ComputerTypeService from '../../../../services/ComputerType/ComputerTypeService';
 import OperatingSystemService from '../../../../services/OperatingSystem/OperatingSystemService';
-import '../../../../styles/pages/ParcList.css';
+import '../../../../styles/list.css';
 
 const ComputerList = () => {
   const [computers, setComputers] = useState([]);

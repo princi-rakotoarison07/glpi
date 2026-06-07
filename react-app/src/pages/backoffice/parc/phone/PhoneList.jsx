@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Eye } from 'lucide-react';
 import PhoneService from '../../../../services/Phone/PhoneService';
-import '../../../../styles/pages/TicketList.css';
+import '../../../../styles/list.css';
 
 const PhoneList = () => {
   const [phones, setPhones] = useState([]);
@@ -67,7 +67,7 @@ const PhoneList = () => {
                       {phone.name || `Téléphone #${phone.id}`}
                     </td>
                     <td>{phone.otherserial || '-'}</td>
-                    <td>{formatDate(phone.date)}</td>
+                    <td>{formatDate(phone.date_creation || phone.date)}</td>
                     <td>{formatDate(phone.date_mod)}</td>
                     <td className="action-cell">
                       <Link to={`/parc/phones/${phone.id}`} className="action-btn view-btn">

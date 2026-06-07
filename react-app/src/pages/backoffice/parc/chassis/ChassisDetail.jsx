@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import ChassisService from '../../../../services/Chassis/ChassisService';
 import ItemPhotos from '../../../../components/common/ItemPhotos';
-import '../../../../styles/pages/TicketDetail.css';
+import '../../../../styles/detail.css';
 
 const ChassisDetail = () => {
   const { id } = useParams();
@@ -89,7 +89,7 @@ const ChassisDetail = () => {
                 <Calendar size={16} />
                 Date de création
               </div>
-              <div className="detail-value">{formatDate(chassis.date)}</div>
+              <div className="detail-value">{formatDate(chassis.date_creation || chassis.date)}</div>
             </div>
             <div className="detail-item">
               <div className="detail-label">

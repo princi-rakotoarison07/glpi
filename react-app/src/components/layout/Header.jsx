@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, LogOut, ExternalLink } from 'lucide-react';
-import '../../styles/layout/Header.css';
+import '../../styles/layout.css';
 import AuthService from '../../services/AuthService';
 
 const Header = ({ isSidebarCollapsed, toggleSidebar }) => {

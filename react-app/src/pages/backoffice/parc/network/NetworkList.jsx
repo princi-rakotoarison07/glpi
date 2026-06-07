@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Eye } from 'lucide-react';
 import NetworkEquipmentService from '../../../../services/NetworkEquipment/NetworkEquipmentService';
-import '../../../../styles/pages/TicketList.css';
+import '../../../../styles/list.css';
 
 const NetworkList = () => {
   const [network, setNetwork] = useState([]);
@@ -65,7 +65,7 @@ const NetworkList = () => {
                     <td className="ticket-title">
                       {item.name || `Matériel réseau #${item.id}`}
                     </td>
-                    <td>{formatDate(item.date)}</td>
+                    <td>{formatDate(item.date_creation || item.date)}</td>
                     <td>{formatDate(item.date_mod)}</td>
                     <td className="action-cell">
                       <Link to={`/parc/network/${item.id}`} className="action-btn view-btn">
