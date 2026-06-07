@@ -3,18 +3,27 @@ import api, { initSession } from '../../config/api';
 const ItemTicketService = {
   // Création du lien entre le ticket et un équipement (table glpi_items_tickets)
   linkItemToTicket: async (ticketId, itemId, itemType = 'Computer') => {
+    console.log('linkItemToTicket called with:', { ticketId, itemId, itemType });
     try {
       await initSession();
-      const response = await api.post('/Item_Ticket', {
+      const dataToSend = {
         input: {
           tickets_id: ticketId,
           items_id: itemId,
           itemtype: itemType
         }
-      });
+      };
+      console.log('Sending to API:', dataToSend);
+      const response = await api.post('/Item_Ticket', dataToSend);
+      console.log('API response:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error linking item to ticket:', error);
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+        console.error('Error response status:', error.response.status);
+        console.error('Error response headers:', error.response.headers);
+      }
       throw error;
     }
   },

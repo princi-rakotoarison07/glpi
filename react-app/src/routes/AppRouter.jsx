@@ -35,7 +35,8 @@ import LicenseDetail from '../pages/backoffice/parc/license/LicenseDetail';
 import FrontOfficeAccueil from '../pages/frontoffice/Accueil';
 import FrontOfficeElementsList from '../pages/frontoffice/ElementsList';
 import FrontOfficeTicketList from '../pages/frontoffice/TicketList';
-import FrontOfficeTicketForm from '../pages/frontoffice/TicketForm';
+import TicketCreate from '../pages/frontoffice/TicketCreate';
+import TicketUpdate from '../pages/frontoffice/TicketUpdate';
 
 const AppRouter = () => {
   return (
@@ -50,8 +51,8 @@ const AppRouter = () => {
         {/* FrontOffice Tickets - protégées */}
         <Route element={<ProtectedRoute />}>
           <Route path="/frontoffice/tickets" element={<FrontOfficeTicketList />} />
-          <Route path="/frontoffice/tickets/add" element={<FrontOfficeTicketForm />} />
-          <Route path="/frontoffice/tickets/:id" element={<FrontOfficeTicketForm />} />
+          <Route path="/frontoffice/tickets/add" element={<TicketCreate />} />
+          <Route path="/frontoffice/tickets/:id" element={<TicketUpdate />} />
         </Route>
 
         {/* Routes protégées par ProtectedRoute */}
