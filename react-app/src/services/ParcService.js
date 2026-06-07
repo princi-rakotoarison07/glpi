@@ -28,7 +28,8 @@ const ParcService = {
       { key: 'chassis', endpoint: '/Enclosure', label: 'Châssis' },
       { key: 'network', endpoint: '/NetworkEquipment', label: 'Matériel réseau' },
       { key: 'licenses', endpoint: '/SoftwareLicense', label: 'Licence' },
-      { key: 'monitors', endpoint: '/Monitor', label: 'Moniteur' }
+      { key: 'monitors', endpoint: '/Monitor', label: 'Moniteur' },
+      { key: 'peripherals', endpoint: '/Peripheral', label: 'Périphérique' } // Added!
     ];
 
     const stats = {
@@ -42,7 +43,8 @@ const ParcService = {
       network: { total: 0 },
       licenses: { total: 0 },
       monitors: { total: 0 },
-      tickets: { total: 0, byType: {} }
+      peripherals: { total: 0 }, // Added!
+      tickets: { total: 0, byType: { incident: 0, demande: 0 } }
     };
 
     try {
@@ -106,6 +108,18 @@ const ParcService = {
               { id: 'closed', name: 'Tickets fermés', color: '#6b7280', icon: 'trash' } // gris foncé
             ];
 
+            // Count tickets by type (Incident = type 1, Demande = type 2)
+            let totalIncident = 0;
+            let totalDemande = 0;
+            try {
+              const incidentResponse = await api.get('/Ticket?searchText[type]=1&range=0-0');
+              totalIncident = extractCountFromResponse(incidentResponse);
+              const demandeResponse = await api.get('/Ticket?searchText[type]=2&range=0-0');
+              totalDemande = extractCountFromResponse(demandeResponse);
+            } catch (e) {
+              console.warn('Erreur lors de la récupération des tickets par type:', e);
+            }
+
             // Pour chaque carte ticket, compter le nombre
             const cards = {};
             for (const card of ticketCards) {
@@ -150,7 +164,7 @@ const ParcService = {
               cards[card.id] = { ...card, count };
             }
 
-            return { key: 'tickets', data: { total: totalTickets, cards }, success: true };
+            return { key: 'tickets', data: { total: totalTickets, cards, byType: { incident: totalIncident, demande: totalDemande } }, success: true };
           } catch (e) {
             console.warn('Erreur lors de la récupération des tickets:', e);
             // Retourner les cartes par défaut avec 0
@@ -171,7 +185,7 @@ const ParcService = {
             for (const c of defaultCards) {
               cards[c.id] = { ...c, count: 0 };
             }
-            return { key: 'tickets', data: { total: 0, cards }, success: false };
+            return { key: 'tickets', data: { total: 0, cards, byType: { incident: 0, demande: 0 } }, success: false };
           }
         })()
       );
