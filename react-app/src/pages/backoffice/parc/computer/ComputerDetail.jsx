@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, Clock, User } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, User, FileText, Download } from 'lucide-react';
 import ComputerService from '../../../../services/Computer/ComputerService';
 import StateService from '../../../../services/State/StateService';
 import ManufacturerService from '../../../../services/Manufacturer/ManufacturerService';
@@ -9,11 +9,13 @@ import ComputerModelService from '../../../../services/ComputerModel/ComputerMod
 import ComputerTypeService from '../../../../services/ComputerType/ComputerTypeService';
 import OperatingSystemService from '../../../../services/OperatingSystem/OperatingSystemService';
 import UserService from '../../../../services/User/UserService';
+import DocumentService from '../../../../services/Document/DocumentService';
 import '../../../../styles/pages/ParcDetail.css';
 
 const ComputerDetail = () => {
   const { id } = useParams();
   const [computer, setComputer] = useState(null);
+  const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [relatedData, setRelatedData] = useState({
     states: {},
@@ -41,7 +43,8 @@ const ComputerDetail = () => {
         computerModelsData,
         computerTypesData,
         operatingSystemsData,
-        usersData
+        usersData,
+        documentsData
       ] = await Promise.all([
         ComputerService.getComputerById(id),
         StateService.getAllStates(),
@@ -50,7 +53,8 @@ const ComputerDetail = () => {
         ComputerModelService.getAllComputerModels(),
         ComputerTypeService.getAllComputerTypes(),
         OperatingSystemService.getAllOperatingSystems(),
-        UserService.getAllUsers()
+        UserService.getAllUsers(),
+        DocumentService.getDocumentsForItem('Computer', id)
       ]);
 
       // Create maps for quick lookup
@@ -86,6 +90,7 @@ const ComputerDetail = () => {
       });
 
       setComputer(computerData);
+      setDocuments(documentsData);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -209,6 +214,50 @@ const ComputerDetail = () => {
               <div className="detail-value">{formatDate(computer.date_mod)}</div>
             </div>
           </div>
+        </div>
+
+        <div className="detail-card">
+          <h2>Documents</h2>
+          {documents.length > 0 ? (
+            <div className="documents-table-container">
+              <table className="documents-table">
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th>Entité</th>
+                    <th>Fichier</th>
+                    <th>Type MIME</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {documents.map((doc) => (
+                    <tr key={doc.id}>
+                      <td>{doc.name || '-'}</td>
+                      <td>{doc.entities_id || '-'}</td>
+                      <td>{doc.filename || '-'}</td>
+                      <td>{doc.mime || '-'}</td>
+                      <td>{doc.date ? new Date(doc.date).toLocaleDateString('fr-FR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) : '-'}</td>
+                      <td>
+                        <a
+                          href={DocumentService.getDocumentDownloadUrl(doc.id)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="download-link"
+                        >
+                          <Download size={16} />
+                          Télécharger
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="empty-state">Aucun document associé</div>
+          )}
         </div>
       </div>
     </div>
