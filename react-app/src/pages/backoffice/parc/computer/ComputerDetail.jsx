@@ -9,6 +9,7 @@ import ComputerModelService from '../../../../services/ComputerModel/ComputerMod
 import ComputerTypeService from '../../../../services/ComputerType/ComputerTypeService';
 import OperatingSystemService from '../../../../services/OperatingSystem/OperatingSystemService';
 import UserService from '../../../../services/User/UserService';
+import ItemPhotos from '../../../../components/common/ItemPhotos';
 import '../../../../styles/pages/ParcDetail.css';
 
 const ComputerDetail = () => {
@@ -61,6 +62,7 @@ const ComputerDetail = () => {
       manufacturersData.forEach(mf => manufacturersMap[mf.id] = mf.name);
 
       const locationsMap = {};
+      locationsMap.forEach = undefined; // safety
       locationsData.forEach(loc => locationsMap[loc.id] = loc.name);
 
       const computerModelsMap = {};
@@ -210,6 +212,9 @@ const ComputerDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Galerie photo réutilisable */}
+        <ItemPhotos itemId={id} itemType="Computer" />
       </div>
     </div>
   );

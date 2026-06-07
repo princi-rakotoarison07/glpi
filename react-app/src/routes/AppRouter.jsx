@@ -9,6 +9,7 @@ import Reset from '../pages/backoffice/Reset/Reset';
 import TicketList from '../pages/backoffice/TicketList';
 import TicketDetail from '../pages/backoffice/TicketDetail';
 import GLPIImportPage from '../pages/backoffice/Import/GLPIImportPage';
+import GLPIImageImportPageV2 from '../pages/backoffice/Import/GLPIImageImportPageV2';
 import Login from '../pages/Auth/Login';
 import ProtectedRoute from '../components/ProtectedRoute';
 import ComputerList from '../pages/backoffice/parc/computer/ComputerList';
@@ -87,6 +88,7 @@ const AppRouter = () => {
             <Route path="/tickets" element={<TicketList />} />
             <Route path="/tickets/:id" element={<TicketDetail />} />
             <Route path="/import" element={<GLPIImportPage />} />
+            <Route path="/import-images" element={<GLPIImageImportPageV2 />} />
           </Route>
         </Route>
 

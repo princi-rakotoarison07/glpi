@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import MonitorService from '../../../../services/Monitor/MonitorService';
+import ItemPhotos from '../../../../components/common/ItemPhotos';
 import '../../../../styles/pages/TicketDetail.css';
 
 const MonitorDetail = () => {
@@ -115,6 +116,9 @@ const MonitorDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Galerie photo réutilisable */}
+        <ItemPhotos itemId={id} itemType="Monitor" />
       </div>
     </div>
   );

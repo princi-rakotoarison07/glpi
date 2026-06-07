@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import PhoneService from '../../../../services/Phone/PhoneService';
+import ItemPhotos from '../../../../components/common/ItemPhotos';
 import '../../../../styles/pages/TicketDetail.css';
 
 const PhoneDetail = () => {
@@ -103,6 +104,9 @@ const PhoneDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Galerie photo réutilisable */}
+        <ItemPhotos itemId={id} itemType="Phone" />
       </div>
     </div>
   );

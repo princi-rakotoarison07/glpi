@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import RackService from '../../../../services/Rack/RackService';
+import ItemPhotos from '../../../../components/common/ItemPhotos';
 import '../../../../styles/pages/TicketDetail.css';
 
 const RackDetail = () => {
@@ -99,6 +100,9 @@ const RackDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Galerie photo réutilisable */}
+        <ItemPhotos itemId={id} itemType="Rack" />
       </div>
     </div>
   );

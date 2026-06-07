@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import PrinterService from '../../../../services/Printer/PrinterService';
+import ItemPhotos from '../../../../components/common/ItemPhotos';
 import '../../../../styles/pages/TicketDetail.css';
 
 const PrinterDetail = () => {
@@ -103,6 +104,9 @@ const PrinterDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Galerie photo réutilisable */}
+        <ItemPhotos itemId={id} itemType="Printer" />
       </div>
     </div>
   );

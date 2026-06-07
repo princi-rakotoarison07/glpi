@@ -10,6 +10,7 @@ import {
   Monitor,
   RefreshCw,
   Ticket,
+  ShieldCheck,
 } from 'lucide-react';
 import '../../styles/layout/Sidebar.css';
 
@@ -51,7 +52,10 @@ const MENU_ITEMS = [
   {
     icon: <Box size={20} />,
     label: 'Import',
-    path: '/import'
+    submenu: [
+      { label: 'Import CSV', path: '/import' },
+      { label: 'Import v2 (Rollback)', path: '/import-images', icon: <ShieldCheck size={13} /> },
+    ]
   }
 ];
 
@@ -137,7 +141,9 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
                           key={subIndex}
                           to={sub.path}
                           className={`submenu-item ${isSubActive ? 'active' : ''}`}
+                          style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
                         >
+                          {sub.icon && <span style={{ opacity: 0.75, display: 'flex', alignItems: 'center' }}>{sub.icon}</span>}
                           <span>{sub.label}</span>
                         </Link>
                       );
