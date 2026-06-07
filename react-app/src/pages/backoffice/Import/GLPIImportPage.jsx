@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import GLPIImportServiceFast from '../../../services/import/GLPIImportServiceFast';
-import { Package, Eye, ShoppingCart, CheckCircle2, AlertCircle, Terminal, Upload } from 'lucide-react';
+import GLPIImageImportService from '../../../services/import/GLPIImageImportService';
+import { Package, Eye, ShoppingCart, Image as ImageIcon, CheckCircle2, AlertCircle, Terminal, Upload } from 'lucide-react';
 import '../../../styles/pages/TicketList.css'; // On va utiliser un style proche ou générique
 // Assurez-vous d'avoir form.css ou import.css importé si nécessaire. On se base sur les styles existants.
 
@@ -43,6 +44,7 @@ const GLPIImportPage = () => {
   const [file1, setFile1] = useState(null);
   const [file2, setFile2] = useState(null);
   const [file3, setFile3] = useState(null);
+  const [zipFile, setZipFile] = useState(null);
 
   const [preview1, setPreview1] = useState({ headers: [], rows: [] });
   const [preview2, setPreview2] = useState({ headers: [], rows: [] });
@@ -109,7 +111,7 @@ const GLPIImportPage = () => {
   const handleFile1Change = (e) => {
     if (!e.target.files[0]) return;
     setFile1(e.target.files[0]);
-    readAndParseCsv(e.target.files[0], setPreview1, GLPIImportServiceFast.validateComputerFile, 'Fichier 1 (Ordinateurs):');
+    readAndParseCsv(e.target.files[0], setPreview1, GLPIImportServiceFast.validateItemFile, 'Fichier 1 (Équipements):');
   };
 
   const handleFile2Change = (e) => {
@@ -124,8 +126,15 @@ const GLPIImportPage = () => {
     readAndParseCsv(e.target.files[0], setPreview3, GLPIImportServiceFast.validateCostFile, 'Fichier 3 (Coûts):');
   };
 
+  const handleZipChange = (e) => {
+    if (!e.target.files[0]) return;
+    setZipFile(e.target.files[0]);
+    setResults({ success: 0, errors: 0, details: [] });
+    setProgress(0);
+  };
+
   const handleImport = async () => {
-    if (preview1.rows.length === 0 && preview2.rows.length === 0 && preview3.rows.length === 0) return;
+    if (preview1.rows.length === 0 && preview2.rows.length === 0 && preview3.rows.length === 0 && !zipFile) return;
     if (validationErrors.length > 0) return;
 
     setIsImporting(true);
@@ -141,14 +150,17 @@ const GLPIImportPage = () => {
     const ticketMap = {};
 
     try {
-      // 1. Ordinateurs (Feuille 1)
-      if (preview1.rows.length > 0) addMessage("Importation des ordinateurs...", 'info');
+      // 1. Équipements (Feuille 1)
+      if (preview1.rows.length > 0) addMessage("Importation des équipements...", 'info');
       for (let i = 0; i < preview1.rows.length; i++) {
         const row = preview1.rows[i];
         try {
-          await GLPIImportServiceFast.importComputerRow(row);
+          const res = await GLPIImportServiceFast.importItemRow(row);
+          // row[4] correspond à l'Item_Type dans le CSV s'il est à l'index 4
+          // Modifions le message pour qu'il soit dynamique
+          const itemType = (row[4] && row[4].trim()) ? row[4].trim() : 'Computer';
           newResults.success++;
-          addMessage(`Ordinateur '${row[0]}' importé.`, 'success');
+          addMessage(`${itemType} '${row[0]}' importé.`, 'success');
         } catch (error) {
           newResults.errors++;
           newResults.details.push({ row: i + 2, status: 'error', name: row[0], message: error.message });
@@ -192,6 +204,25 @@ const GLPIImportPage = () => {
       addMessage(`Erreur critique: ${err.message}`, 'error');
     }
 
+    // 4. Import des images (ZIP)
+    if (zipFile) {
+      addMessage('Importation des images...', 'info');
+      try {
+        const imgResults = await GLPIImageImportService.importImages(zipFile, (prog) => {
+          setProgress(Math.min(99, 90 + Math.round(prog / 10)));
+        });
+        newResults.success += imgResults.success;
+        newResults.errors += imgResults.errors;
+        newResults.details = [...newResults.details, ...imgResults.details];
+        addMessage(
+          `Images : ${imgResults.success} importée(s), ${imgResults.errors} erreur(s).`,
+          imgResults.errors > 0 ? 'error' : 'success'
+        );
+      } catch (imgErr) {
+        addMessage(`Erreur import images : ${imgErr.message}`, 'error');
+      }
+    }
+
     setIsImporting(false);
     setProgress(100);
     setResults({ ...newResults });
@@ -207,9 +238,10 @@ const GLPIImportPage = () => {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <FileField label="1. Ordinateurs (Feuille 1)" icon={Package} file={file1} count={preview1.rows.length} onChange={handleFile1Change} isImporting={isImporting} />
+          <FileField label="1. Équipements (Feuille 1)" icon={Package} file={file1} count={preview1.rows.length} onChange={handleFile1Change} isImporting={isImporting} />
           <FileField label="2. Tickets (Feuille 2)" icon={Eye} file={file2} count={preview2.rows.length} onChange={handleFile2Change} isImporting={isImporting} />
           <FileField label="3. Coûts (Feuille 3)" icon={ShoppingCart} file={file3} count={preview3.rows.length} onChange={handleFile3Change} isImporting={isImporting} />
+          <FileField label="4. Images des équipements (ZIP)" icon={ImageIcon} file={zipFile} onChange={handleZipChange} accept=".zip" isImporting={isImporting} />
         </div>
 
         {validationErrors.length > 0 && !isImporting && (
@@ -259,7 +291,7 @@ const GLPIImportPage = () => {
           </div>
         )}
 
-        {(file1 || file2 || file3) && !isImporting && (
+        {(file1 || file2 || file3 || zipFile) && !isImporting && (
           <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'flex-end' }}>
             <button 
               onClick={handleImport}
