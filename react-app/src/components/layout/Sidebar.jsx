@@ -85,8 +85,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
       if (activeItem) {
         setOpenSubmenu(activeItem.label);
       } else {
-        // Keep "Parc" open by default
-        setOpenSubmenu('Parc');
+        setOpenSubmenu('');
       }
     } else {
       setOpenSubmenu('');

@@ -91,7 +91,7 @@ const Dashboard = () => {
           </div>
           
           {error ? (
-            <span className="badge-demo" style={{ backgroundColor: 'rgba(224, 84, 83, 0.1)', color: 'var(--color-danger)', borderColor: 'rgba(224, 84, 83, 0.2)' }}>
+            <span className="badge-error">
               Erreur de connexion API
             </span>
           ) : (
@@ -119,6 +119,12 @@ const Dashboard = () => {
           {error} Vérifiez vos jetons d'accès dans le fichier `.env` ou la configuration réseau de votre serveur local Apache.
         </div>
       )}
+
+      {/* Total Elements General Card */}
+      <div className="total-elements-card">
+        <div className="total-elements-label">Nombre d'éléments général</div>
+        <div className="total-elements-value">{stats?.totalItems || 0}</div>
+      </div>
 
       {/* Grid de 10 KPI Cards principales */}
       <div className="stats-grid stats-grid-dashboard">
@@ -268,7 +274,7 @@ const Dashboard = () => {
         {/* Détails par carte (style GLPI) */}
         <div className="ticket-cards-grid">
           {Object.values(stats?.tickets?.cards || {}).map((card, index) => (
-            <div key={`ticket-card-${card.id || index}`} className="ticket-card" style={{ backgroundColor: card.color }}>
+            <div key={`ticket-card-${card.id || index}`} className="ticket-card" style={{ '--card-color': card.color }}>
               <div className="ticket-card-top">
                 <div className="ticket-card-count">{card.count}</div>
                 <div className="ticket-card-icon">

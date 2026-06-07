@@ -3,6 +3,7 @@ import { RefreshCcw } from 'lucide-react';
 import { RESET_RESOURCES } from '../../../config/resetResources';
 import useResetResources from '../../../hooks/useResetResources';
 import '../../../styles/Reset.css';
+import '../../../styles/list.css';
 
 const StatusCell = ({ name, progress }) => {
   const state = progress.get(name);
@@ -96,48 +97,67 @@ const Reset = () => {
           </div>
         </div>
 
-        <div className="reset-panel__content">
-          <div className="reset-simple-list">
-            {RESET_RESOURCES.map(resource => {
-              const deps = getDependenciesForParent(resource.name);
-              const isSelected = selected.has(resource.name);
+        <div className={`reset-panel__content parc-table-container reset-table-container`}>
+          <table className={`parc-table reset-table ${isRunning ? 'reset-running' : ''}`}>
+            <thead>
+              <tr>
+                <th className="reset-col-check">
+                  <input
+                    type="checkbox"
+                    checked={selectedCount === RESET_RESOURCES.length}
+                    onChange={(e) => {
+                      if (isRunning) return;
+                      if (e.target.checked) selectAll();
+                      else deselectAll();
+                    }}
+                    disabled={isRunning}
+                  />
+                </th>
+                <th>Ressource</th>
+                <th>Endpoint API</th>
+                <th>Dépendances</th>
+                <th className="reset-col-status">Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              {RESET_RESOURCES.map(resource => {
+                const deps = getDependenciesForParent(resource.name);
+                const isSelected = selected.has(resource.name);
 
-              return (
-                <div 
-                  key={resource.name} 
-                  onClick={() => !isRunning && toggleResource(resource.name)}
-                  className={`reset-list-item ${isSelected ? 'is-selected-row' : ''} ${isRunning ? 'reset-row-disabled' : 'reset-row-clickable'}`}
-                >
-                  <div className="reset-list-item__left">
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => !isRunning && toggleResource(resource.name)}
-                      onClick={(e) => e.stopPropagation()}
-                      disabled={isRunning}
-                      className="reset-checkbox"
-                    />
-                    <div className="reset-resource-info">
-                      <span className="reset-resource-label">{resource.label}</span>
-                      <span className="reset-resource-name">{resource.endpoint}</span>
-                    </div>
-                  </div>
-                  <div className="reset-list-item__center">
-                    {deps.length > 0 ? (
-                      <span className="reset-card__deps" title="Sera également vidé pour éviter des erreurs d'intégrité">
-                        Dépendances: {deps.join(', ')}
-                      </span>
-                    ) : (
-                      <span className="reset-deps-none">Aucune dépendance directe</span>
-                    )}
-                  </div>
-                  <div className="reset-list-item__right">
-                    <StatusCell name={resource.name} progress={progress} />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                return (
+                  <tr 
+                    key={resource.name} 
+                    onClick={() => !isRunning && toggleResource(resource.name)}
+                    className={isSelected ? 'is-selected-row' : ''}
+                  >
+                    <td className="reset-col-check">
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => {}}
+                        onClick={(e) => e.stopPropagation()}
+                        disabled={isRunning}
+                      />
+                    </td>
+                    <td className="reset-col-label">{resource.label}</td>
+                    <td className="reset-col-endpoint">{resource.endpoint}</td>
+                    <td>
+                      {deps.length > 0 ? (
+                        <span className="reset-card__deps" title="Sera également vidé pour éviter des erreurs d'intégrité">
+                          {deps.join(', ')}
+                        </span>
+                      ) : (
+                        <span className="reset-deps-none">Aucune</span>
+                      )}
+                    </td>
+                    <td className="reset-col-status">
+                      <StatusCell name={resource.name} progress={progress} />
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
 
         {isDone && (

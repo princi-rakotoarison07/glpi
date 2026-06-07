@@ -5,6 +5,7 @@ import {
   Upload, CheckCircle2, AlertCircle, Terminal,
   ShieldCheck, RotateCcw, X,
 } from 'lucide-react';
+import '../../../styles/Import.css';
 
 // ─── CSV Parser ──────────────────────────────────────────────────────────────
 const parseCSV = (text) => {
@@ -23,64 +24,35 @@ const parseCSV = (text) => {
   return { headers: parseLine(lines[0]), rows: lines.slice(1).map(parseLine) };
 };
 
-// ─── Styles ──────────────────────────────────────────────────────────────────
-const S = {
-  page:  { padding: '28px', maxWidth: '1100px', margin: '0 auto', fontFamily: "'Inter','Segoe UI',sans-serif" },
-  card:  { background: '#fff', borderRadius: '14px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', overflow: 'hidden', marginBottom: '24px' },
-  hdr:   { background: 'linear-gradient(135deg,#1e3a5f,#2563eb)', padding: '24px 28px', color: '#fff' },
-  h1:    { fontSize: '20px', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '10px' },
-  sub:   { fontSize: '13px', opacity: 0.8, marginTop: '4px', marginBottom: 0 },
-  badge: { display:'inline-flex', alignItems:'center', gap:'5px', background:'rgba(255,255,255,0.15)',
-           border:'1px solid rgba(255,255,255,0.3)', borderRadius:'20px', padding:'3px 10px',
-           fontSize:'11px', fontWeight:600, marginTop:'10px' },
-  body:  { padding: '24px' },
-  grid:  { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' },
-  field: { border: '1px solid #e2e8f0', borderRadius: '10px', padding: '14px 16px',
-           background: '#f8fafc', cursor: 'pointer', transition: 'border-color 0.2s' },
-  fieldOk: { border: '1px solid #bbf7d0', background: '#f0fdf4' },
-  lbl:   { display:'flex', alignItems:'center', gap:'7px', fontWeight:600, fontSize:'13px', color:'#334155', marginBottom:'8px' },
-  infoBox: (color, bg, border) => ({
-    margin:'16px 0', padding:'13px 16px', background: bg,
-    border: `1px solid ${border}`, borderRadius:'8px',
-    display:'flex', gap:'10px', alignItems:'flex-start', fontSize:'13px', color,
-  }),
-  progressBox: { marginTop:'16px', background:'#f1f5f9', borderRadius:'8px', padding:'16px', border:'1px solid #e2e8f0' },
-  terminal: { background:'#0f172a', borderRadius:'12px', padding:'20px', color:'#f1f5f9',
-              fontFamily:"'Fira Code','Courier New',monospace", fontSize:'12px' },
-  logC: { error:'#f87171', success:'#4ade80', warn:'#fbbf24', info:'#93c5fd' },
-  btn: (disabled, danger) => ({
-    display:'inline-flex', alignItems:'center', gap:'8px', padding:'11px 24px',
-    borderRadius:'8px', fontWeight:700, fontSize:'14px', border:'none',
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    background: disabled ? '#94a3b8' : danger ? '#dc2626' : 'linear-gradient(135deg,#2563eb,#1d4ed8)',
-    color:'#fff',
-    boxShadow: disabled ? 'none' : '0 4px 12px rgba(37,99,235,0.25)',
-  }),
-};
-
 // ─── FileField ───────────────────────────────────────────────────────────────
 const FileField = ({ label, icon: Icon, file, count, accept, onChange, disabled, onRemove }) => {
   const ref = useRef(null);
   return (
-    <div style={{ ...S.field, ...(file ? S.fieldOk : {}) }} onClick={() => !file && ref.current?.click()}>
-      <input ref={ref} type="file" accept={accept} onChange={onChange} disabled={disabled} style={{ display:'none' }} />
-      <div style={S.lbl}><Icon size={15} />{label}</div>
+    <div 
+      className={`import-field ${file ? 'import-field--ok' : ''} ${disabled ? 'import-field--disabled' : ''}`}
+      onClick={() => !file && ref.current?.click()}
+    >
+      <input ref={ref} type="file" accept={accept} onChange={onChange} disabled={disabled} className="import-field__file-input" />
+      <div className="import-field__label"><Icon size={15} />{label}</div>
       {file ? (
-        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-          <div style={{ display:'flex', alignItems:'center', gap:'7px' }}>
+        <div className="import-field__info">
+          <div className="import-field__info-left">
             <CheckCircle2 size={15} color="#16a34a" />
-            <span style={{ fontWeight:600, fontSize:'13px', color:'#166534' }}>{file.name}</span>
+            <span className="import-field__filename">{file.name}</span>
           </div>
-          <div style={{ display:'flex', alignItems:'center', gap:'8px' }}>
-            {count !== undefined && <span style={{ fontSize:'12px', color:'#64748b' }}>{count} lignes</span>}
-            <button onClick={(e) => { e.stopPropagation(); onRemove(); }} disabled={disabled}
-              style={{ background:'none', border:'none', cursor:'pointer', color:'#94a3b8', padding:'2px' }}>
+          <div className="import-field__meta-info">
+            {count !== undefined && <span className="import-field__count">{count} lignes</span>}
+            <button 
+              onClick={(e) => { e.stopPropagation(); onRemove(); }} 
+              disabled={disabled}
+              className="import-field__remove-btn"
+            >
               <X size={13} />
             </button>
           </div>
         </div>
       ) : (
-        <div style={{ display:'flex', alignItems:'center', gap:'8px', color:'#94a3b8', fontSize:'13px' }}>
+        <div className="import-field__placeholder">
           <Upload size={13} /> Choisir un fichier
         </div>
       )}
@@ -310,32 +282,42 @@ const GLPIImageImportPageV2 = () => {
   const canImport = hasFiles && !isImporting && validationErrors.length === 0;
 
   return (
-    <div style={S.page}>
+    <div className="import-page">
+      <div className="import-header">
+        <h1 className="import-title">Import GLPI (V2)</h1>
+        <p className="import-subtitle">Importation sécurisée avec option de rollback automatique en cas d'erreur.</p>
+      </div>
 
-      {/* ── Carte principale ── */}
-      <div style={S.card}>
-        <div style={S.hdr}>
-          <h1 style={S.h1}><ShieldCheck size={22}/> Import GLPI — v2 (avec Rollback)</h1>
-          <p style={S.sub}>Importez équipements, tickets, coûts et images. En cas d'erreur sur une ligne, toutes les données de la session sont automatiquement supprimées.</p>
-          <div style={S.badge}><RotateCcw size={12}/> Rollback automatique activé</div>
+      <div className="import-panel">
+        <div className="import-panel__header">
+          <div className="import-panel__header-top">
+            <h2 className="import-panel__title">
+              <ShieldCheck size={22} />
+              <span>Import GLPI — v2 (avec Rollback)</span>
+            </h2>
+            <div className="import-panel__badge">
+              <RotateCcw size={12} />
+              <span>Rollback automatique activé</span>
+            </div>
+          </div>
+          <p className="import-panel__subtitle">Importez équipements, tickets, coûts et images. En cas d'erreur sur une ligne, toutes les données de la session sont automatiquement supprimées.</p>
         </div>
 
-        <div style={S.body}>
-
-          {/* Overlay Rollback en cours — identique à PrestaShop */}
+        <div className="import-panel__body">
+          {/* Overlay Rollback en cours */}
           {isRollingBack && (
-            <div style={S.infoBox('#92400e', '#fffbeb', '#fcd34d')}>
-              <RotateCcw size={18} color="#d97706" style={{ flexShrink:0, marginTop:'1px' }}/>
+            <div className="import-alert import-alert--warning">
+              <RotateCcw size={18} color="#d97706" style={{ flexShrink: 0, marginTop: '1px' }} />
               <div>
                 <strong>Nettoyage de sécurité en cours...</strong>
-                {rollbackStatus && <div style={{ marginTop:'4px', fontWeight:600 }}>{rollbackStatus}</div>}
+                {rollbackStatus && <div style={{ marginTop: '4px', fontWeight: 600 }}>{rollbackStatus}</div>}
               </div>
             </div>
           )}
 
           {/* Explication rollback */}
-          <div style={S.infoBox('#1e40af', '#eff6ff', '#bfdbfe')}>
-            <ShieldCheck size={17} color="#2563eb" style={{ flexShrink:0, marginTop:'1px' }}/>
+          <div className="import-alert import-alert--info">
+            <ShieldCheck size={17} color="#2563eb" style={{ flexShrink: 0, marginTop: '1px' }} />
             <div>
               <strong>Rollback identique à PrestaShop :</strong> Si une ligne est invalide ou échoue,
               l'import s'arrête immédiatement et <em>toutes</em> les ressources créées pendant cette
@@ -344,19 +326,19 @@ const GLPIImageImportPageV2 = () => {
           </div>
 
           {/* 4 file fields */}
-          <div style={S.grid}>
+          <div className="import-grid">
             <FileField label="1. Équipements (CSV)" icon={Package}
               file={file1} count={preview1.rows.length} accept=".csv"
               onChange={handleFile1} disabled={isImporting}
-              onRemove={removeFile(setFile1, setPreview1, {headers:[],rows:[]}, '[Équipements]')} />
+              onRemove={removeFile(setFile1, setPreview1, { headers: [], rows: [] }, '[Équipements]')} />
             <FileField label="2. Tickets (CSV)" icon={Eye}
               file={file2} count={preview2.rows.length} accept=".csv"
               onChange={handleFile2} disabled={isImporting}
-              onRemove={removeFile(setFile2, setPreview2, {headers:[],rows:[]}, '[Tickets]')} />
+              onRemove={removeFile(setFile2, setPreview2, { headers: [], rows: [] }, '[Tickets]')} />
             <FileField label="3. Coûts (CSV)" icon={ShoppingCart}
               file={file3} count={preview3.rows.length} accept=".csv"
               onChange={handleFile3} disabled={isImporting}
-              onRemove={removeFile(setFile3, setPreview3, {headers:[],rows:[]}, '[Coûts]')} />
+              onRemove={removeFile(setFile3, setPreview3, { headers: [], rows: [] }, '[Coûts]')} />
             <FileField label="4. Images (.zip)" icon={ImageIcon}
               file={fileZip} accept=".zip"
               onChange={handleZip} disabled={isImporting}
@@ -365,56 +347,44 @@ const GLPIImageImportPageV2 = () => {
 
           {/* Erreurs de validation */}
           {validationErrors.length > 0 && !isImporting && (
-            <div style={{ marginTop:'14px', padding:'13px 16px', background:'#fef2f2',
-                          border:'1px solid #fca5a5', borderRadius:'8px' }}>
-              <div style={{ fontWeight:700, color:'#991b1b', display:'flex', alignItems:'center', gap:'6px', marginBottom:'8px' }}>
-                <AlertCircle size={15}/> {validationErrors.length} erreur(s) de validation — l'import est bloqué
+            <div className="import-alert import-alert--danger">
+              <AlertCircle size={15} />
+              <div>
+                <strong className="import-alert__title">{validationErrors.length} erreur(s) de validation — l'import est bloqué</strong>
+                <ul className="import-alert__list">
+                  {validationErrors.map((e, i) => <li key={i}>{e}</li>)}
+                </ul>
               </div>
-              <ul style={{ margin:0, paddingLeft:'18px', color:'#b91c1c', fontSize:'12px', maxHeight:'120px', overflowY:'auto' }}>
-                {validationErrors.map((e,i) => <li key={i}>{e}</li>)}
-              </ul>
             </div>
           )}
 
           {/* Barre de progression */}
           {isImporting && (
-            <div style={S.progressBox}>
-              <div style={{ display:'flex', justifyContent:'space-between', fontWeight:600, color:'#334155', marginBottom:'8px' }}>
+            <div className="import-progress-box">
+              <div className="import-progress-box__header">
                 <span>{isRollingBack ? '⏪ Rollback en cours…' : 'Importation en cours…'}</span>
                 <span>{progress}%</span>
               </div>
-              <div style={{ height:'8px', background:'#e2e8f0', borderRadius:'4px', overflow:'hidden' }}>
-                <div style={{ height:'100%', width:`${progress}%`,
-                              background: isRollingBack
-                                ? 'linear-gradient(90deg,#f59e0b,#ef4444)'
-                                : 'linear-gradient(90deg,#2563eb,#60a5fa)',
-                              transition:'width 0.3s' }}/>
+              <div className="import-progress-bar">
+                <div className={`import-progress-fill ${isRollingBack ? 'import-progress-fill--rollback' : ''}`} style={{ width: `${progress}%` }} />
               </div>
             </div>
           )}
 
           {/* Résultats */}
           {results.details.length > 0 && !isImporting && (
-            <div style={{ border:`1px solid ${results.errors>0?'#fca5a5':'#bbf7d0'}`,
-                          borderRadius:'10px', overflow:'hidden', marginTop:'18px' }}>
-              <div style={{ padding:'12px 18px', background: results.errors>0?'#fef2f2':'#f0fdf4',
-                            display:'flex', gap:'20px', flexWrap:'wrap' }}>
-                <span style={{ fontWeight:700, color:'#166534', display:'flex', alignItems:'center', gap:'5px' }}>
-                  <CheckCircle2 size={15}/> {results.success} succès
-                </span>
-                <span style={{ fontWeight:700, color:'#991b1b', display:'flex', alignItems:'center', gap:'5px' }}>
-                  <AlertCircle size={15}/> {results.errors} erreur(s)
-                </span>
+            <div className={`import-results ${results.errors > 0 ? 'import-results--error' : 'import-results--ok'}`}>
+              <div className={`import-results__header ${results.errors > 0 ? 'import-results__header--ok--error' : 'import-results__header--ok'}`}>
+                <span>{results.success} succès — {results.errors} erreur(s)</span>
               </div>
               {results.errors > 0 && (
-                <div style={{ maxHeight:'200px', overflowY:'auto', background:'#fff' }}>
-                  {results.details.filter(d=>d.status==='error').map((d,i)=>(
-                    <div key={i} style={{ display:'flex', gap:'10px', padding:'10px 18px',
-                                          borderBottom:'1px solid #f1f5f9', fontSize:'13px' }}>
-                      <AlertCircle size={13} color="#dc2626" style={{ flexShrink:0, marginTop:'2px' }}/>
+                <div className="import-results__body">
+                  {results.details.filter(d => d.status === 'error').map((d, i) => (
+                    <div key={i} className="import-results__item">
+                      <AlertCircle size={13} color="#dc2626" style={{ flexShrink: 0, marginTop: '2px' }} />
                       <div>
                         <strong>Ligne {d.row} {d.name ? `(${d.name})` : ''}</strong>
-                        <div style={{ color:'#64748b', marginTop:'2px' }}>{d.message}</div>
+                        <div className="import-results__item-msg">{d.message}</div>
                       </div>
                     </div>
                   ))}
@@ -423,43 +393,42 @@ const GLPIImageImportPageV2 = () => {
             </div>
           )}
 
-          {/* Boutons — comme PrestaShop */}
+          {/* Boutons */}
           {hasFiles && !isImporting && (
-            <div style={{ marginTop:'18px', display:'flex', justifyContent:'flex-end', gap:'12px' }}>
+            <div className="import-footer-actions">
               <button onClick={() => {
                 setFile1(null); setFile2(null); setFile3(null); setFileZip(null);
-                setPreview1({headers:[],rows:[]}); setPreview2({headers:[],rows:[]}); setPreview3({headers:[],rows:[]});
-                setResults({success:0,errors:0,details:[]}); setValidationErrors([]); setProgress(0); setMessages([]);
-              }} style={S.btn(false, false)}>
+                setPreview1({ headers: [], rows: [] }); setPreview2({ headers: [], rows: [] }); setPreview3({ headers: [], rows: [] });
+                setResults({ success: 0, errors: 0, details: [] }); setValidationErrors([]); setProgress(0); setMessages([]);
+              }} className="btn-import btn-import--secondary">
                 Tout annuler
               </button>
-              <button id="btn-import-v2" onClick={handleImport} disabled={!canImport} style={S.btn(!canImport)}>
-                <Upload size={15}/> Lancer l'importation
+              <button id="btn-import-v2" onClick={handleImport} disabled={!canImport} className="btn-import btn-import--primary">
+                <Upload size={15} /> Lancer l'importation
               </button>
             </div>
           )}
-
         </div>
       </div>
 
-      {/* ── Terminal ── */}
-      <div style={S.terminal}>
-        <div style={{ display:'flex', alignItems:'center', gap:'8px', color:'#94a3b8', fontWeight:600, fontSize:'13px', marginBottom:'14px' }}>
-          <Terminal size={15}/> Journal d'importation
-        </div>
-        <div style={{ maxHeight:'260px', overflowY:'auto', display:'flex', flexDirection:'column', gap:'2px' }}>
+      {/* Terminal */}
+      <div className="import-terminal">
+        <h3 className="import-terminal__header">
+          <Terminal size={15} />
+          <span>Journal d'importation</span>
+        </h3>
+        <div className="import-terminal__logs">
           {messages.length === 0
-            ? <span style={{ color:'#475569' }}>En attente d'actions…</span>
-            : messages.map((l,i) => (
-                <div key={i} style={{ color: S.logC[l.type] || '#93c5fd', lineHeight:'1.6' }}>
-                  <span style={{ color:'#475569' }}>[{l.ts}]</span> {l.msg}
-                </div>
-              ))
+            ? <span className="import-terminal__placeholder">En attente d'actions…</span>
+            : messages.map((l, i) => (
+              <div key={i} className={`import-terminal__line import-terminal__line--${l.type}`}>
+                <span className="import-terminal__timestamp">[{l.ts}]</span> {l.msg}
+              </div>
+            ))
           }
-          <div ref={logEndRef}/>
+          <div ref={logEndRef} />
         </div>
       </div>
-
     </div>
   );
 };

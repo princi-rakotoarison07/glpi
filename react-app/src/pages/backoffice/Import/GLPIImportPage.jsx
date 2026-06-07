@@ -2,38 +2,37 @@ import React, { useState } from 'react';
 import GLPIImportServiceFast from '../../../services/import/GLPIImportServiceFast';
 import GLPIImageImportService from '../../../services/import/GLPIImageImportService';
 import { Package, Eye, ShoppingCart, CheckCircle2, AlertCircle, Terminal, Upload, Image as ImageIcon } from 'lucide-react';
-import '../../../styles/list.css'; // On va utiliser un style proche ou générique
-// Assurez-vous d'avoir form.css ou import.css importé si nécessaire. On se base sur les styles existants.
+import '../../../styles/Import.css';
 
 /**
  * COMPOSANT : FileField
  */
 const FileField = ({ label, icon: Icon, file, count, onChange, accept = ".csv", isImporting }) => (
-  <div className="import-field">
-    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, marginBottom: '8px' }}>
+  <div className={`import-field ${file ? 'import-field--ok' : ''} ${isImporting ? 'import-field--disabled' : ''}`}>
+    <div className="import-field__label">
       <Icon size={18} />
-      {label}
-    </label>
-    <div className="file-input-wrapper" style={{ position: 'relative', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px', background: '#fff' }}>
+      <span>{label}</span>
+    </div>
+    <div className="import-field__input-wrapper">
       <input 
         type="file" 
         accept={accept} 
         onChange={onChange} 
         disabled={isImporting} 
-        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
+        className="import-field__file-input-overlay"
       />
-      <div className="file-info-text" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div className="import-field__info">
         {file ? (
-          <>
+          <div className="import-field__info-left">
             <CheckCircle2 size={24} color="#16a34a" />
-            <span className="file-name" style={{ fontWeight: 600 }}>{file.name}</span>
-            {count !== undefined && <span className="file-meta" style={{ marginLeft: 'auto', color: '#64748b' }}>{count} lignes détectées</span>}
-          </>
+            <span className="import-field__filename">{file.name}</span>
+            {count !== undefined && <span className="import-field__count">({count} lignes)</span>}
+          </div>
         ) : (
-          <>
-            <Upload size={24} color="#64748b" />
-            <span style={{ fontWeight: '600', color: '#64748b' }}>Choisir un fichier</span>
-          </>
+          <div className="import-field__placeholder">
+            <Upload size={24} />
+            <span>Choisir un fichier</span>
+          </div>
         )}
       </div>
     </div>
@@ -230,95 +229,98 @@ const GLPIImportPage = () => {
   };
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', padding: '24px' }}>
-        <div style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: '16px', marginBottom: '24px' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1e293b', margin: 0 }}>Import GLPI (CSV)</h1>
-          <p style={{ color: '#64748b', marginTop: '8px' }}>Importez vos ordinateurs, tickets et coûts dans l'ordre chronologique.</p>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <FileField label="1. Équipements (Feuille 1)" icon={Package} file={file1} count={preview1.rows.length} onChange={handleFile1Change} isImporting={isImporting} />
-          <FileField label="2. Tickets (Feuille 2)" icon={Eye} file={file2} count={preview2.rows.length} onChange={handleFile2Change} isImporting={isImporting} />
-          <FileField label="3. Coûts (Feuille 3)" icon={ShoppingCart} file={file3} count={preview3.rows.length} onChange={handleFile3Change} isImporting={isImporting} />
-          <FileField label="4. Images (.zip)" icon={ImageIcon} file={fileImages} onChange={handleFileImagesChange} accept=".zip" isImporting={isImporting} />
-        </div>
-
-        {validationErrors.length > 0 && !isImporting && (
-          <div style={{ marginTop: '24px', padding: '16px', background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: '8px' }}>
-            <h3 style={{ color: '#991b1b', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <AlertCircle size={20} />
-              Erreurs de validation ({validationErrors.length})
-            </h3>
-            <ul style={{ margin: 0, paddingLeft: '24px', color: '#b91c1c', fontSize: '14px', maxHeight: '150px', overflowY: 'auto' }}>
-              {validationErrors.map((err, i) => <li key={i} style={{ marginBottom: '4px' }}>{err}</li>)}
-            </ul>
-          </div>
-        )}
-
-        {isImporting && (
-          <div style={{ marginTop: '24px', background: '#f8fafc', padding: '20px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', fontWeight: 'bold', color: '#334155' }}>
-              <span>Importation en cours...</span>
-              <span>{progress}%</span>
-            </div>
-            <div style={{ height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
-              <div style={{ height: '100%', background: '#2563eb', width: `${progress}%`, transition: 'width 0.3s' }}></div>
-            </div>
-          </div>
-        )}
-
-        {results.details.length > 0 && !isImporting && (
-          <div style={{ marginTop: '24px', border: `1px solid ${results.errors > 0 ? '#fca5a5' : '#bbf7d0'}`, borderRadius: '8px', overflow: 'hidden' }}>
-            <div style={{ padding: '16px', background: results.errors > 0 ? '#fef2f2' : '#f0fdf4', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ color: results.errors > 0 ? '#991b1b' : '#166534', fontWeight: 'bold' }}>
-                Rapport : {results.success} succès — {results.errors} erreurs
-              </span>
-            </div>
-            {results.errors > 0 && (
-              <div style={{ padding: '16px', background: '#fff', maxHeight: '200px', overflowY: 'auto' }}>
-                {results.details.filter(d => d.status === 'error').map((err, i) => (
-                  <div key={i} style={{ display: 'flex', gap: '12px', paddingBottom: '12px', marginBottom: '12px', borderBottom: '1px solid #f1f5f9', fontSize: '14px' }}>
-                    <AlertCircle size={16} color="#dc2626" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <div>
-                      <strong style={{ color: '#1e293b' }}>Ligne {err.row} {err.name ? `(${err.name})` : ''}</strong>
-                      <div style={{ color: '#64748b', marginTop: '4px' }}>{err.message}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {(file1 || file2 || file3 || fileImages) && !isImporting && (
-          <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'flex-end' }}>
-            <button 
-              onClick={handleImport}
-              disabled={validationErrors.length > 0}
-              style={{
-                background: validationErrors.length > 0 ? '#94a3b8' : '#2563eb',
-                color: '#fff', border: 'none', padding: '12px 24px', borderRadius: '8px',
-                fontWeight: 'bold', cursor: validationErrors.length > 0 ? 'not-allowed' : 'pointer'
-              }}
-            >
-              Démarrer l'import
-            </button>
-          </div>
-        )}
+    <div className="import-page">
+      <div className="import-header">
+        <h1 className="import-title">Import GLPI (CSV)</h1>
+        <p className="import-subtitle">Importez vos ordinateurs, tickets et coûts dans l'ordre chronologique.</p>
       </div>
 
-      <div style={{ marginTop: '24px', background: '#1e293b', borderRadius: '12px', padding: '24px', color: '#f1f5f9', fontFamily: 'monospace' }}>
-        <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '0 0 16px 0', color: '#94a3b8', fontSize: '16px' }}>
-          <Terminal size={20} /> Journal Technique
+      <div className="import-panel">
+        <div className="import-panel__header">
+          <h2 className="import-panel__title">Fichiers sources</h2>
+          <p className="import-panel__subtitle">Sélectionnez les fichiers CSV ou ZIP pour lancer l'importation.</p>
+        </div>
+
+        <div className="import-panel__body">
+          <div className="import-grid">
+            <FileField label="1. Équipements (Feuille 1)" icon={Package} file={file1} count={preview1.rows.length} onChange={handleFile1Change} isImporting={isImporting} />
+            <FileField label="2. Tickets (Feuille 2)" icon={Eye} file={file2} count={preview2.rows.length} onChange={handleFile2Change} isImporting={isImporting} />
+            <FileField label="3. Coûts (Feuille 3)" icon={ShoppingCart} file={file3} count={preview3.rows.length} onChange={handleFile3Change} isImporting={isImporting} />
+            <FileField label="4. Images (.zip)" icon={ImageIcon} file={fileImages} onChange={handleFileImagesChange} accept=".zip" isImporting={isImporting} />
+          </div>
+
+          {validationErrors.length > 0 && !isImporting && (
+            <div className="import-alert import-alert--danger">
+              <AlertCircle size={20} />
+              <div>
+                <div className="import-alert__title">Erreurs de validation ({validationErrors.length})</div>
+                <ul className="import-alert__list">
+                  {validationErrors.map((err, i) => <li key={i}>{err}</li>)}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {isImporting && (
+            <div className="import-progress-box">
+              <div className="import-progress-box__header">
+                <span>Importation en cours...</span>
+                <span>{progress}%</span>
+              </div>
+              <div className="import-progress-bar">
+                <div className="import-progress-fill" style={{ width: `${progress}%` }}></div>
+              </div>
+            </div>
+          )}
+
+          {results.details.length > 0 && !isImporting && (
+            <div className={`import-results ${results.errors > 0 ? 'import-results--error' : 'import-results--ok'}`}>
+              <div className={`import-results__header ${results.errors > 0 ? 'import-results__header--error' : 'import-results__header--ok'}`}>
+                <span>Rapport : {results.success} succès — {results.errors} erreurs</span>
+              </div>
+              {results.errors > 0 && (
+                <div className="import-results__body">
+                  {results.details.filter(d => d.status === 'error').map((err, i) => (
+                    <div key={i} className="import-results__item">
+                      <AlertCircle size={16} color="#dc2626" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <div>
+                        <strong className="import-results__item-title">Ligne {err.row} {err.name ? `(${err.name})` : ''}</strong>
+                        <div className="import-results__item-msg">{err.message}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {(file1 || file2 || file3 || fileImages) && !isImporting && (
+            <div className="import-footer-actions">
+              <button 
+                onClick={handleImport}
+                disabled={validationErrors.length > 0}
+                className="btn-import btn-import--primary"
+              >
+                Démarrer l'import
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="import-terminal">
+        <h3 className="import-terminal__header">
+          <Terminal size={20} />
+          <span>Journal Technique</span>
         </h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '300px', overflowY: 'auto' }}>
+        <div className="import-terminal__logs">
           {messages.map((msg, index) => (
-            <div key={index} style={{ color: msg.type === 'error' ? '#fca5a5' : msg.type === 'success' ? '#86efac' : '#93c5fd' }}>
-              <span style={{ color: '#64748b' }}>[{msg.timestamp}]</span> {msg.msg}
+            <div key={index} className={`import-terminal__line import-terminal__line--${msg.type}`}>
+              <span className="import-terminal__timestamp">[{msg.timestamp}]</span>
+              {msg.msg}
             </div>
           ))}
-          {messages.length === 0 && <div style={{ color: '#475569' }}>En attente d'actions...</div>}
+          {messages.length === 0 && <div className="import-terminal__placeholder">En attente d'actions...</div>}
         </div>
       </div>
     </div>
