@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+  background: #f8fafc;
 }
 
 .frontoffice-content {
@@ -13,11 +13,11 @@
 
 /* Navbar */
 .frontoffice-navbar {
-  background: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  background: #2563eb;
   position: sticky;
   top: 0;
   z-index: 100;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
 }
 
 .nav-container {
@@ -31,14 +31,27 @@
 }
 
 .nav-logo {
-  font-size: 20px;
-  font-weight: bold;
-  color: #2563eb;
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-logo::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #ffffff;
+  border-radius: 3px;
 }
 
 .nav-links {
   display: flex;
-  gap: 24px;
+  gap: 12px;
   align-items: center;
 }
 
@@ -47,31 +60,36 @@
   align-items: center;
   gap: 8px;
   text-decoration: none;
-  color: #475569;
-  font-weight: 500;
+  color: #e0f2fe;
+  font-weight: 600;
+  font-size: 14px;
   padding: 8px 16px;
-  border-radius: 8px;
-  transition: all 0.2s;
+  border-radius: 10px;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-link:hover {
-  background: #eff6ff;
-  color: #2563eb;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
 }
 
 .nav-link.active {
-  background: #2563eb;
-  color: white;
+  background: #ffffff;
+  color: #2563eb;
 }
 
 .back-link {
-  background: #f1f5f9;
-  color: #334155;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border: none;
 }
 
 .back-link:hover {
-  background: #e2e8f0;
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
 }
+
+
 
 /* Page Styles */
 .frontoffice-page {

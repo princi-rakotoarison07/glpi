@@ -5,8 +5,9 @@ import { Home, Box, Ticket } from 'lucide-react';
 const FrontOfficeNavbar = () => {
   const location = useLocation();
 
-  const isActive = (path) => {
-    return location.pathname.startsWith(path) ? 'active' : '';
+  const isActive = (path, exact = false) => {
+    const active = exact ? location.pathname === path : location.pathname.startsWith(path);
+    return active ? 'active' : '';
   };
 
   return (
@@ -14,7 +15,7 @@ const FrontOfficeNavbar = () => {
       <div className="nav-container">
         <div className="nav-logo">GLPI FrontOffice</div>
         <div className="nav-links">
-          <Link to="/frontoffice" className={`nav-link ${isActive('/frontoffice') && !isActive('/frontoffice/tickets') && !isActive('/frontoffice/elements')}`}>
+          <Link to="/frontoffice" className={`nav-link ${isActive('/frontoffice', true)}`}>
             <Home size={18} />
             Accueil
           </Link>
