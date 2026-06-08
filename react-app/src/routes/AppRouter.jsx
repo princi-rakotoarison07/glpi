@@ -31,6 +31,8 @@ import NetworkList from '../pages/backoffice/parc/network/NetworkList';
 import NetworkDetail from '../pages/backoffice/parc/network/NetworkDetail';
 import LicenseList from '../pages/backoffice/parc/license/LicenseList';
 import LicenseDetail from '../pages/backoffice/parc/license/LicenseDetail';
+import PeripheralList from '../pages/backoffice/parc/peripheral/PeripheralList';
+import PeripheralDetail from '../pages/backoffice/parc/peripheral/PeripheralDetail';
 // FrontOffice
 import FrontOfficeAccueil from '../pages/frontoffice/Accueil';
 import FrontOfficeElementsList from '../pages/frontoffice/ElementsList';
@@ -83,6 +85,8 @@ const AppRouter = () => {
             <Route path="/parc/network/:id" element={<NetworkDetail />} />
             <Route path="/parc/licenses" element={<LicenseList />} />
             <Route path="/parc/licenses/:id" element={<LicenseDetail />} />
+            <Route path="/parc/peripherals" element={<PeripheralList />} />
+            <Route path="/parc/peripherals/:id" element={<PeripheralDetail />} />
             <Route path="/reset" element={<Reset />} />
             <Route path="/tickets" element={<TicketList />} />
             <Route path="/tickets/:id" element={<TicketDetail />} />
