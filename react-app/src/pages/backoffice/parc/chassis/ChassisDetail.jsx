@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock, FileText, Download } from 'lucide-react';
 import ChassisService from '../../../../services/Chassis/ChassisService';
 import DocumentService from '../../../../services/Document/DocumentService';
-import '../../../../styles/pages/TicketDetail.css';
+import '../../../../styles/detail.css';
 
 const ChassisDetail = () => {
   const { id } = useParams();

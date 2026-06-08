@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Filter, ArrowUpDown, Eye, User } from 'lucide-react';
 import TicketService from '../../services/Ticket/TicketService';
 import UserService from '../../services/User/UserService';
-import '../../styles/pages/TicketList.css';
+import '../../styles/list.css';
 
 const TicketList = () => {
   const [tickets, setTickets] = useState([]);

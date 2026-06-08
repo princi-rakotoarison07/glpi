@@ -22,7 +22,7 @@ echo Creation de la base...
 
 echo.
 echo Importation du fichier SQL...
-"%MYSQL_BIN%\mysql.exe" -u %MYSQL_USER% %DB_NAME% < glpi_db_v3.sql
+"%MYSQL_BIN%\mysql.exe" -u %MYSQL_USER% %DB_NAME% < glpi_db_v2.sql
 
 echo.
 echo ================================

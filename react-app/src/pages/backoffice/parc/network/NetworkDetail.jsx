@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock, FileText, Download } from 'lucide-react';
 import NetworkEquipmentService from '../../../../services/NetworkEquipment/NetworkEquipmentService';
 import DocumentService from '../../../../services/Document/DocumentService';
-import '../../../../styles/pages/TicketDetail.css';
+import '../../../../styles/detail.css';
 
 const NetworkDetail = () => {
   const { id } = useParams();

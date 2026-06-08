@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock, FileText, Download } from 'lucide-react';
 import MonitorService from '../../../../services/Monitor/MonitorService';
 import DocumentService from '../../../../services/Document/DocumentService';
-import '../../../../styles/pages/TicketDetail.css';
+import '../../../../styles/detail.css';
 
 const MonitorDetail = () => {
   const { id } = useParams();

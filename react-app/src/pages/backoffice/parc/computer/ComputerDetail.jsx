@@ -10,7 +10,7 @@ import ComputerTypeService from '../../../../services/ComputerType/ComputerTypeS
 import OperatingSystemService from '../../../../services/OperatingSystem/OperatingSystemService';
 import UserService from '../../../../services/User/UserService';
 import DocumentService from '../../../../services/Document/DocumentService';
-import '../../../../styles/pages/ParcDetail.css';
+import '../../../../styles/detail.css';
 
 const ComputerDetail = () => {
   const { id } = useParams();
