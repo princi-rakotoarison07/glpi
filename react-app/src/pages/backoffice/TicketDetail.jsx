@@ -161,7 +161,7 @@ const TicketDetail = () => {
         console.log('Items with full details:', itemsWithDetails);
         
         setTicket(ticketData);
-        setTicketCosts(costsData.data || costsData || []);
+        setTicketCosts(Array.isArray(costsData) ? costsData : []);
         setLinkedItems({
           items: itemsWithDetails,
           statesMap,

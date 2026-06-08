@@ -29,17 +29,20 @@ const TicketCostService = {
 
   /**
    * Récupérer les coûts associés à un ticket
+   * Note : searchText fait un match partiel (ticket 1 matche aussi 10, 11, 12...)
+   * donc on récupère tout et on filtre côté client par tickets_id exact.
    */
   getTicketCosts: async (ticketId) => {
     try {
       await initSession();
       const response = await api.get('/TicketCost', {
         params: {
-          'searchText[tickets_id]': ticketId,
-          range: '0-999'
+          range: '0-9999'
         }
       });
-      return response.data;
+      const allCosts = response.data || [];
+      // Filtrer côté client par tickets_id exact
+      return allCosts.filter(cost => Number(cost.tickets_id) === Number(ticketId));
     } catch (error) {
       console.error(`Error fetching costs for ticket ${ticketId}:`, error);
       throw error;
