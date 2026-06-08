@@ -26,7 +26,10 @@ const GLPIImportServiceFast = {
     
     // 2. Créer l'équipement en fonction de son type
     // On s'assure que le type correspond à la bonne entité GLPI (Computer, Monitor, Printer...)
-    const validItemType = (itemType && itemType.trim()) ? itemType.trim() : 'Computer';
+    let validItemType = (itemType && itemType.trim()) ? itemType.trim() : 'Computer';
+    if (validItemType === 'Database') {
+      validItemType = 'DatabaseInstance';
+    }
 
     const itemData = {
       name: name,
@@ -39,6 +42,12 @@ const GLPIImportServiceFast = {
       [`${validItemType.toLowerCase()}models_id`]: computermodels_id || 0,
       users_id: users_id || 0
     };
+
+    // DCRoom requiert vis_rows et vis_cols (nombre de rangées/colonnes visibles)
+    if (validItemType === 'DCRoom') {
+      itemData.vis_rows = 1;
+      itemData.vis_cols = 1;
+    }
     
     try {
       const response = await api.post(`/${validItemType}`, { input: itemData });

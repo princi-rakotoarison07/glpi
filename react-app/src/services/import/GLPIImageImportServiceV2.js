@@ -153,7 +153,11 @@ const GLPIImportServiceV2 = {
     const computermodels_id = await GLPIImportServiceFast.resolveComputerModel(model);
     const users_id          = await GLPIImportServiceFast.resolveUser(user);
 
-    const validItemType = (itemType && itemType.trim()) ? itemType.trim() : 'Computer';
+    let validItemType = (itemType && itemType.trim()) ? itemType.trim() : 'Computer';
+    if (validItemType === 'Database') {
+      validItemType = 'DatabaseInstance';
+    }
+
     const itemData = {
       name,
       otherserial: inventoryNumber,
@@ -163,6 +167,12 @@ const GLPIImportServiceV2 = {
       [`${validItemType.toLowerCase()}models_id`]: computermodels_id || 0,
       users_id: users_id || 0,
     };
+
+    // DCRoom requiert vis_rows et vis_cols (nombre de rangées/colonnes visibles)
+    if (validItemType === 'DCRoom') {
+      itemData.vis_rows = 1;
+      itemData.vis_cols = 1;
+    }
 
     const response = await api.post(`/${validItemType}`, { input: itemData });
     const newId = response.data?.id;
