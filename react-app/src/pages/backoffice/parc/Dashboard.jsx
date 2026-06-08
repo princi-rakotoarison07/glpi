@@ -19,7 +19,8 @@ import {
   CheckCircle,
   PauseCircle,
   Calendar,
-  Trash2
+  Trash2,
+  Usb
 } from 'lucide-react';
 import ParcService from '../../../services/ParcService';
 import '../../../styles/ParcDashboard.css';
@@ -257,6 +258,19 @@ const Dashboard = () => {
             <div className="stat-value">{stats?.monitors?.total || 0}</div>
           </div>
         </div>
+
+        {/* Périphérique */}
+        <div className="stat-card peripherals stat-card-custom">
+          <div className="stat-card-header">
+            <span className="stat-card-title">Périphérique</span>
+            <div className="stat-icon-wrapper">
+              <Usb size={20} />
+            </div>
+          </div>
+          <div className="stat-card-body">
+            <div className="stat-value">{stats?.peripherals?.total || 0}</div>
+          </div>
+        </div>
       </div>
 
       {/* Section Tickets (en bas) */}
@@ -269,6 +283,18 @@ const Dashboard = () => {
         <div className="total-tickets-card">
           <div className="total-tickets-label">Nombre de tickets général</div>
           <div className="total-tickets-value">{stats?.tickets?.total || 0}</div>
+        </div>
+
+        {/* Total Incident and Demande */}
+        <div className="ticket-type-cards-grid">
+          <div className="ticket-type-card incident">
+            <div className="ticket-type-label">Total Incidents</div>
+            <div className="ticket-type-value">{stats?.tickets?.byType?.incident || 0}</div>
+          </div>
+          <div className="ticket-type-card demande">
+            <div className="ticket-type-label">Total Demandes</div>
+            <div className="ticket-type-value">{stats?.tickets?.byType?.demande || 0}</div>
+          </div>
         </div>
 
         {/* Détails par carte (style GLPI) */}

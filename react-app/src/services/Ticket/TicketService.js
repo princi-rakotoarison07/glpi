@@ -21,7 +21,7 @@ const TicketService = {
     try {
       await initSession();
       const defaultParams = {
-        range: '0-19', // 20 items per page by default
+        range: '0-99', // Fetch more tickets to filter client-side
       };
 
       const searchParams = new URLSearchParams();
@@ -33,13 +33,15 @@ const TicketService = {
         searchParams.append('range', defaultParams.range);
       }
 
-      // Add filters
+      // Add status filter (if present, it might work without causing 400)
       if (params.status) {
         searchParams.append('searchText[status]', params.status);
       }
 
       const queryString = searchParams.toString();
-      const response = await api.get(`/Ticket${queryString ? `?${queryString}` : ''}`);
+      const url = `/Ticket${queryString ? `?${queryString}` : ''}`;
+      console.log('Calling API:', url);
+      const response = await api.get(url);
 
       // Get total items from Content-Range header
       const totalItems = extractCountFromResponse(response);

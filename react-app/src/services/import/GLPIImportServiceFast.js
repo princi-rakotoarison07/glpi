@@ -71,9 +71,11 @@ const GLPIImportServiceFast = {
     const statusMap = {
       'New': 1,
       'Assign': 2,
+      'In Progress': 2,
       'Planned': 3,
       'Pending': 4,
       'Solved': 5,
+      'Resolved': 5,
       'Closed': 6
     };
     
@@ -83,21 +85,37 @@ const GLPIImportServiceFast = {
       'Medium': 3,
       'High': 4,
       'Very High': 5,
-      'Major': 6
+      'Major': 6,
+      'Critical': 6
     };
 
     const typeMap = {
       'Incident': 1,
+      'Demande': 2,
       'Request': 2
+    };
+
+    // Make all lookups case-insensitive by trimming and lowercasing keys
+    const getMapValue = (map, key) => {
+      if (!key) return undefined;
+      const normalizedKey = key.trim();
+      // First try exact match
+      if (map[normalizedKey]) return map[normalizedKey];
+      // Then try case-insensitive match
+      const lowerKey = normalizedKey.toLowerCase();
+      for (const [mapKey, mapValue] of Object.entries(map)) {
+        if (mapKey.toLowerCase() === lowerKey) return mapValue;
+      }
+      return undefined;
     };
 
     const ticketData = {
       name: titre,
       content: description,
       date: formattedDate,
-      status: statusMap[status] || 1,
-      priority: priorityMap[priority] || 3,
-      type: typeMap[type] || 1
+      status: getMapValue(statusMap, status) || 1,
+      priority: getMapValue(priorityMap, priority) || 3,
+      type: getMapValue(typeMap, type) || 1
     };
 
     try {

@@ -103,6 +103,16 @@ const ImportValidationService = {
     errors.push(...ImportValidationService.validateTime(heure, 'Heure', lineNumber).errors);
     errors.push(...ImportValidationService.validateString(titre, 'Titre', lineNumber).errors);
     
+    // Validate ticket type
+    if (type && type.trim()) {
+      const validTypes = ['Incident', 'Demande', 'Request'];
+      const normalizedType = type.trim().toLowerCase();
+      const isValid = validTypes.some(t => t.toLowerCase() === normalizedType);
+      if (!isValid) {
+        errors.push(ImportValidationService.formatError('Type', `doit être l'un des types valides : ${validTypes.join(', ')}`, lineNumber));
+      }
+    }
+    
     return { valid: errors.length === 0, errors };
   },
 

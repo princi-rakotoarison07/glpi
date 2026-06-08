@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, Clock } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, FileText, Download } from 'lucide-react';
 import SoftwareService from '../../../../services/Software/SoftwareService';
-import ItemPhotos from '../../../../components/common/ItemPhotos';
-import '../../../../styles/detail.css';
+import DocumentService from '../../../../services/Document/DocumentService';
+import '../../../../styles/pages/TicketDetail.css';
 
 const SoftwareDetail = () => {
   const { id } = useParams();
   const [software, setSoftware] = useState(null);
+  const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSoftware = async () => {
       try {
         setLoading(true);
-        const data = await SoftwareService.getSoftwareById(id);
-        setSoftware(data);
+        const [softwareData, documentsData] = await Promise.all([
+          SoftwareService.getSoftwareById(id),
+          DocumentService.getDocumentsForItem('Software', id)
+        ]);
+        setSoftware(softwareData);
+        setDocuments(documentsData);
       } catch (error) {
         console.error('Error fetching software:', error);
       } finally {
@@ -89,7 +94,7 @@ const SoftwareDetail = () => {
                 <Calendar size={16} />
                 Date de création
               </div>
-              <div className="detail-value">{formatDate(software.date_creation || software.date)}</div>
+              <div className="detail-value">{formatDate(software.date)}</div>
             </div>
             <div className="detail-item">
               <div className="detail-label">
@@ -101,8 +106,49 @@ const SoftwareDetail = () => {
           </div>
         </div>
 
-        {/* Galerie photo réutilisable */}
-        <ItemPhotos itemId={id} itemType="Software" />
+        <div className="detail-card">
+          <h2>Documents</h2>
+          {documents.length > 0 ? (
+            <div className="documents-table-container">
+              <table className="documents-table">
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th>Entité</th>
+                    <th>Fichier</th>
+                    <th>Type MIME</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {documents.map((doc) => (
+                    <tr key={doc.id}>
+                      <td>{doc.name || '-'}</td>
+                      <td>{doc.entities_id || '-'}</td>
+                      <td>{doc.filename || '-'}</td>
+                      <td>{doc.mime || '-'}</td>
+                      <td>{doc.date ? new Date(doc.date).toLocaleDateString('fr-FR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) : '-'}</td>
+                      <td>
+                        <a
+                          href={DocumentService.getDocumentDownloadUrl(doc.id)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="download-link"
+                        >
+                          <Download size={16} />
+                          Télécharger
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="empty-state">Aucun document associé</div>
+          )}
+        </div>
       </div>
     </div>
   );
