@@ -20,7 +20,11 @@ import {
   PauseCircle,
   Calendar,
   Trash2,
-  Usb
+  Usb,
+  Cable,
+  Droplet,
+  Package,
+  Layers
 } from 'lucide-react';
 import ParcService from '../../../services/ParcService';
 import '../../../styles/ParcDashboard.css';
@@ -269,6 +273,58 @@ const Dashboard = () => {
           </div>
           <div className="stat-card-body">
             <div className="stat-value">{stats?.peripherals?.total || 0}</div>
+          </div>
+        </div>
+
+        {/* Matériel passif */}
+        <div className="stat-card passive-equipment stat-card-custom">
+          <div className="stat-card-header">
+            <span className="stat-card-title">Matériel passif</span>
+            <div className="stat-icon-wrapper">
+              <Layers size={20} />
+            </div>
+          </div>
+          <div className="stat-card-body">
+            <div className="stat-value">{stats?.passiveEquipment?.total || 0}</div>
+          </div>
+        </div>
+
+        {/* Cartouche */}
+        <div className="stat-card cartridges stat-card-custom">
+          <div className="stat-card-header">
+            <span className="stat-card-title">Cartouche</span>
+            <div className="stat-icon-wrapper">
+              <Droplet size={20} />
+            </div>
+          </div>
+          <div className="stat-card-body">
+            <div className="stat-value">{stats?.cartridges?.total || 0}</div>
+          </div>
+        </div>
+
+        {/* Consommable */}
+        <div className="stat-card consumables stat-card-custom">
+          <div className="stat-card-header">
+            <span className="stat-card-title">Consommable</span>
+            <div className="stat-icon-wrapper">
+              <Package size={20} />
+            </div>
+          </div>
+          <div className="stat-card-body">
+            <div className="stat-value">{stats?.consumables?.total || 0}</div>
+          </div>
+        </div>
+
+        {/* Câbles */}
+        <div className="stat-card cables stat-card-custom">
+          <div className="stat-card-header">
+            <span className="stat-card-title">Câble</span>
+            <div className="stat-icon-wrapper">
+              <Cable size={20} />
+            </div>
+          </div>
+          <div className="stat-card-body">
+            <div className="stat-value">{stats?.cables?.total || 0}</div>
           </div>
         </div>
       </div>

@@ -29,7 +29,11 @@ const ParcService = {
       { key: 'network', endpoint: '/NetworkEquipment', label: 'Matériel réseau' },
       { key: 'licenses', endpoint: '/SoftwareLicense', label: 'Licence' },
       { key: 'monitors', endpoint: '/Monitor', label: 'Moniteur' },
-      { key: 'peripherals', endpoint: '/Peripheral', label: 'Périphérique' } // Added!
+      { key: 'peripherals', endpoint: '/Peripheral', label: 'Périphérique' },
+      { key: 'passiveEquipment', endpoint: '/PassiveDCEquipment', label: 'Matériel passif' },
+      { key: 'cartridges', endpoint: '/CartridgeItem', label: 'Cartouche' },
+      { key: 'consumables', endpoint: '/ConsumableItem', label: 'Consommable' },
+      { key: 'cables', endpoint: '/Cable', label: 'Câbles' }
     ];
 
     const stats = {
@@ -43,7 +47,11 @@ const ParcService = {
       network: { total: 0 },
       licenses: { total: 0 },
       monitors: { total: 0 },
-      peripherals: { total: 0 }, // Added!
+      peripherals: { total: 0 },
+      passiveEquipment: { total: 0 },
+      cartridges: { total: 0 },
+      consumables: { total: 0 },
+      cables: { total: 0 },
       tickets: { total: 0, byType: { incident: 0, demande: 0 } }
     };
 

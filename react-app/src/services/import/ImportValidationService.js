@@ -88,7 +88,8 @@ const ImportValidationService = {
     const [name, status, location, manufacturer, itemType, model, inventoryNumber, user] = row;
     
     errors.push(...ImportValidationService.validateString(name, 'Name', lineNumber).errors);
-    errors.push(...ImportValidationService.validateString(status, 'Status', lineNumber).errors);
+    // Status est optionnel : si vide, l'import utilisera l'état par défaut de GLPI
+    // (on valide seulement s'il est renseigné)
     errors.push(...ImportValidationService.validateString(itemType, 'Item_Type', lineNumber).errors);
     
     return { valid: errors.length === 0, errors };
@@ -121,7 +122,7 @@ const ImportValidationService = {
     const [numTicket, durationSecond, timeCost, fixedCost] = row;
     
     errors.push(...ImportValidationService.validateString(numTicket, 'Num_Ticket', lineNumber).errors);
-    errors.push(...ImportValidationService.validateNumber(durationSecond, 'Duration_second', { min: 0, isInteger: true }, lineNumber).errors);
+    errors.push(...ImportValidationService.validateNumber(durationSecond, 'Duration_second', { min: 0 }, lineNumber).errors);
     errors.push(...ImportValidationService.validateNumber(timeCost, 'Time_Cost', { min: 0 }, lineNumber).errors);
     errors.push(...ImportValidationService.validateNumber(fixedCost, 'Fixed_Cost', { min: 0 }, lineNumber).errors);
     

@@ -184,6 +184,11 @@
 .stat-card.network { --card-color: #f59e0b; }
 .stat-card.licenses { --card-color: #dc2626; }
 .stat-card.monitors { --card-color: #10b981; }
+.stat-card.peripherals { --card-color: #ec4899; }
+.stat-card.passive-equipment { --card-color: #0ea5e9; }
+.stat-card.cartridges { --card-color: #64748b; }
+.stat-card.consumables { --card-color: #a855f7; }
+.stat-card.cables { --card-color: #f43f5e; }
 
 .stat-card:hover {
   transform: translateY(-3px);

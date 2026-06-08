@@ -71,6 +71,7 @@ const GLPIImportServiceFast = {
     const statusMap = {
       'New': 1,
       'Assign': 2,
+      'Assigned': 2,
       'In Progress': 2,
       'Planned': 3,
       'Pending': 4,
