@@ -7,7 +7,7 @@ import ManufacturerService from '../../../../services/Manufacturer/ManufacturerS
 import LocationService from '../../../../services/Location/LocationService';
 import UserService from '../../../../services/User/UserService';
 import DocumentService from '../../../../services/Document/DocumentService';
-import '../../../../styles/pages/ParcDetail.css';
+import '../../../../styles/detail.css';
 
 const PeripheralDetail = () => {
   const { id } = useParams();

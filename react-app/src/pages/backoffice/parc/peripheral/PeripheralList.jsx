@@ -5,7 +5,7 @@ import PeripheralService from '../../../../services/Peripheral/PeripheralService
 import StateService from '../../../../services/State/StateService';
 import ManufacturerService from '../../../../services/Manufacturer/ManufacturerService';
 import LocationService from '../../../../services/Location/LocationService';
-import '../../../../styles/pages/ParcList.css';
+import '../../../../styles/list.css';
 
 const PeripheralList = () => {
   const [peripherals, setPeripherals] = useState([]);
