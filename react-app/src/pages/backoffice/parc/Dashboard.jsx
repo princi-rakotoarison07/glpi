@@ -327,6 +327,32 @@ const Dashboard = () => {
             <div className="stat-value">{stats?.cables?.total || 0}</div>
           </div>
         </div>
+
+        {/* Base de données */}
+        <div className="stat-card databaseInstances stat-card-custom">
+          <div className="stat-card-header">
+            <span className="stat-card-title">Base de données</span>
+            <div className="stat-icon-wrapper">
+              <Database size={20} />
+            </div>
+          </div>
+          <div className="stat-card-body">
+            <div className="stat-value">{stats?.databaseInstances?.total || 0}</div>
+          </div>
+        </div>
+
+        {/* Salle serveur */}
+        <div className="stat-card dcRooms stat-card-custom">
+          <div className="stat-card-header">
+            <span className="stat-card-title">Salle serveur</span>
+            <div className="stat-icon-wrapper">
+              <Server size={20} />
+            </div>
+          </div>
+          <div className="stat-card-body">
+            <div className="stat-value">{stats?.dcRooms?.total || 0}</div>
+          </div>
+        </div>
       </div>
 
       {/* Section Tickets (en bas) */}

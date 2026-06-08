@@ -118,7 +118,7 @@ const GLPIImportHelpers = {
       const allTypes = [
         'Computer', 'Monitor', 'Printer', 'NetworkEquipment', 'Phone', 'Peripheral', 
         'Enclosure', 'PDU', 'Pdu', 'Rack', 'Software', 'PassiveDCEquipment', 
-        'CartridgeItem', 'ConsumableItem', 'Cable'
+        'CartridgeItem', 'ConsumableItem', 'Cable', 'DatabaseInstance', 'DCRoom'
       ];
       
       for (const type of allTypes) {

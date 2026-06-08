@@ -14,6 +14,9 @@ import PhoneService from '../../services/Phone/PhoneService';
 import ChassisService from '../../services/Chassis/ChassisService';
 import NetworkEquipmentService from '../../services/NetworkEquipment/NetworkEquipmentService';
 import SoftwareLicenseService from '../../services/SoftwareLicense/SoftwareLicenseService';
+import PeripheralService from '../../services/Peripheral/PeripheralService';
+import DatabaseInstanceService from '../../services/DatabaseInstance/DatabaseInstanceService';
+import DCRoomService from '../../services/DCRoom/DCRoomService';
 import StateService from '../../services/State/StateService';
 import LocationService from '../../services/Location/LocationService';
 import ManufacturerService from '../../services/Manufacturer/ManufacturerService';
@@ -53,8 +56,12 @@ const TicketDetail = () => {
       'Rack': '/parc/racks',
       'Phone': '/parc/phones',
       'Chassis': '/parc/chassis',
+      'Enclosure': '/parc/chassis',
       'NetworkEquipment': '/parc/network-equipment',
-      'SoftwareLicense': '/parc/licenses'
+      'SoftwareLicense': '/parc/licenses',
+      'Peripheral': '/parc/peripherals',
+      'DatabaseInstance': '/parc/database-instances',
+      'DCRoom': '/parc/dc-rooms'
     };
     const basePath = typeMap[itemType];
     if (basePath) {
@@ -67,15 +74,19 @@ const TicketDetail = () => {
   const getItemTypeLabel = (itemType) => {
     const labelMap = {
       'Computer': 'Ordinateur',
-      'Monitor': 'Écran',
+      'Monitor': 'Moniteur',
       'Software': 'Logiciel',
       'Printer': 'Imprimante',
       'PDU': 'PDU',
       'Rack': 'Baie',
       'Phone': 'Téléphone',
       'Chassis': 'Châssis',
+      'Enclosure': 'Châssis',
       'NetworkEquipment': 'Matériel réseau',
-      'SoftwareLicense': 'Licence logiciel'
+      'SoftwareLicense': 'Licence logiciel',
+      'Peripheral': 'Périphérique',
+      'DatabaseInstance': 'Base de données',
+      'DCRoom': 'Salle serveur'
     };
     return labelMap[itemType] || itemType;
   };
@@ -104,6 +115,12 @@ const TicketDetail = () => {
           return await NetworkEquipmentService.getNetworkEquipmentById(itemId);
         case 'SoftwareLicense':
           return await SoftwareLicenseService.getSoftwareLicenseById(itemId);
+        case 'Peripheral':
+          return await PeripheralService.getPeripheralById(itemId);
+        case 'DatabaseInstance':
+          return await DatabaseInstanceService.getDatabaseInstanceById(itemId);
+        case 'DCRoom':
+          return await DCRoomService.getDCRoomById(itemId);
         default:
           return null;
       }

@@ -41,6 +41,9 @@ export const RESET_RESOURCES = [
   { name: 'Rack', endpoint: '/Rack', label: 'Racks', group: 'Parc Informatique', isParent: true },
   { name: 'Enclosure', endpoint: '/Enclosure', label: 'Châssis (Enclosures)', group: 'Parc Informatique', isParent: true },
   { name: 'PDU', endpoint: '/PDU', label: 'PDU', group: 'Parc Informatique', isParent: true },
+  { name: 'PassiveDCEquipment', endpoint: '/PassiveDCEquipment', label: 'Matériel passif', group: 'Parc Informatique', isParent: true },
+  { name: 'Cable', endpoint: '/Cable', label: 'Câbles', group: 'Parc Informatique', isParent: true },
+  { name: 'DCRoom', endpoint: '/DCRoom', label: 'Salles serveur', group: 'Parc Informatique', isParent: true },
 
   // ─── Virtualisation & BDD ────────────────────────────────────────────────
   { name: 'VirtualMachine', endpoint: '/VirtualMachine', label: 'Machines virtuelles', group: 'Virtualisation' },

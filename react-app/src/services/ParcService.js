@@ -33,7 +33,9 @@ const ParcService = {
       { key: 'passiveEquipment', endpoint: '/PassiveDCEquipment', label: 'Matériel passif' },
       { key: 'cartridges', endpoint: '/CartridgeItem', label: 'Cartouche' },
       { key: 'consumables', endpoint: '/ConsumableItem', label: 'Consommable' },
-      { key: 'cables', endpoint: '/Cable', label: 'Câbles' }
+      { key: 'cables', endpoint: '/Cable', label: 'Câbles' },
+      { key: 'databaseInstances', endpoint: '/DatabaseInstance', label: 'Base de données' },
+      { key: 'dcRooms', endpoint: '/DCRoom', label: 'Salle serveur' }
     ];
 
     const stats = {
@@ -52,6 +54,8 @@ const ParcService = {
       cartridges: { total: 0 },
       consumables: { total: 0 },
       cables: { total: 0 },
+      databaseInstances: { total: 0 },
+      dcRooms: { total: 0 },
       tickets: { total: 0, byType: { incident: 0, demande: 0 } }
     };
 

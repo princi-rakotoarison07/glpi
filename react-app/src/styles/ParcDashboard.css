@@ -189,6 +189,8 @@
 .stat-card.cartridges { --card-color: #64748b; }
 .stat-card.consumables { --card-color: #a855f7; }
 .stat-card.cables { --card-color: #f43f5e; }
+.stat-card.databaseInstances { --card-color: #0d9488; }
+.stat-card.dcRooms { --card-color: #d97706; }
 
 .stat-card:hover {
   transform: translateY(-3px);
