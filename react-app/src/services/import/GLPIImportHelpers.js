@@ -112,35 +112,27 @@ const GLPIImportHelpers = {
   resolveItem: async (itemName) => {
     if (!itemName || !itemName.trim()) return null;
     
-    // Essayer de chercher dans les Computers
-    try {
-      const items = await ComputerService.getAllComputers();
-      const existing = items.find(item => item.name && item.name.toLowerCase() === itemName.toLowerCase());
-      if (existing) return { id: existing.id, type: 'Computer' };
-    } catch(e) {
-      console.warn(e);
-    }
-    
-    // Liste des autres types d'équipements possibles dans GLPI
-    const otherTypes = ['Monitor', 'Printer', 'NetworkEquipment', 'Phone', 'Peripheral', 'Enclosure', 'PDU', 'Rack', 'Software'];
-    
     try {
       const { default: api } = await import('../../config/api');
       
-      // On boucle sur chaque type d'équipement
-      for (const type of otherTypes) {
+      const allTypes = [
+        'Computer', 'Monitor', 'Printer', 'NetworkEquipment', 'Phone', 'Peripheral', 
+        'Enclosure', 'PDU', 'Pdu', 'Rack', 'Software', 'PassiveDCEquipment', 
+        'CartridgeItem', 'ConsumableItem', 'Cable'
+      ];
+      
+      for (const type of allTypes) {
         try {
-          const response = await api.get(`/${type}`);
-          const items = response.data;
+          const response = await api.get(`/${type}?range=0-9999`);
+          const items = response.data || [];
           const existing = items.find(item => item.name && item.name.toLowerCase() === itemName.toLowerCase());
           if (existing) return { id: existing.id, type: type };
         } catch (e) {
-          // L'API peut retourner une erreur 400/404 si le endpoint n'existe pas ou s'il n'y a pas de droits, on ignore et on passe au suivant
-          // console.warn(`Erreur lors de la recherche dans ${type}`, e);
+          // L'API peut retourner une erreur si l'endpoint ou les droits manquent, on ignore
         }
       }
     } catch(e) {
-      console.warn('Erreur globale lors de la recherche des autres équipements', e);
+      console.warn('Erreur globale lors de la recherche des équipements', e);
     }
     
     return null;

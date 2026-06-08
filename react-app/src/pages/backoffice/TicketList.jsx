@@ -68,9 +68,10 @@ const TicketList = () => {
     { value: '', label: 'Tous les statuts' },
     { value: '1', label: 'Nouveau' },
     { value: '2', label: 'En cours (Attribué)' },
-    { value: '3', label: 'En attente' },
-    { value: '4', label: 'Résolu' },
-    { value: '5', label: 'Fermé' },
+    { value: '3', label: 'En cours (Planifié)' },
+    { value: '4', label: 'En attente' },
+    { value: '5', label: 'Résolu' },
+    { value: '6', label: 'Clos' },
   ];
 
   const priorityOptions = [

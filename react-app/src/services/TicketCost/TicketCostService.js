@@ -35,7 +35,8 @@ const TicketCostService = {
       await initSession();
       const response = await api.get('/TicketCost', {
         params: {
-          'searchText[tickets_id]': ticketId
+          'searchText[tickets_id]': ticketId,
+          range: '0-999'
         }
       });
       return response.data;

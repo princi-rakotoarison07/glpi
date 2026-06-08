@@ -110,11 +110,13 @@ const GLPIImportServiceFast = {
       return undefined;
     };
 
+    const targetStatusValue = getMapValue(statusMap, status) || 1;
+
     const ticketData = {
       name: titre,
       content: description,
       date: formattedDate,
-      status: getMapValue(statusMap, status) || 1,
+      status: targetStatusValue === 6 ? 1 : targetStatusValue,
       priority: getMapValue(priorityMap, priority) || 3,
       type: getMapValue(typeMap, type) || 1
     };
@@ -172,6 +174,19 @@ const GLPIImportServiceFast = {
           }
         } catch (e) {
           console.warn(`Erreur lors du parsing des items pour le ticket ${titre}:`, itemsStr, e.message);
+        }
+      }
+
+      // 3. Mettre à jour en Closed si c'est le statut cible
+      if (targetStatusValue === 6) {
+        try {
+          await TicketService.updateTicket(newTicketId, {
+            status: 6,
+            solvedate: formattedDate,
+            closedate: formattedDate
+          });
+        } catch (err) {
+          console.error(`Erreur mise à jour statut Closed pour ticket ${newTicketId}:`, err);
         }
       }
       

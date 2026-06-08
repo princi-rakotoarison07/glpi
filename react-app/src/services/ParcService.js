@@ -145,20 +145,21 @@ const ParcService = {
                   // En cours (Attribué) (status 2)
                   const response = await api.get('/Ticket?searchText[status]=2&range=0-0');
                   count = extractCountFromResponse(response);
-                } else if (card.id === 'waiting') {
-                  // En attente (status 3)
+                } else if (card.id === 'planned') {
+                  // Planifiés (status 3)
                   const response = await api.get('/Ticket?searchText[status]=3&range=0-0');
                   count = extractCountFromResponse(response);
-                } else if (card.id === 'planned') {
-                  // Planifiés (si vous utilisez un statut spécifique)
-                  count = 0;
-                } else if (card.id === 'solved') {
-                  // Résolus (status 4)
+                } else if (card.id === 'waiting') {
+                  // En attente (status 4)
                   const response = await api.get('/Ticket?searchText[status]=4&range=0-0');
                   count = extractCountFromResponse(response);
-                } else if (card.id === 'closed') {
-                  // Fermés (status 5)
+                } else if (card.id === 'solved') {
+                  // Résolus (status 5)
                   const response = await api.get('/Ticket?searchText[status]=5&range=0-0');
+                  count = extractCountFromResponse(response);
+                } else if (card.id === 'closed') {
+                  // Fermés (status 6)
+                  const response = await api.get('/Ticket?searchText[status]=6&range=0-0');
                   count = extractCountFromResponse(response);
                 } else {
                   // Autres cartes (en retard, problème, changement, récurrents)

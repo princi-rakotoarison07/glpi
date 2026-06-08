@@ -240,9 +240,10 @@ const TicketDetail = () => {
                 <span className="status-badge">
                   {ticket.status === 1 ? 'Nouveau' :
                    ticket.status === 2 ? 'En cours (Attribué)' :
-                   ticket.status === 3 ? 'En attente' :
-                   ticket.status === 4 ? 'Résolu' :
-                   ticket.status === 5 ? 'Fermé' : 'Statut inconnu'}
+                   ticket.status === 3 ? 'En cours (Planifié)' :
+                   ticket.status === 4 ? 'En attente' :
+                   ticket.status === 5 ? 'Résolu' :
+                   ticket.status === 6 ? 'Clos' : 'Statut inconnu'}
                 </span>
               </div>
             </div>

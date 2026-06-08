@@ -80,6 +80,18 @@ const TicketService = {
     }
   },
 
+  // Mise à jour d'un ticket (PUT /Ticket/:id)
+  updateTicket: async (id, ticketData) => {
+    try {
+      await initSession();
+      const response = await api.put(`/Ticket/${id}`, { input: ticketData });
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating ticket ${id}:`, error);
+      throw error;
+    }
+  },
+
   // Méthode combinée : Crée un ticket puis le lie directement à un PC
   createTicketForComputer: async (ticketData, computerId) => {
     try {
