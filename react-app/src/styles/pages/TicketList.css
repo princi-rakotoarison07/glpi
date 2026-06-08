@@ -71,6 +71,14 @@
   color: var(--text-primary);
 }
 
+.ticket-user {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
 .status-badge {
   display: inline-block;
   padding: 4px 12px;

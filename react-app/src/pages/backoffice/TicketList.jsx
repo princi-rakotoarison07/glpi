@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Filter, ArrowUpDown, Eye } from 'lucide-react';
+import { Filter, ArrowUpDown, Eye, User } from 'lucide-react';
 import TicketService from '../../services/Ticket/TicketService';
+import UserService from '../../services/User/UserService';
 import '../../styles/pages/TicketList.css';
 
 const TicketList = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalItems, setTotalItems] = useState(0);
+  const [userMap, setUserMap] = useState({}); // { userId: userName }
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,9 +41,26 @@ const TicketList = () => {
     }
   };
 
+  // Fetch all users once on mount
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const users = await UserService.getAllUsers();
+        const map = {};
+        users.forEach(u => {
+          map[u.id] = u.name;
+        });
+        setUserMap(map);
+      } catch (e) {
+        console.error('Error fetching users:', e);
+      }
+    };
+    fetchUsers();
+  }, []);
+
   useEffect(() => {
     fetchTickets();
-  }, [currentPage, itemsPerPage, statusFilter]);
+  }, [currentPage, itemsPerPage, statusFilter, userMap]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -120,6 +139,7 @@ const TicketList = () => {
               <tr>
                 <th>ID</th>
                 <th>Titre</th>
+                <th>Utilisateur</th>
                 <th>Statut</th>
                 <th>Priorité</th>
                 <th>Dernière modification</th>
@@ -131,11 +151,20 @@ const TicketList = () => {
               {tickets.length > 0 ? (
                 tickets.map((ticket) => {
                   const priorityInfo = getPriorityInfo(ticket.priority);
+                  const userId = ticket.users_id_recipient;
+                  const userName = userMap[userId] 
+                        || (userId ? `Utilisateur #${userId}` : 'Inconnu');
                   return (
                     <tr key={ticket.id}>
                       <td>{ticket.id}</td>
                       <td className="ticket-title">
                         {ticket.name || `Ticket #${ticket.id}`}
+                      </td>
+                      <td>
+                        <div className="ticket-user">
+                          <User size={14} style={{ marginRight: '4px' }} />
+                          {userName}
+                        </div>
                       </td>
                       <td>
                         <span className="status-badge">
@@ -163,7 +192,7 @@ const TicketList = () => {
                 })
               ) : (
                 <tr>
-                  <td colSpan="7" className="empty-state">
+                  <td colSpan="8" className="empty-state">
                     Aucun ticket trouvé.
                   </td>
                 </tr>
