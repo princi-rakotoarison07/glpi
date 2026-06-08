@@ -34,13 +34,16 @@ const ItemTicketService = {
       await initSession();
       const response = await api.get(`/Item_Ticket`, {
         params: {
-          searchText: {
-            tickets_id: ticketId
-          },
-          expand: ['item', 'item.State', 'item.Location'] // Expand more related data
+          expand: ['item', 'item.State', 'item.Location'], // Expand more related data
+          range: '0-9999' // Get all entries
         }
       });
-      return response.data;
+      // Manually filter the results for the specific ticket ID
+      const filteredItems = response.data.filter(item => 
+        Number(item.tickets_id) === Number(ticketId)
+      );
+      console.log('getItemsForTicket found:', filteredItems.length, 'items for ticket', ticketId);
+      return filteredItems;
     } catch (error) {
       console.error('Error fetching items for ticket:', error);
       return [];
