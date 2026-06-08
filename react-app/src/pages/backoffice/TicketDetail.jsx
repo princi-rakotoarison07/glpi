@@ -378,14 +378,6 @@ const TicketDetail = () => {
           </h2>
           {ticketCosts.length > 0 ? (
             <>
-              <div style={{ marginBottom: '16px', padding: '16px', background: '#d4edda', border: '1px solid #c3e6cb', borderRadius: '8px', fontWeight: 'bold', fontSize: '18px', color: '#155724' }}>
-                Total des coûts : {ticketCosts.reduce((total, cost) => {
-                  const costFixed = parseFloat(cost.cost_fixed || 0);
-                  const costMaterial = parseFloat(cost.cost_material || 0);
-                  const costTime = parseFloat(cost.cost_time || 0);
-                  return total + costFixed + costMaterial + costTime;
-                }, 0).toFixed(2)} €
-              </div>
               <div className="linked-items-table-container">
                 <table className="linked-items-table">
                   <thead>
@@ -405,8 +397,10 @@ const TicketDetail = () => {
                     {ticketCosts.map((cost) => {
                       const costFixed = parseFloat(cost.cost_fixed || 0);
                       const costMaterial = parseFloat(cost.cost_material || 0);
-                      const costTime = parseFloat(cost.cost_time || 0);
-                      const total = costFixed + costMaterial + costTime;
+                      const hourlyRate = parseFloat(cost.cost_time || 0);
+                      const durationHours = (parseInt(cost.actiontime) || 0) / 3600;
+                      const timeCost = durationHours * hourlyRate;
+                      const total = costFixed + costMaterial + timeCost;
                       
                       // Formater la durée (secondes -> format lisible)
                       const formatDuration = (seconds) => {
@@ -445,7 +439,7 @@ const TicketDetail = () => {
                           <td>{formatDate(cost.end_date)}</td>
                           <td>{cost.budget ? parseFloat(cost.budget).toFixed(2) + ' €' : '-'}</td>
                           <td>{formatDuration(cost.actiontime)}</td>
-                          <td>{parseFloat(cost.cost_hourly || 0).toFixed(2)}</td>
+                          <td>{hourlyRate.toFixed(2)}</td>
                           <td>{costFixed.toFixed(2)}</td>
                           <td>{costMaterial.toFixed(2)}</td>
                           <td style={{ fontWeight: 'bold' }}>{total.toFixed(2)}</td>
@@ -453,6 +447,45 @@ const TicketDetail = () => {
                       );
                     })}
                   </tbody>
+                  <tfoot>
+                    <tr className="cost-total-row">
+                      <td colSpan={4}></td>
+                      <td>
+                        {(() => {
+                          const totalSecs = ticketCosts.reduce((sum, c) => sum + (parseInt(c.actiontime) || 0), 0);
+                          if (totalSecs === 0) return '0 seconde';
+                          const h = Math.floor(totalSecs / 3600);
+                          const m = Math.floor((totalSecs % 3600) / 60);
+                          const s = totalSecs % 60;
+                          const parts = [];
+                          if (h > 0) parts.push(`${h} heure${h > 1 ? 's' : ''}`);
+                          if (m > 0) parts.push(`${m} minute${m > 1 ? 's' : ''}`);
+                          if (s > 0) parts.push(`${s} seconde${s > 1 ? 's' : ''}`);
+                          return parts.join(' ');
+                        })()}
+                      </td>
+                      <td>
+                        {ticketCosts.reduce((sum, c) => {
+                          const rate = parseFloat(c.cost_time || 0);
+                          const h = (parseInt(c.actiontime) || 0) / 3600;
+                          return sum + h * rate;
+                        }, 0).toFixed(2)}
+                      </td>
+                      <td>
+                        {ticketCosts.reduce((sum, c) => sum + parseFloat(c.cost_fixed || 0), 0).toFixed(2)}
+                      </td>
+                      <td>
+                        {ticketCosts.reduce((sum, c) => sum + parseFloat(c.cost_material || 0), 0).toFixed(2)}
+                      </td>
+                      <td>
+                        {ticketCosts.reduce((sum, c) => {
+                          const rate = parseFloat(c.cost_time || 0);
+                          const h = (parseInt(c.actiontime) || 0) / 3600;
+                          return sum + h * rate + parseFloat(c.cost_fixed || 0) + parseFloat(c.cost_material || 0);
+                        }, 0).toFixed(2)}
+                      </td>
+                    </tr>
+                  </tfoot>
                 </table>
               </div>
             </>

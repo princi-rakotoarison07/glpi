@@ -204,6 +204,18 @@
   background: var(--bg-general);
 }
 
+.linked-items-table tfoot .cost-total-row {
+  background: #f0f7ff;
+  border-top: 2px solid var(--color-primary);
+}
+
+.linked-items-table tfoot .cost-total-row td {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-primary);
+  border-bottom: none;
+}
+
 .item-name-cell {
   font-weight: 500;
 }
