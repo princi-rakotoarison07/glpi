@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, Clock, User, Layers, ArrowUpRight } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, User, Layers, ArrowUpRight, DollarSign } from 'lucide-react';
 import TicketService from '../../services/Ticket/TicketService';
 import ItemTicketService from '../../services/ItemTicket/ItemTicketService';
+import TicketCostService from '../../services/TicketCost/TicketCostService';
 import ComputerService from '../../services/Computer/ComputerService';
 import MonitorService from '../../services/Monitor/MonitorService';
 import SoftwareService from '../../services/Software/SoftwareService';
@@ -24,6 +25,7 @@ const TicketDetail = () => {
   const { id } = useParams();
   const [ticket, setTicket] = useState(null);
   const [linkedItems, setLinkedItems] = useState([]);
+  const [ticketCosts, setTicketCosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const priorityOptions = [
@@ -115,14 +117,15 @@ const TicketDetail = () => {
     const fetchAllData = async () => {
       try {
         setLoading(true);
-        const [ticketData, itemsData, statesData, locationsData, manufacturersData, computerModelsData, computerTypesData] = await Promise.all([
+        const [ticketData, itemsData, statesData, locationsData, manufacturersData, computerModelsData, computerTypesData, costsData] = await Promise.all([
           TicketService.getTicket(id),
           ItemTicketService.getItemsForTicket(id),
           StateService.getAllStates(),
           LocationService.getAllLocations(),
           ManufacturerService.getAllManufacturers(),
           ComputerModelService.getAllComputerModels(),
-          ComputerTypeService.getAllComputerTypes()
+          ComputerTypeService.getAllComputerTypes(),
+          TicketCostService.getTicketCosts(id)
         ]);
         
         console.log('Ticket data:', ticketData);
@@ -158,6 +161,7 @@ const TicketDetail = () => {
         console.log('Items with full details:', itemsWithDetails);
         
         setTicket(ticketData);
+        setTicketCosts(costsData.data || costsData || []);
         setLinkedItems({
           items: itemsWithDetails,
           statesMap,
@@ -363,6 +367,98 @@ const TicketDetail = () => {
           ) : (
             <div className="empty-state">
               Aucun élément lié à ce ticket.
+            </div>
+          )}
+        </div>
+
+        <div className="detail-card">
+          <h2>
+            <DollarSign size={18} style={{ marginRight: '8px' }} />
+            Coûts associés
+          </h2>
+          {ticketCosts.length > 0 ? (
+            <>
+              <div style={{ marginBottom: '16px', padding: '16px', background: '#d4edda', border: '1px solid #c3e6cb', borderRadius: '8px', fontWeight: 'bold', fontSize: '18px', color: '#155724' }}>
+                Total des coûts : {ticketCosts.reduce((total, cost) => {
+                  const costFixed = parseFloat(cost.cost_fixed || 0);
+                  const costMaterial = parseFloat(cost.cost_material || 0);
+                  const costTime = parseFloat(cost.cost_time || 0);
+                  return total + costFixed + costMaterial + costTime;
+                }, 0).toFixed(2)} €
+              </div>
+              <div className="linked-items-table-container">
+                <table className="linked-items-table">
+                  <thead>
+                    <tr>
+                      <th>Nom</th>
+                      <th>Date de début</th>
+                      <th>Date de fin</th>
+                      <th>Budget</th>
+                      <th>Durée</th>
+                      <th>Coût horaire (€)</th>
+                      <th>Coût fixe (€)</th>
+                      <th>Coût matériel (€)</th>
+                      <th>Coût total (€)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ticketCosts.map((cost) => {
+                      const costFixed = parseFloat(cost.cost_fixed || 0);
+                      const costMaterial = parseFloat(cost.cost_material || 0);
+                      const costTime = parseFloat(cost.cost_time || 0);
+                      const total = costFixed + costMaterial + costTime;
+                      
+                      // Formater la durée (secondes -> format lisible)
+                      const formatDuration = (seconds) => {
+                        const secs = parseInt(seconds) || 0;
+                        if (secs === 0) return '0 seconde';
+                        
+                        const h = Math.floor(secs / 3600);
+                        const m = Math.floor((secs % 3600) / 60);
+                        const s = secs % 60;
+                        
+                        let result = [];
+                        if (h > 0) result.push(`${h} heure${h > 1 ? 's' : ''}`);
+                        if (m > 0) result.push(`${m} minute${m > 1 ? 's' : ''}`);
+                        if (s > 0) result.push(`${s} seconde${s > 1 ? 's' : ''}`);
+                        
+                        return result.join(' ');
+                      };
+
+                      // Formater la date
+                      const formatDate = (dateStr) => {
+                        if (!dateStr) return '';
+                        const date = new Date(dateStr);
+                        return date.toLocaleDateString('fr-FR', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        });
+                      };
+
+                      return (
+                        <tr key={cost.id}>
+                          <td>{cost.name || 'Sans description'}</td>
+                          <td>{formatDate(cost.begin_date)}</td>
+                          <td>{formatDate(cost.end_date)}</td>
+                          <td>{cost.budget ? parseFloat(cost.budget).toFixed(2) + ' €' : '-'}</td>
+                          <td>{formatDuration(cost.actiontime)}</td>
+                          <td>{parseFloat(cost.cost_hourly || 0).toFixed(2)}</td>
+                          <td>{costFixed.toFixed(2)}</td>
+                          <td>{costMaterial.toFixed(2)}</td>
+                          <td style={{ fontWeight: 'bold' }}>{total.toFixed(2)}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          ) : (
+            <div className="empty-state">
+              Aucun coût associé à ce ticket.
             </div>
           )}
         </div>

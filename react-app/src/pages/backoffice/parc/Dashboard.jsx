@@ -49,16 +49,16 @@ const Dashboard = () => {
 
   const getTicketIcon = (iconName) => {
     switch (iconName) {
-      case 'alert': return <AlertCircle size={32} />;
-      case 'clock': return <Clock size={32} />;
-      case 'warning': return <AlertTriangle size={32} />;
-      case 'clipboard': return <ClipboardList size={32} />;
-      case 'users': return <Users size={32} />;
-      case 'check': return <CheckCircle size={32} />;
-      case 'pause': return <PauseCircle size={32} />;
-      case 'calendar': return <Calendar size={32} />;
-      case 'trash': return <Trash2 size={32} />;
-      default: return <AlertCircle size={32} />;
+      case 'alert': return <AlertCircle size={32} color="#1e293b" />;
+      case 'clock': return <Clock size={32} color="#1e293b" />;
+      case 'warning': return <AlertTriangle size={32} color="#1e293b" />;
+      case 'clipboard': return <ClipboardList size={32} color="#1e293b" />;
+      case 'users': return <Users size={32} color="#1e293b" />;
+      case 'check': return <CheckCircle size={32} color="#1e293b" />;
+      case 'pause': return <PauseCircle size={32} color="#1e293b" />;
+      case 'calendar': return <Calendar size={32} color="#1e293b" />;
+      case 'trash': return <Trash2 size={32} color="#1e293b" />;
+      default: return <AlertCircle size={32} color="#1e293b" />;
     }
   };
 
@@ -187,7 +187,7 @@ const Dashboard = () => {
           {/* Détails par carte (style GLPI) */}
           <div className="ticket-cards-grid">
             {Object.values(stats?.tickets?.cards || {}).map((card, index) => (
-              <div key={`ticket-card-${card.id || index}`} className="ticket-card" style={{ backgroundColor: card.color }}>
+              <div key={`ticket-card-${card.id || index}`} className="ticket-card">
                 <div className="ticket-card-top">
                   <div className="ticket-card-count">{card.count}</div>
                   <div className="ticket-card-icon">

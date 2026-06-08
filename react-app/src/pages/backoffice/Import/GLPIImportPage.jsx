@@ -2,12 +2,8 @@ import React, { useState } from 'react';
 import GLPIImportServiceFast from '../../../services/import/GLPIImportServiceFast';
 import GLPIImageImportService from '../../../services/import/GLPIImageImportService';
 import { Package, Eye, ShoppingCart, Image as ImageIcon, CheckCircle2, AlertCircle, Terminal, Upload } from 'lucide-react';
-import '../../../styles/pages/TicketList.css'; // On va utiliser un style proche ou générique
-// Assurez-vous d'avoir form.css ou import.css importé si nécessaire. On se base sur les styles existants.
+import '../../../styles/pages/TicketList.css';
 
-/**
- * COMPOSANT : FileField
- */
 const FileField = ({ label, icon: Icon, file, count, onChange, accept = ".csv", isImporting }) => (
   <div className="import-field">
     <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, marginBottom: '8px' }}>
@@ -60,12 +56,10 @@ const GLPIImportPage = () => {
     setMessages((prev) => [...prev, { msg, type, timestamp: new Date().toLocaleTimeString() }]);
   };
 
-  // Parser simple pour CSV (gestion basique des guillemets)
   const parseCSV = (text) => {
     const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
     if (lines.length === 0) return { headers: [], rows: [] };
     
-    // Une fonction très basique pour parser une ligne CSV
     const parseLine = (line) => {
       const result = [];
       let current = '';
@@ -102,7 +96,7 @@ const GLPIImportPage = () => {
 
       if (parsed.rows.length > 0) {
         const validation = validationFunction(parsed);
-        setValidationErrors(prev => [...prev.filter(err => !err.startsWith(errorPrefix)), ...validation.errors.map(e => `${errorPrefix} ${e}`)]);
+        setValidationErrors(prev => [...prev.filter(err => !err.startsWith(errorPrefix)), ...validation.errors.map(e => errorPrefix + ' ' + e)]);
       }
     };
     reader.readAsText(selectedFile);
@@ -146,21 +140,17 @@ const GLPIImportPage = () => {
     const totalRows = preview1.rows.length + preview2.rows.length + preview3.rows.length;
     let processed = 0;
     
-    // Mapping pour lier Ref_Ticket (CSV) à l'ID GLPI réel
     const ticketMap = {};
 
     try {
-      // 1. Équipements (Feuille 1)
       if (preview1.rows.length > 0) addMessage("Importation des équipements...", 'info');
       for (let i = 0; i < preview1.rows.length; i++) {
         const row = preview1.rows[i];
         try {
           const res = await GLPIImportServiceFast.importItemRow(row);
-          // row[4] correspond à l'Item_Type dans le CSV s'il est à l'index 4
-          // Modifions le message pour qu'il soit dynamique
           const itemType = (row[4] && row[4].trim()) ? row[4].trim() : 'Computer';
           newResults.success++;
-          addMessage(`${itemType} '${row[0]}' importé.`, 'success');
+          addMessage(itemType + ' \'' + row[0] + '\' importé.', 'success');
         } catch (error) {
           newResults.errors++;
           newResults.details.push({ row: i + 2, status: 'error', name: row[0], message: error.message });
@@ -168,16 +158,15 @@ const GLPIImportPage = () => {
         processed++; setProgress(Math.round((processed / totalRows) * 100));
       }
 
-      // 2. Tickets (Feuille 2)
       if (preview2.rows.length > 0) addMessage("Importation des tickets...", 'info');
       for (let i = 0; i < preview2.rows.length; i++) {
         const row = preview2.rows[i];
         const refTicket = row[0];
         try {
           const res = await GLPIImportServiceFast.importTicketRow(row);
-          ticketMap[refTicket] = res.id; // Sauvegarde de l'ID réel
+          ticketMap[refTicket] = res.id;
           newResults.success++;
-          addMessage(`Ticket '${row[4]}' importé (GLPI ID: ${res.id}).`, 'success');
+          addMessage("Ticket '" + row[4] + "' importé (GLPI ID: " + res.id + ").", 'success');
         } catch (error) {
           newResults.errors++;
           newResults.details.push({ row: preview1.rows.length + i + 2, status: 'error', name: row[4], message: error.message });
@@ -185,26 +174,24 @@ const GLPIImportPage = () => {
         processed++; setProgress(Math.round((processed / totalRows) * 100));
       }
 
-      // 3. Coûts (Feuille 3)
       if (preview3.rows.length > 0) addMessage("Importation des coûts...", 'info');
       for (let i = 0; i < preview3.rows.length; i++) {
         const row = preview3.rows[i];
         try {
           await GLPIImportServiceFast.importCostRow(row, ticketMap);
           newResults.success++;
-          addMessage(`Coût pour le ticket réf '${row[0]}' importé.`, 'success');
+          addMessage("Coût pour le ticket réf '" + row[0] + "' importé.", 'success');
         } catch (error) {
           newResults.errors++;
-          newResults.details.push({ row: preview1.rows.length + preview2.rows.length + i + 2, status: 'error', name: `Ticket ${row[0]}`, message: error.message });
+          newResults.details.push({ row: preview1.rows.length + preview2.rows.length + i + 2, status: 'error', name: "Ticket " + row[0], message: error.message });
         }
         processed++; setProgress(Math.round((processed / totalRows) * 100));
       }
 
     } catch (err) {
-      addMessage(`Erreur critique: ${err.message}`, 'error');
+      addMessage("Erreur critique: " + err.message, 'error');
     }
 
-    // 4. Import des images (ZIP)
     if (zipFile) {
       addMessage('Importation des images...', 'info');
       try {
@@ -215,11 +202,11 @@ const GLPIImportPage = () => {
         newResults.errors += imgResults.errors;
         newResults.details = [...newResults.details, ...imgResults.details];
         addMessage(
-          `Images : ${imgResults.success} importée(s), ${imgResults.errors} erreur(s).`,
+          "Images : " + imgResults.success + " importée(s), " + imgResults.errors + " erreur(s).",
           imgResults.errors > 0 ? 'error' : 'success'
         );
       } catch (imgErr) {
-        addMessage(`Erreur import images : ${imgErr.message}`, 'error');
+        addMessage("Erreur import images : " + imgErr.message, 'error');
       }
     }
 
@@ -230,8 +217,8 @@ const GLPIImportPage = () => {
   };
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', padding: '24px' }}>
+    <div style={{ padding: '24px', width: '100%', height: 'calc(100vh - 64px)', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', padding: '24px', flex: 1, overflow: 'auto' }}>
         <div style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: '16px', marginBottom: '24px' }}>
           <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1e293b', margin: 0 }}>Import GLPI (CSV)</h1>
           <p style={{ color: '#64748b', marginTop: '8px' }}>Importez vos ordinateurs, tickets et coûts dans l'ordre chronologique.</p>
@@ -257,19 +244,53 @@ const GLPIImportPage = () => {
         )}
 
         {isImporting && (
-          <div style={{ marginTop: '24px', background: '#f8fafc', padding: '20px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', fontWeight: 'bold', color: '#334155' }}>
+          <div style={{ marginTop: '24px', background: '#f8fafc', padding: '24px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', fontWeight: 'bold', color: '#334155', fontSize: '16px' }}>
               <span>Importation en cours...</span>
               <span>{progress}%</span>
             </div>
-            <div style={{ height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
-              <div style={{ height: '100%', background: '#2563eb', width: `${progress}%`, transition: 'width 0.3s' }}></div>
+            <div style={{ height: '20px', background: '#e2e8f0', borderRadius: '10px', overflow: 'hidden', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1)' }}>
+              <div style={{ 
+                height: '100%', 
+                background: 'linear-gradient(90deg, #2563eb 0%, #3b82f6 100%)', 
+                width: progress + '%', 
+                transition: 'width 0.3s ease-out',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                paddingRight: '10px',
+                color: '#fff',
+                fontWeight: 'bold',
+                fontSize: '12px',
+                boxShadow: '0 2px 8px rgba(37, 99, 235, 0.4)'
+              }}>
+                {progress > 10 && progress + '%'}
+              </div>
+            </div>
+            <div style={{ 
+              marginTop: '12px', 
+              display: 'flex', 
+              gap: '8px', 
+              fontSize: '14px', 
+              color: '#64748b',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <div style={{ 
+                width: '12px', 
+                height: '12px', 
+                border: '2px solid #2563eb', 
+                borderTopColor: 'transparent', 
+                borderRadius: '50%', 
+                animation: 'spin 1s linear infinite' 
+              }}></div>
+              <span>Traitement des données en cours...</span>
             </div>
           </div>
         )}
 
         {results.details.length > 0 && !isImporting && (
-          <div style={{ marginTop: '24px', border: `1px solid ${results.errors > 0 ? '#fca5a5' : '#bbf7d0'}`, borderRadius: '8px', overflow: 'hidden' }}>
+          <div style={{ marginTop: '24px', border: '1px solid ' + (results.errors > 0 ? '#fca5a5' : '#bbf7d0'), borderRadius: '8px', overflow: 'hidden' }}>
             <div style={{ padding: '16px', background: results.errors > 0 ? '#fef2f2' : '#f0fdf4', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ color: results.errors > 0 ? '#991b1b' : '#166534', fontWeight: 'bold' }}>
                 Rapport : {results.success} succès — {results.errors} erreurs
@@ -281,7 +302,7 @@ const GLPIImportPage = () => {
                   <div key={i} style={{ display: 'flex', gap: '12px', paddingBottom: '12px', marginBottom: '12px', borderBottom: '1px solid #f1f5f9', fontSize: '14px' }}>
                     <AlertCircle size={16} color="#dc2626" style={{ flexShrink: 0, marginTop: '2px' }} />
                     <div>
-                      <strong style={{ color: '#1e293b' }}>Ligne {err.row} {err.name ? `(${err.name})` : ''}</strong>
+                      <strong style={{ color: '#1e293b' }}>Ligne {err.row} {err.name ? '(' + err.name + ')' : ''}</strong>
                       <div style={{ color: '#64748b', marginTop: '4px' }}>{err.message}</div>
                     </div>
                   </div>
@@ -308,11 +329,11 @@ const GLPIImportPage = () => {
         )}
       </div>
 
-      <div style={{ marginTop: '24px', background: '#1e293b', borderRadius: '12px', padding: '24px', color: '#f1f5f9', fontFamily: 'monospace' }}>
-        <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '0 0 16px 0', color: '#94a3b8', fontSize: '16px' }}>
+      <div style={{ background: '#1e293b', borderRadius: '12px', padding: '24px', color: '#f1f5f9', fontFamily: 'monospace', flex: 1, minHeight: '200px', display: 'flex', flexDirection: 'column' }}>
+        <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '0 0 16px 0', color: '#94a3b8', fontSize: '16px', flexShrink: 0 }}>
           <Terminal size={20} /> Journal Technique
         </h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '300px', overflowY: 'auto' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', overflowY: 'auto', flex: 1 }}>
           {messages.map((msg, index) => (
             <div key={index} style={{ color: msg.type === 'error' ? '#fca5a5' : msg.type === 'success' ? '#86efac' : '#93c5fd' }}>
               <span style={{ color: '#64748b' }}>[{msg.timestamp}]</span> {msg.msg}
