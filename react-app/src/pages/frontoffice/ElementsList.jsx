@@ -25,6 +25,9 @@ const ElementsList = () => {
     locations: {},
     manufacturers: {}
   });
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   
   // Filters state
   const [filters, setFilters] = useState({
@@ -150,7 +153,16 @@ const ElementsList = () => {
     }
 
     setFilteredElements(filtered);
+    setCurrentPage(1); // Reset to first page when filters change
   }, [filters, allElements]);
+
+  // Calculate paginated elements
+  const getPaginatedElements = () => {
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return filteredElements.slice(start, end);
+  };
+  const totalPages = Math.ceil(filteredElements.length / itemsPerPage);
 
   // Initial load
   useEffect(() => {
@@ -224,38 +236,76 @@ const ElementsList = () => {
           {loading ? (
             <div className="loading-state">Chargement des éléments...</div>
           ) : (
-            <table className="elements-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Type d'élément</th>
-                  <th>Nom</th>
-                  <th>Numéro de Série / Clé</th>
-                  <th>Fabricant / Éditeur</th>
-                  <th>Emplacement</th>
-                  <th>Statut</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredElements.length > 0 ? (
-                  filteredElements.map((element) => (
-                    <tr key={`${element.type}-${element.id}`}>
-                      <td>{element.id}</td>
-                      <td>{getTypeLabel(element.type)}</td>
-                      <td>{element.name || '-'}</td>
-                      <td>{element.serial || element.otherserial || '-'}</td>
-                      <td>{getValue(relatedData.manufacturers[element.manufacturers_id], element.manufacturers_id, relatedData.manufacturers)}</td>
-                      <td>{getValue(relatedData.locations[element.locations_id], element.locations_id, relatedData.locations)}</td>
-                      <td>{getValue(relatedData.states[element.states_id], element.states_id, relatedData.states)}</td>
-                    </tr>
-                  ))
-                ) : (
+            <>
+              <table className="elements-table">
+                <thead>
                   <tr>
-                    <td colSpan={7} className="empty-state">Aucun élément trouvé avec ces critères</td>
+                    <th>ID</th>
+                    <th>Type d'élément</th>
+                    <th>Nom</th>
+                    <th>Numéro de Série / Clé</th>
+                    <th>Fabricant / Éditeur</th>
+                    <th>Emplacement</th>
+                    <th>Statut</th>
                   </tr>
-                )}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {getPaginatedElements().length > 0 ? (
+                    getPaginatedElements().map((element) => (
+                      <tr key={`${element.type}-${element.id}`}>
+                        <td>{element.id}</td>
+                        <td>{getTypeLabel(element.type)}</td>
+                        <td>{element.name || '-'}</td>
+                        <td>{element.serial || element.otherserial || '-'}</td>
+                        <td>{getValue(relatedData.manufacturers[element.manufacturers_id], element.manufacturers_id, relatedData.manufacturers)}</td>
+                        <td>{getValue(relatedData.locations[element.locations_id], element.locations_id, relatedData.locations)}</td>
+                        <td>{getValue(relatedData.states[element.states_id], element.states_id, relatedData.states)}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={7} className="empty-state">Aucun élément trouvé avec ces critères</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+
+              {/* Pagination */}
+              {!loading && filteredElements.length > 0 && (
+                <div className="pagination-bar" style={{ background: 'white', borderRadius: '12px', marginTop: '16px', padding: '16px' }}>
+                  <div className="pagination-info">
+                    <select
+                      value={itemsPerPage}
+                      onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}
+                      className="per-page-select"
+                    >
+                      <option value={10}>10 éléments / page</option>
+                      <option value={20}>20 éléments / page</option>
+                      <option value={50}>50 éléments / page</option>
+                    </select>
+                  </div>
+                  <div className="pagination-controls">
+                    <button
+                      className="pagination-btn"
+                      disabled={currentPage === 1}
+                      onClick={() => setCurrentPage(currentPage - 1)}
+                    >
+                      Précédent
+                    </button>
+                    <span className="pagination-info-text">
+                      Page {currentPage} sur {totalPages}
+                    </span>
+                    <button
+                      className="pagination-btn"
+                      disabled={currentPage === totalPages}
+                      onClick={() => setCurrentPage(currentPage + 1)}
+                    >
+                      Suivant
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

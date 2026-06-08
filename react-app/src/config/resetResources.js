@@ -70,7 +70,8 @@ export const RESET_RESOURCES = [
   { name: 'ProjectTask', endpoint: '/ProjectTask', label: 'Tâches de projets', group: 'Projets' },
   { name: 'Project', endpoint: '/Project', label: 'Projets', group: 'Projets', isParent: true },
   { name: 'KnowbaseItem', endpoint: '/KnowbaseItem', label: 'Base de connaissances', group: 'Connaissances' },
-  { name: 'Location', endpoint: '/Location', label: 'Emplacements', group: 'Localisation' }
+  { name: 'Location', endpoint: '/Location', label: 'Emplacements', group: 'Localisation' },
+  { name: 'User', endpoint: '/User', label: 'Utilisateurs', group: 'Utilisateurs', skipIds: [1, 2, 3, 4, 5, 6] }
 ];
 
 /**
