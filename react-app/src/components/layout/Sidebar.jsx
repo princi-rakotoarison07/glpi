@@ -31,18 +31,19 @@ const MENU_ITEMS = [
     icon: <Monitor size={20} />,
     label: 'Parc',
     submenu: [
-      { label: 'Tableau de bord', path: '/parc/dashboard' },
-      { label: 'Ordinateurs', path: '/parc/computers' },
-      { label: 'Moniteurs', path: '/parc/monitors' },
-      { label: 'Logiciels', path: '/parc/software' },
-      { label: 'Imprimantes', path: '/parc/printers' },
-      { label: 'PDUs', path: '/parc/pdus' },
-      { label: 'Baies', path: '/parc/racks' },
-      { label: 'Téléphones', path: '/parc/phones' },
-      { label: 'Châssis', path: '/parc/chassis' },
-      { label: 'Matériel réseau', path: '/parc/network' },
-      { label: 'Licences', path: '/parc/licenses' }
-    ]
+            { label: 'Tableau de bord', path: '/parc/dashboard' },
+            { label: 'Ordinateurs', path: '/parc/computers' },
+            { label: 'Moniteurs', path: '/parc/monitors' },
+            { label: 'Périphériques', path: '/parc/peripherals' },
+            { label: 'Logiciels', path: '/parc/software' },
+            { label: 'Imprimantes', path: '/parc/printers' },
+            { label: 'PDUs', path: '/parc/pdus' },
+            { label: 'Baies', path: '/parc/racks' },
+            { label: 'Téléphones', path: '/parc/phones' },
+            { label: 'Châssis', path: '/parc/chassis' },
+            { label: 'Matériel réseau', path: '/parc/network' },
+            { label: 'Licences', path: '/parc/licenses' }
+          ]
   },
   { 
     icon: <RefreshCw size={20} />, 
