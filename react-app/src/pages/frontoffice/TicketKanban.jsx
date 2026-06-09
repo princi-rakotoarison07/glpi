@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Calendar, Clock, AlertCircle, Ticket, X, Link as LinkIcon, Edit, User } from 'lucide-react';
+import { Calendar, Ticket, X, Trash2, Plus } from 'lucide-react';
 import TicketService from '../../services/Ticket/TicketService';
 import ItemTicketService from '../../services/ItemTicket/ItemTicketService';
-import UserService from '../../services/User/UserService';
 import AuthService from '../../services/AuthService';
 import FrontOfficeLayout from '../../layouts/FrontOfficeLayout';
 import ComputerService from '../../services/Computer/ComputerService';
@@ -25,25 +24,25 @@ import DatabaseInstanceService from '../../services/DatabaseInstance/DatabaseIns
 import DCRoomService from '../../services/DCRoom/DCRoomService';
 import { getTicketItemTypes } from '../../config/itemTypes';
 import '../../styles/FrontOffice.css';
-import './TicketKanban.css';
+import '../../styles/front/TicketKanban.css';
 
 const TicketKanban = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [userMap, setUserMap] = useState({});
-  const [selectedTicket, setSelectedTicket] = useState(null);
-  const [linkedItems, setLinkedItems] = useState([]);
-  const [loadingLinkedItems, setLoadingLinkedItems] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
-  const [quickTitle, setQuickTitle] = useState('');
-  const [quickDesc, setQuickDesc] = useState('');
-  const [quickType, setQuickType] = useState(1);
-  const [quickPriority, setQuickPriority] = useState(3);
+  const [quickTickets, setQuickTickets] = useState([
+    {
+      tempId: 'init-ticket-1',
+      name: '',
+      content: '',
+      type: 1,
+      priority: 3,
+      itemRows: []
+    }
+  ]);
   const [quickSubmitting, setQuickSubmitting] = useState(false);
   const [allItemsByType, setAllItemsByType] = useState({});
   const [fetchingAllItems, setFetchingAllItems] = useState(false);
-  const [quickItemRows, setQuickItemRows] = useState([]);
 
   const navigate = useNavigate();
   const currentUser = AuthService.getCurrentUser();
@@ -155,82 +154,127 @@ const TicketKanban = () => {
   };
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const users = await UserService.getAllUsers();
-        const map = {};
-        users.forEach(u => {
-          map[u.id] = u.name;
-        });
-        setUserMap(map);
-      } catch (e) {
-        console.error('Error fetching users:', e);
-      }
-    };
-    fetchUsers();
     fetchTickets();
     fetchAllItems();
   }, [currentUser?.id]);
 
   const generateTempId = () => Date.now() + Math.random().toString(36).substr(2, 9);
 
-  const handleAddQuickRow = () => {
-    setQuickItemRows(prev => [...prev, { tempId: generateTempId(), itemType: '', itemId: '' }]);
+  const openQuickAdd = () => {
+    setQuickTickets([
+      {
+        tempId: generateTempId(),
+        name: '',
+        content: '',
+        type: 1,
+        priority: 3,
+        itemRows: []
+      }
+    ]);
+    setShowQuickAdd(true);
   };
 
-  const handleQuickRowChange = (tempId, field, value) => {
-    setQuickItemRows(prev => prev.map(row => 
-      row.tempId === tempId ? { 
-        ...row, 
-        [field]: value, 
-        itemId: field === 'itemType' ? '' : (field === 'itemId' ? value : row.itemId)
-      } : row
+  const handleAddQuickTicket = () => {
+    setQuickTickets(prev => [...prev, {
+      tempId: generateTempId(),
+      name: '',
+      content: '',
+      type: 1,
+      priority: 3,
+      itemRows: []
+    }]);
+  };
+
+  const handleRemoveQuickTicket = (ticketTempId) => {
+    setQuickTickets(prev => prev.filter(t => t.tempId !== ticketTempId));
+  };
+
+  const handleQuickTicketChange = (ticketTempId, field, value) => {
+    setQuickTickets(prev => prev.map(t => 
+      t.tempId === ticketTempId ? { ...t, [field]: value } : t
     ));
   };
 
-  const handleRemoveQuickRow = (tempId) => {
-    setQuickItemRows(prev => prev.filter(row => row.tempId !== tempId));
+  const handleAddQuickRow = (ticketTempId) => {
+    setQuickTickets(prev => prev.map(t => 
+      t.tempId === ticketTempId 
+        ? { ...t, itemRows: [...t.itemRows, { tempId: generateTempId(), itemType: '', itemId: '' }] }
+        : t
+    ));
   };
 
-  const handleQuickAddSubmit = async (e, keepOpen = false) => {
+  const handleQuickRowChange = (ticketTempId, rowTempId, field, value) => {
+    setQuickTickets(prev => prev.map(t => 
+      t.tempId === ticketTempId 
+        ? { 
+            ...t, 
+            itemRows: t.itemRows.map(row => 
+              row.tempId === rowTempId 
+                ? { 
+                    ...row, 
+                    [field]: value, 
+                    itemId: field === 'itemType' ? '' : (field === 'itemId' ? value : row.itemId)
+                  } 
+                : row
+            )
+          }
+        : t
+    ));
+  };
+
+  const handleRemoveQuickRow = (ticketTempId, rowTempId) => {
+    setQuickTickets(prev => prev.map(t => 
+      t.tempId === ticketTempId 
+        ? { ...t, itemRows: t.itemRows.filter(row => row.tempId !== rowTempId) }
+        : t
+    ));
+  };
+
+  const handleQuickAddSubmit = async (e) => {
     if (e) e.preventDefault();
-    if (!quickTitle.trim() || !quickDesc.trim()) {
-      alert('Veuillez remplir le titre et la description.');
+    
+    const hasInvalid = quickTickets.some(t => !t.name.trim() || !t.content.trim());
+    if (hasInvalid) {
+      alert('Veuillez remplir le titre et la description pour tous les tickets.');
       return;
     }
 
     setQuickSubmitting(true);
     try {
-      const payload = {
-        name: quickTitle.trim(),
-        content: quickDesc.trim(),
-        type: Number(quickType),
-        status: 1, // Forced to Nouveau
-        priority: Number(quickPriority),
-        users_id_recipient: currentUser?.id || 0,
-      };
+      for (const t of quickTickets) {
+        const payload = {
+          name: t.name.trim(),
+          content: t.content.trim(),
+          type: Number(t.type),
+          status: 1, // Nouveau
+          priority: Number(t.priority),
+          users_id_recipient: currentUser?.id || 0,
+        };
 
-      const ticketRes = await TicketService.createTicket(payload);
-      const ticketId = ticketRes.id;
+        const ticketRes = await TicketService.createTicket(payload);
+        const ticketId = ticketRes.id;
 
-      if (ticketId && quickItemRows.length > 0) {
-        for (const row of quickItemRows) {
-          if (row.itemType && row.itemId) {
-            await ItemTicketService.linkItemToTicket(ticketId, row.itemId, row.itemType);
+        if (ticketId && t.itemRows.length > 0) {
+          for (const row of t.itemRows) {
+            if (row.itemType && row.itemId) {
+              await ItemTicketService.linkItemToTicket(ticketId, row.itemId, row.itemType);
+            }
           }
         }
       }
 
       // Reset form
-      setQuickTitle('');
-      setQuickDesc('');
-      setQuickType(1);
-      setQuickPriority(3);
-      setQuickItemRows([]);
-
-      if (!keepOpen) {
-        setShowQuickAdd(false);
-      }
+      setQuickTickets([
+        {
+          tempId: generateTempId(),
+          name: '',
+          content: '',
+          type: 1,
+          priority: 3,
+          itemRows: []
+        }
+      ]);
+      setShowQuickAdd(false);
 
       // Refresh tickets list
       await fetchTickets();
@@ -242,32 +286,7 @@ const TicketKanban = () => {
     }
   };
 
-  const handleCardClick = async (ticket) => {
-    setSelectedTicket(ticket);
-    setShowModal(true);
-    setLoadingLinkedItems(true);
-    setLinkedItems([]);
-    try {
-      const items = await ItemTicketService.getItemsForTicket(ticket.id);
-      setLinkedItems(items || []);
-    } catch (e) {
-      console.error('Error fetching linked items for ticket:', e);
-    } finally {
-      setLoadingLinkedItems(false);
-    }
-  };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return '-';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('fr-FR', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
 
   // Group tickets into columns
   const getColumns = () => {
@@ -336,9 +355,9 @@ const TicketKanban = () => {
                   {col.id === 'nouveau' && (
                     <button
                       className="column-add-btn"
-                      onClick={() => setShowQuickAdd(true)}
+                      onClick={openQuickAdd}
                     >
-                      + Ajouter 1 ticket
+                      + Créer des tickets
                     </button>
                   )}
                 </div>
@@ -352,7 +371,7 @@ const TicketKanban = () => {
                         <div
                           key={ticket.id}
                           className="kanban-card"
-                          onClick={() => handleCardClick(ticket)}
+                          onClick={() => navigate(`/frontoffice/tickets/${ticket.id}`)}
                         >
                           <div className="card-top">
                             <span className="ticket-id">#{ticket.id}</span>
@@ -395,290 +414,225 @@ const TicketKanban = () => {
           </div>
         )}
 
-        {/* DETAILS MODAL */}
-        {showModal && selectedTicket && (
-          <div className="modal-overlay" onClick={() => setShowModal(false)}>
-            <div className="modal-container" onClick={e => e.stopPropagation()}>
-              <div className="modal-header">
-                <h2>Détails du ticket #{selectedTicket.id}</h2>
-                <button className="close-btn" onClick={() => setShowModal(false)}>
-                  <X size={20} />
-                </button>
-              </div>
+        {/* QUICK ADD MODAL */}
+        <TicketQuickAddModal
+          isOpen={showQuickAdd}
+          onClose={() => setShowQuickAdd(false)}
+          onSubmit={handleQuickAddSubmit}
+          quickTickets={quickTickets}
+          quickSubmitting={quickSubmitting}
+          itemTypeOptions={itemTypeOptions}
+          allItemsByType={allItemsByType}
+          handleAddQuickTicket={handleAddQuickTicket}
+          handleRemoveQuickTicket={handleRemoveQuickTicket}
+          handleQuickTicketChange={handleQuickTicketChange}
+          handleAddQuickRow={handleAddQuickRow}
+          handleQuickRowChange={handleQuickRowChange}
+          handleRemoveQuickRow={handleRemoveQuickRow}
+        />
+      </div>
+    </FrontOfficeLayout>
+  );
+};
 
-              <div className="modal-body">
-                <div className="modal-section ticket-main-info">
-                  <h3>{selectedTicket.name || 'Sans titre'}</h3>
-                  <div className="metadata-row">
-                    <span
-                      className="meta-tag type"
-                      style={{
-                        color: getTypeInfo(selectedTicket.type).color,
-                        backgroundColor: getTypeInfo(selectedTicket.type).bg,
-                      }}
-                    >
-                      {getTypeInfo(selectedTicket.type).label}
+// Sub-component: Quick Add Modal (multiple forms)
+const TicketQuickAddModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  quickTickets,
+  quickSubmitting,
+  itemTypeOptions,
+  allItemsByType,
+  handleAddQuickTicket,
+  handleRemoveQuickTicket,
+  handleQuickTicketChange,
+  handleAddQuickRow,
+  handleQuickRowChange,
+  handleRemoveQuickRow
+}) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-container modal-container-large" onClick={e => e.stopPropagation()}>
+        <div className="modal-header">
+          <h2>Création multiple de tickets</h2>
+          <button className="close-btn" onClick={onClose}>
+            <X size={20} />
+          </button>
+        </div>
+
+        <form onSubmit={onSubmit}>
+          <div className="modal-body modal-body-scrollable">
+            {quickTickets.map((ticket, index) => (
+              <div key={ticket.tempId} className="quick-ticket-card">
+                <div className="quick-ticket-header">
+                  <h3 className="quick-ticket-title">
+                    <span className="quick-ticket-badge">
+                      {index + 1}
                     </span>
-                    <span
-                      className="meta-tag status"
-                      style={{
-                        color: getStatusInfo(selectedTicket.status).color,
-                        backgroundColor: getStatusInfo(selectedTicket.status).bg,
-                      }}
+                    Ticket
+                  </h3>
+                  {quickTickets.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveQuickTicket(ticket.tempId)}
+                      className="remove-ticket-form-btn"
                     >
-                      {getStatusInfo(selectedTicket.status).label}
-                    </span>
-                    <span
-                      className="meta-tag priority"
-                      style={{
-                        color: getPriorityInfo(selectedTicket.priority).color,
-                        backgroundColor: getPriorityInfo(selectedTicket.priority).bg,
-                      }}
+                      <Trash2 size={14} />
+                      Supprimer
+                    </button>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor={`quickTitle-${ticket.tempId}`}>Titre *</label>
+                  <input
+                    type="text"
+                    id={`quickTitle-${ticket.tempId}`}
+                    value={ticket.name}
+                    onChange={e => handleQuickTicketChange(ticket.tempId, 'name', e.target.value)}
+                    placeholder="Ex: Problème d'impression..."
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor={`quickDesc-${ticket.tempId}`}>Description *</label>
+                  <textarea
+                    id={`quickDesc-${ticket.tempId}`}
+                    rows="3"
+                    value={ticket.content}
+                    onChange={e => handleQuickTicketChange(ticket.tempId, 'content', e.target.value)}
+                    placeholder="Décrivez votre problème en détail..."
+                    required
+                  ></textarea>
+                </div>
+
+                <div className="form-row quick-ticket-form-row">
+                  <div className="form-group">
+                    <label htmlFor={`quickType-${ticket.tempId}`}>Type</label>
+                    <select
+                      id={`quickType-${ticket.tempId}`}
+                      value={ticket.type}
+                      onChange={e => handleQuickTicketChange(ticket.tempId, 'type', Number(e.target.value))}
                     >
-                      Priorité: {getPriorityInfo(selectedTicket.priority).label}
-                    </span>
+                      <option value={1}>Incident</option>
+                      <option value={2}>Demande</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor={`quickPriority-${ticket.tempId}`}>Priorité</label>
+                    <select
+                      id={`quickPriority-${ticket.tempId}`}
+                      value={ticket.priority}
+                      onChange={e => handleQuickTicketChange(ticket.tempId, 'priority', Number(e.target.value))}
+                    >
+                      <option value={1}>Très basse</option>
+                      <option value={2}>Basse</option>
+                      <option value={3}>Moyenne</option>
+                      <option value={4}>Haute</option>
+                      <option value={5}>Très haute</option>
+                      <option value={6}>Majeure</option>
+                    </select>
                   </div>
                 </div>
 
-                <div className="modal-section description-section">
-                  <h4>Description</h4>
-                  <div className="description-box">
-                    {selectedTicket.content || 'Aucune description fournie.'}
+                {/* EQUIPMENT ASSOCIATION */}
+                <div className="quick-equipments-section">
+                  <div className="quick-equipments-header">
+                    <h4 className="quick-equipments-title">
+                      Équipements associés (optionnel)
+                    </h4>
+                    <button
+                      type="button"
+                      onClick={() => handleAddQuickRow(ticket.tempId)}
+                      className="add-equipment-btn"
+                    >
+                      <Plus size={12} />
+                      Ajouter un équipement
+                    </button>
                   </div>
-                </div>
 
-                <div className="modal-section info-grid">
-                  <div className="info-cell">
-                    <Calendar size={16} />
-                    <div>
-                      <strong>Date de création</strong>
-                      <span>{formatDate(selectedTicket.date)}</span>
-                    </div>
-                  </div>
-                  <div className="info-cell">
-                    <Clock size={16} />
-                    <div>
-                      <strong>Dernière modification</strong>
-                      <span>{formatDate(selectedTicket.date_mod)}</span>
-                    </div>
-                  </div>
-                  <div className="info-cell">
-                    <User size={16} />
-                    <div>
-                      <strong>Destinataire</strong>
-                      <span>{userMap[selectedTicket.users_id_recipient] || `Utilisateur ID: ${selectedTicket.users_id_recipient}`}</span>
-                    </div>
-                  </div>
-                </div>
+                  {ticket.itemRows.length > 0 ? (
+                    <div className="quick-equipment-rows-list">
+                      {ticket.itemRows.map((row) => (
+                        <div key={row.tempId} className="quick-equipment-row">
+                          <div className="form-group">
+                            <label>Type</label>
+                            <select
+                              value={row.itemType}
+                              onChange={(e) => handleQuickRowChange(ticket.tempId, row.tempId, 'itemType', e.target.value)}
+                            >
+                              <option value="">Sélectionner un type...</option>
+                              {itemTypeOptions.map(opt => (
+                                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                    ))}
+                            </select>
+                          </div>
 
-                <div className="modal-section assets-section">
-                  <h4>Éléments associés</h4>
-                  {loadingLinkedItems ? (
-                    <div className="loading-small">Chargement des éléments...</div>
-                  ) : linkedItems.length > 0 ? (
-                    <div className="linked-assets-list">
-                      {linkedItems.map((link, idx) => (
-                        <div key={idx} className="asset-tag">
-                          <LinkIcon size={14} />
-                          <span>
-                            <strong>{link.itemtype}</strong>: {link.item?.name || `ID: ${link.items_id}`}
-                          </span>
+                          <div className="form-group">
+                            <label>Élément</label>
+                            <select
+                              value={row.itemId}
+                              onChange={(e) => handleQuickRowChange(ticket.tempId, row.tempId, 'itemId', e.target.value)}
+                              disabled={!row.itemType}
+                            >
+                              <option value="">Sélectionner un élément...</option>
+                              {(allItemsByType[row.itemType] || []).map(item => (
+                                <option key={item.id} value={item.id}>{item.name || `ID: ${item.id}`}</option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveQuickRow(ticket.tempId, row.tempId)}
+                            className="remove-equipment-btn"
+                          >
+                            Supprimer
+                          </button>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className="no-assets">Aucun équipement lié à ce ticket.</div>
+                    <div className="quick-equipments-empty">
+                      Aucun équipement associé. Cliquez sur "+ Ajouter un équipement" pour commencer.
+                    </div>
                   )}
                 </div>
               </div>
+            ))}
 
-              <div className="modal-footer">
-                <button
-                  className="edit-nav-btn"
-                  onClick={() => {
-                    setShowModal(false);
-                    navigate(`/frontoffice/tickets/${selectedTicket.id}`);
-                  }}
-                >
-                  <Edit size={16} />
-                  Modifier le ticket
-                </button>
-                <button className="cancel-modal-btn" onClick={() => setShowModal(false)}>
-                  Fermer
-                </button>
-              </div>
+            <div className="add-more-container">
+              <button
+                type="button"
+                onClick={handleAddQuickTicket}
+                className="add-more-ticket-form-btn"
+              >
+                <Plus size={16} />
+                Ajouter un autre formulaire de ticket
+              </button>
             </div>
           </div>
-        )}
 
-        {/* QUICK ADD MODAL */}
-        {showQuickAdd && (
-          <div className="modal-overlay" onClick={() => setShowQuickAdd(false)}>
-            <div className="modal-container" style={{ maxWidth: '750px' }} onClick={e => e.stopPropagation()}>
-              <div className="modal-header">
-                <h2>Créer un nouveau ticket</h2>
-                <button className="close-btn" onClick={() => setShowQuickAdd(false)}>
-                  <X size={20} />
-                </button>
-              </div>
-
-              <form onSubmit={handleQuickAddSubmit}>
-                <div className="modal-body">
-                  <div className="form-group">
-                    <label htmlFor="quickTitle">Titre *</label>
-                    <input
-                      type="text"
-                      id="quickTitle"
-                      value={quickTitle}
-                      onChange={e => setQuickTitle(e.target.value)}
-                      placeholder="Ex: Problème d'impression..."
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="quickDesc">Description *</label>
-                    <textarea
-                      id="quickDesc"
-                      rows="4"
-                      value={quickDesc}
-                      onChange={e => setQuickDesc(e.target.value)}
-                      placeholder="Décrivez votre problème en détail..."
-                      required
-                    ></textarea>
-                  </div>
-
-                  <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                    <div className="form-group">
-                      <label htmlFor="quickType">Type</label>
-                      <select
-                        id="quickType"
-                        value={quickType}
-                        onChange={e => setQuickType(Number(e.target.value))}
-                      >
-                        <option value={1}>Incident</option>
-                        <option value={2}>Demande</option>
-                      </select>
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="quickPriority">Priorité</label>
-                      <select
-                        id="quickPriority"
-                        value={quickPriority}
-                        onChange={e => setQuickPriority(Number(e.target.value))}
-                      >
-                        <option value={1}>Très basse</option>
-                        <option value={2}>Basse</option>
-                        <option value={3}>Moyenne</option>
-                        <option value={4}>Haute</option>
-                        <option value={5}>Très haute</option>
-                        <option value={6}>Majeure</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label>Statut</label>
-                    <input type="text" value="Nouveau (par défaut)" disabled style={{ backgroundColor: '#f1f5f9', color: '#64748b' }} />
-                  </div>
-
-                  {/* EQUIPMENT ASSOCIATION IN QUICK ADD */}
-                  <div className="quick-equipments-section" style={{ borderTop: '1px solid #e2e8f0', paddingTop: '16px', marginTop: '16px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                      <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#475569', margin: 0, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                        Équipements associés (optionnel)
-                      </h4>
-                      <button
-                        type="button"
-                        onClick={handleAddQuickRow}
-                        style={{
-                          backgroundColor: '#2563eb', color: '#ffffff', border: 'none', padding: '6px 12px',
-                          borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '12px'
-                        }}
-                      >
-                        + Ajouter une ligne
-                      </button>
-                    </div>
-
-                    {quickItemRows.length > 0 ? (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                        {quickItemRows.map((row) => (
-                          <div key={row.tempId} style={{ display: 'grid', gridTemplateColumns: '1.2fr 1.5fr auto', gap: '12px', alignItems: 'end' }}>
-                            <div className="form-group" style={{ marginBottom: 0 }}>
-                              <label style={{ fontSize: '12px' }}>Type</label>
-                              <select
-                                value={row.itemType}
-                                onChange={(e) => handleQuickRowChange(row.tempId, 'itemType', e.target.value)}
-                              >
-                                <option value="">Sélectionner un type...</option>
-                                {itemTypeOptions.map(opt => (
-                                  <option key={opt.value} value={opt.value}>{opt.label}</option>
-                                ))}
-                              </select>
-                            </div>
-
-                            <div className="form-group" style={{ marginBottom: 0 }}>
-                              <label style={{ fontSize: '12px' }}>Élément</label>
-                              <select
-                                value={row.itemId}
-                                onChange={(e) => handleQuickRowChange(row.tempId, 'itemId', e.target.value)}
-                                disabled={!row.itemType}
-                              >
-                                <option value="">Sélectionner un élément...</option>
-                                {(allItemsByType[row.itemType] || []).map(item => (
-                                  <option key={item.id} value={item.id}>{item.name || `ID: ${item.id}`}</option>
-                                ))}
-                              </select>
-                            </div>
-
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveQuickRow(row.tempId)}
-                              style={{
-                                backgroundColor: '#ef4444', color: '#ffffff', border: 'none', padding: '10px 16px',
-                                borderRadius: '8px', fontWeight: '600', cursor: 'pointer', height: '42px', fontSize: '13px'
-                              }}
-                            >
-                              Supprimer
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div style={{ fontSize: '12px', color: '#94a3b8', fontStyle: 'italic' }}>Aucun équipement associé. Cliquez sur "+ Ajouter une ligne" pour commencer.</div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="modal-footer" style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
-                  <button
-                    type="button"
-                    className="cancel-modal-btn"
-                    style={{ backgroundColor: '#f1f5f9', color: '#475569', border: '1px solid #e2e8f0', marginRight: 'auto' }}
-                    onClick={() => setShowQuickAdd(false)}
-                  >
-                    Annuler
-                  </button>
-                  <button
-                    type="button"
-                    className="edit-nav-btn"
-                    style={{ backgroundColor: '#10b981' }}
-                    disabled={quickSubmitting}
-                    onClick={() => handleQuickAddSubmit(null, true)}
-                  >
-                    {quickSubmitting ? 'Création...' : 'Créer et ajouter un autre'}
-                  </button>
-                  <button type="submit" className="edit-nav-btn" disabled={quickSubmitting}>
-                    {quickSubmitting ? 'Création...' : 'Créer le ticket'}
-                  </button>
-                </div>
-              </form>
-            </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="cancel-modal-btn"
+              onClick={onClose}
+            >
+              Annuler
+            </button>
+            <button type="submit" className="edit-nav-btn" disabled={quickSubmitting}>
+              {quickSubmitting ? 'Création...' : `Créer ${quickTickets.length} ticket(s)`}
+            </button>
           </div>
-        )}
+        </form>
       </div>
-    </FrontOfficeLayout>
+    </div>
   );
 };
 

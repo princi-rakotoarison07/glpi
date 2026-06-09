@@ -309,7 +309,7 @@ const TicketUpdate = () => {
         await ItemTicketService.linkItemToTicket(id, item.id, item.itemType);
       }
 
-      navigate('/frontoffice/tickets');
+      navigate(`/frontoffice/tickets/${id}`);
     } catch (error) {
       console.error('Error saving ticket:', error);
       alert('Erreur lors de la sauvegarde du ticket: ' + error.message);
@@ -322,7 +322,7 @@ const TicketUpdate = () => {
     <FrontOfficeLayout>
       <div className="frontoffice-page ticket-form-page">
         <div className="form-header">
-          <Link to="/frontoffice/tickets" className="back-btn-form">
+          <Link to={`/frontoffice/tickets/${id}`} className="back-btn-form">
             <ArrowLeft size={18} />
             Retour
           </Link>
@@ -504,7 +504,7 @@ const TicketUpdate = () => {
           </div>
 
           <div className="form-actions">
-            <Link to="/frontoffice/tickets" className="btn-cancel">
+            <Link to={`/frontoffice/tickets/${id}`} className="btn-cancel">
               Annuler
             </Link>
             <button type="submit" disabled={loading} className="btn-save">

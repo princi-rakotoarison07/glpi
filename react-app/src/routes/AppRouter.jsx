@@ -53,6 +53,7 @@ import FrontOfficeTicketList from '../pages/frontoffice/TicketList';
 import TicketKanban from '../pages/frontoffice/TicketKanban';
 import TicketCreate from '../pages/frontoffice/TicketCreate';
 import TicketUpdate from '../pages/frontoffice/TicketUpdate';
+import FrontOfficeTicketDetail from '../pages/frontoffice/TicketDetail';
 
 const AppRouter = () => {
   return (
@@ -69,7 +70,8 @@ const AppRouter = () => {
           <Route path="/frontoffice/tickets" element={<FrontOfficeTicketList />} />
           <Route path="/frontoffice/kanban" element={<TicketKanban />} />
           <Route path="/frontoffice/tickets/add" element={<TicketCreate />} />
-          <Route path="/frontoffice/tickets/:id" element={<TicketUpdate />} />
+          <Route path="/frontoffice/tickets/:id" element={<FrontOfficeTicketDetail />} />
+          <Route path="/frontoffice/tickets/:id/edit" element={<TicketUpdate />} />
         </Route>
 
         {/* Routes protégées par ProtectedRoute */}
