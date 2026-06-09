@@ -24,7 +24,8 @@ const MENU_ITEMS = [
     icon: <Ticket size={20} />,
     label: 'Assistance',
     submenu: [
-      { label: 'Tickets', path: '/tickets' }
+      { label: 'Tickets', path: '/tickets' },
+      { label: 'Configuration Kanban', path: '/admin' }
     ]
   },
   {

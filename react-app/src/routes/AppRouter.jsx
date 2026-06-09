@@ -54,6 +54,7 @@ import TicketKanban from '../pages/frontoffice/TicketKanban';
 import TicketCreate from '../pages/frontoffice/TicketCreate';
 import TicketUpdate from '../pages/frontoffice/TicketUpdate';
 import FrontOfficeTicketDetail from '../pages/frontoffice/TicketDetail';
+import AdminSettings from '../pages/backoffice/AdminSettings/AdminSettings';
 
 const AppRouter = () => {
   return (
@@ -124,6 +125,7 @@ const AppRouter = () => {
             <Route path="/tickets/:id" element={<TicketDetail />} />
             <Route path="/import" element={<GLPIImportPage />} />
             <Route path="/import-images" element={<GLPIImageImportPageV2 />} />
+            <Route path="/admin" element={<AdminSettings />} />
           </Route>
         </Route>
 

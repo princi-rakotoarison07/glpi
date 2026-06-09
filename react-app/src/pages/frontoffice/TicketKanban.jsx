@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Calendar, Ticket, X, Trash2, Plus } from 'lucide-react';
+import { Calendar, Ticket, X, Trash2, Plus, Settings } from 'lucide-react';
 import TicketService from '../../services/Ticket/TicketService';
 import ItemTicketService from '../../services/ItemTicket/ItemTicketService';
 import AuthService from '../../services/AuthService';
@@ -23,6 +23,7 @@ import CableService from '../../services/Cable/CableService';
 import DatabaseInstanceService from '../../services/DatabaseInstance/DatabaseInstanceService';
 import DCRoomService from '../../services/DCRoom/DCRoomService';
 import { getTicketItemTypes } from '../../config/itemTypes';
+import SettingsService from '../../services/Settings/SettingsService';
 import '../../styles/FrontOffice.css';
 import '../../styles/front/TicketKanban.css';
 
@@ -43,6 +44,20 @@ const TicketKanban = () => {
   const [quickSubmitting, setQuickSubmitting] = useState(false);
   const [allItemsByType, setAllItemsByType] = useState({});
   const [fetchingAllItems, setFetchingAllItems] = useState(false);
+  const [closeModalData, setCloseModalData] = useState({
+    isOpen: false,
+    ticketId: null,
+    comment: '',
+    date: new Date().toISOString().split('T')[0]
+  });
+  const [kanbanSettings, setKanbanSettings] = useState({
+    color_nouveau: '#3b82f6',
+    color_inProgress: '#f59e0b',
+    color_termine: '#10b981',
+    label_nouveau: 'Nouveau',
+    label_inProgress: 'In progress (assigné)',
+    label_termine: 'Terminé'
+  });
 
   const navigate = useNavigate();
   const currentUser = AuthService.getCurrentUser();
@@ -153,9 +168,26 @@ const TicketKanban = () => {
     }
   };
 
+  const fetchKanbanSettings = async () => {
+    try {
+      const data = await SettingsService.getSettings();
+      setKanbanSettings({
+        color_nouveau: data.color_nouveau || '#3b82f6',
+        color_inProgress: data.color_inProgress || '#f59e0b',
+        color_termine: data.color_termine || '#10b981',
+        label_nouveau: data.label_nouveau || 'Nouveau',
+        label_inProgress: data.label_inProgress || 'In progress (assigné)',
+        label_termine: data.label_termine || 'Terminé'
+      });
+    } catch (err) {
+      console.error('Error loading Kanban settings from SQLite:', err);
+    }
+  };
+
   useEffect(() => {
     fetchTickets();
     fetchAllItems();
+    fetchKanbanSettings();
   }, [currentUser?.id]);
 
   const generateTempId = () => Date.now() + Math.random().toString(36).substr(2, 9);
@@ -286,6 +318,80 @@ const TicketKanban = () => {
     }
   };
 
+  const handleDragStart = (e, ticketId, fromColumnId) => {
+    e.dataTransfer.setData('text/plain', ticketId);
+    e.dataTransfer.setData('fromColumn', fromColumnId);
+  };
+
+  const handleDrop = async (e, targetColumnId) => {
+    e.preventDefault();
+    const ticketId = e.dataTransfer.getData('text/plain');
+    const fromColumnId = e.dataTransfer.getData('fromColumn');
+
+    if (!ticketId || fromColumnId === targetColumnId) return;
+
+    if (targetColumnId === 'termine') {
+      setCloseModalData({
+        isOpen: true,
+        ticketId: ticketId,
+        comment: '',
+        date: new Date().toISOString().split('T')[0]
+      });
+    } else {
+      // Direct status update
+      const newStatus = targetColumnId === 'nouveau' ? 1 : 2;
+      try {
+        setLoading(true);
+        await TicketService.updateTicket(ticketId, { status: newStatus });
+        await fetchTickets();
+      } catch (err) {
+        console.error('Error updating status:', err);
+        alert('Erreur lors de la mise à jour du statut: ' + err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleConfirmClose = async (e) => {
+    if (e) e.preventDefault();
+    const { ticketId, comment, date } = closeModalData;
+
+    if (!ticketId) return;
+
+    try {
+      setLoading(true);
+      
+      // Fetch ticket to get existing content
+      const ticketObj = await TicketService.getTicket(ticketId);
+      const currentContent = ticketObj.content || '';
+      
+      const formattedDate = date ? new Date(date).toLocaleDateString('fr-FR') : new Date().toLocaleDateString('fr-FR');
+      const closingNote = `\n\n[Clôture - Date de réalisation : ${formattedDate}]${comment.trim() ? ` Commentaire : ${comment.trim()}` : ''}`;
+      
+      const updatedContent = currentContent + closingNote;
+
+      await TicketService.updateTicket(ticketId, {
+        status: 5, // Fermé/Terminé
+        content: updatedContent
+      });
+
+      setCloseModalData({
+        isOpen: false,
+        ticketId: null,
+        comment: '',
+        date: ''
+      });
+
+      await fetchTickets();
+    } catch (err) {
+      console.error('Error closing ticket:', err);
+      alert('Erreur lors de la clôture du ticket: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
 
   // Group tickets into columns
@@ -293,21 +399,21 @@ const TicketKanban = () => {
     const columns = {
       nouveau: {
         id: 'nouveau',
-        title: 'Nouveau',
+        title: kanbanSettings.label_nouveau,
         tickets: [],
-        color: '#3b82f6',
+        color: kanbanSettings.color_nouveau,
       },
       inProgress: {
         id: 'inProgress',
-        title: 'In progress (assigné)',
+        title: kanbanSettings.label_inProgress,
         tickets: [],
-        color: '#f59e0b',
+        color: kanbanSettings.color_inProgress,
       },
       termine: {
         id: 'termine',
-        title: 'Terminé',
+        title: kanbanSettings.label_termine,
         tickets: [],
-        color: '#10b981',
+        color: kanbanSettings.color_termine,
       },
     };
 
@@ -326,6 +432,15 @@ const TicketKanban = () => {
     return columns;
   };
 
+  const hexToRgba = (hex, opacity = 0.08) => {
+    if (!hex) return `rgba(241, 245, 249, ${opacity})`;
+    const cleanHex = hex.replace('#', '');
+    const r = parseInt(cleanHex.substring(0, 2), 16);
+    const g = parseInt(cleanHex.substring(2, 4), 16);
+    const b = parseInt(cleanHex.substring(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  };
+
   const cols = getColumns();
 
   return (
@@ -336,9 +451,15 @@ const TicketKanban = () => {
             <Ticket size={24} className="title-icon" />
             <h1>Tableau de suivi (Kanban)</h1>
           </div>
-          <Link to="/frontoffice/tickets/add" className="add-ticket-btn">
-            + Nouveau Ticket
-          </Link>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <Link to="/admin" className="cancel-modal-btn" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 16px', margin: 0 }}>
+              <Settings size={16} />
+              Configuration
+            </Link>
+            <Link to="/frontoffice/tickets/add" className="add-ticket-btn">
+              + Nouveau Ticket
+            </Link>
+          </div>
         </div>
 
         {loading ? (
@@ -346,8 +467,17 @@ const TicketKanban = () => {
         ) : (
           <div className="kanban-board">
             {Object.values(cols).map(col => (
-              <div key={col.id} className={`kanban-column col-${col.id}`}>
-                <div className="column-header" style={{ borderTopColor: col.color }}>
+              <div 
+                key={col.id} 
+                className={`kanban-column col-${col.id}`}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => handleDrop(e, col.id)}
+                style={{ 
+                  backgroundColor: hexToRgba(col.color, 0.08),
+                  border: `2px solid ${col.color}`
+                }}
+              >
+                <div className="column-header">
                   <div className="column-title">
                     <span>{col.title}</span>
                     <span className="column-count">{col.tickets.length}</span>
@@ -372,6 +502,11 @@ const TicketKanban = () => {
                           key={ticket.id}
                           className="kanban-card"
                           onClick={() => navigate(`/frontoffice/tickets/${ticket.id}`)}
+                          draggable
+                          onDragStart={(e) => {
+                            e.stopPropagation();
+                            handleDragStart(e, ticket.id, col.id);
+                          }}
                         >
                           <div className="card-top">
                             <span className="ticket-id">#{ticket.id}</span>
@@ -429,6 +564,15 @@ const TicketKanban = () => {
           handleAddQuickRow={handleAddQuickRow}
           handleQuickRowChange={handleQuickRowChange}
           handleRemoveQuickRow={handleRemoveQuickRow}
+        />
+
+        {/* CLOSE TICKET MODAL */}
+        <TicketCloseModal
+          isOpen={closeModalData.isOpen}
+          onClose={() => setCloseModalData(prev => ({ ...prev, isOpen: false }))}
+          onSubmit={handleConfirmClose}
+          data={closeModalData}
+          setData={setCloseModalData}
         />
       </div>
     </FrontOfficeLayout>
@@ -628,6 +772,63 @@ const TicketQuickAddModal = ({
             </button>
             <button type="submit" className="edit-nav-btn" disabled={quickSubmitting}>
               {quickSubmitting ? 'Création...' : `Créer ${quickTickets.length} ticket(s)`}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+// Sub-component: Close Dialog Modal
+const TicketCloseModal = ({ isOpen, onClose, onSubmit, data, setData }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-container" onClick={e => e.stopPropagation()} style={{ maxWidth: '450px' }}>
+        <div className="modal-header">
+          <h2>Clôture du ticket #{data.ticketId}</h2>
+          <button className="close-btn" onClick={onClose}>
+            <X size={20} />
+          </button>
+        </div>
+
+        <form onSubmit={onSubmit}>
+          <div className="modal-body">
+            <div className="form-group">
+              <label htmlFor="closeDate">Date de réalisation *</label>
+              <input
+                type="date"
+                id="closeDate"
+                value={data.date}
+                onChange={e => setData(prev => ({ ...prev, date: e.target.value }))}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="closeComment">Commentaire de clôture</label>
+              <textarea
+                id="closeComment"
+                rows="4"
+                value={data.comment}
+                onChange={e => setData(prev => ({ ...prev, comment: e.target.value }))}
+                placeholder="Indiquez les détails de la résolution ou remarques de clôture..."
+              ></textarea>
+            </div>
+          </div>
+
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="cancel-modal-btn"
+              onClick={onClose}
+            >
+              Annuler
+            </button>
+            <button type="submit" className="edit-nav-btn">
+              Confirmer la clôture
             </button>
           </div>
         </form>

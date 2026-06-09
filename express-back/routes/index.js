@@ -1,11 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const itemsRoutes = require('./items.routes');
+const settingsRoutes = require('./settings.routes');
 
-router.use('/items', itemsRoutes);
-
-// Ajoute tes futures routes ici :
-// router.use('/tickets', ticketsRoutes);
+router.use('/settings', settingsRoutes);
 
 module.exports = router;
