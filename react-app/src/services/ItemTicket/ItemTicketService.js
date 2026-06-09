@@ -48,6 +48,19 @@ const ItemTicketService = {
       console.error('Error fetching items for ticket:', error);
       return [];
     }
+  },
+
+  // Supprimer le lien (désassocier un équipement du ticket)
+  unlinkItemFromTicket: async (linkId) => {
+    console.log('unlinkItemFromTicket called with:', linkId);
+    try {
+      await initSession();
+      const response = await api.delete(`/Item_Ticket/${linkId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error deleting Item_Ticket link ${linkId}:`, error);
+      throw error;
+    }
   }
 };
 
