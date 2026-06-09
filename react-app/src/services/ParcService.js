@@ -1,4 +1,5 @@
 import api, { initSession } from '../config/api';
+import { getAllItemTypes } from '../config/itemTypes';
 
 // Helper to extract count from Content-Range header
 const extractCountFromResponse = (response) => {
@@ -18,25 +19,7 @@ const extractCountFromResponse = (response) => {
 const ParcService = {
   // Récupérer uniquement les statistiques globales réelles via l'API GLPI
   getStats: async () => {
-    const assets = [
-      { key: 'computers', endpoint: '/Computer', label: 'Ordinateurs' },
-      { key: 'software', endpoint: '/Software', label: 'Logiciels' },
-      { key: 'printers', endpoint: '/Printer', label: 'Imprimantes' },
-      { key: 'pdus', endpoint: '/Pdu', label: 'PDU' },
-      { key: 'racks', endpoint: '/Rack', label: 'Baie' },
-      { key: 'phones', endpoint: '/Phone', label: 'Téléphone' },
-      { key: 'chassis', endpoint: '/Enclosure', label: 'Châssis' },
-      { key: 'network', endpoint: '/NetworkEquipment', label: 'Matériel réseau' },
-      { key: 'licenses', endpoint: '/SoftwareLicense', label: 'Licence' },
-      { key: 'monitors', endpoint: '/Monitor', label: 'Moniteur' },
-      { key: 'peripherals', endpoint: '/Peripheral', label: 'Périphérique' },
-      { key: 'passiveEquipment', endpoint: '/PassiveDCEquipment', label: 'Matériel passif' },
-      { key: 'cartridges', endpoint: '/CartridgeItem', label: 'Cartouche' },
-      { key: 'consumables', endpoint: '/ConsumableItem', label: 'Consommable' },
-      { key: 'cables', endpoint: '/Cable', label: 'Câbles' },
-      { key: 'databaseInstances', endpoint: '/DatabaseInstance', label: 'Base de données' },
-      { key: 'dcRooms', endpoint: '/DCRoom', label: 'Salle serveur' }
-    ];
+    const assets = getAllItemTypes();
 
     const stats = {
       computers: { total: 0 },

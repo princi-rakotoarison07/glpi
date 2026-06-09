@@ -40,9 +40,19 @@ const TicketDetail = () => {
     { value: 6, label: 'Majeure', color: '#b71c1c' },
   ];
 
+  const typeOptions = [
+    { value: 1, label: 'Incident' },
+    { value: 2, label: 'Demande' },
+  ];
+
   const getPriorityInfo = (priorityId) => {
     const option = priorityOptions.find(opt => opt.value === priorityId);
     return option || { label: 'Priorité inconnue', color: '#9e9e9e' };
+  };
+
+  const getTypeName = (typeId) => {
+    const option = typeOptions.find(opt => opt.value === typeId);
+    return option ? option.label : 'Type inconnu';
   };
 
   // Function to get the correct link path for an item type
@@ -250,6 +260,10 @@ const TicketDetail = () => {
             <div className="detail-item">
               <div className="detail-label">Titre</div>
               <div className="detail-value">{ticket.name || 'Non défini'}</div>
+            </div>
+            <div className="detail-item">
+              <div className="detail-label">Type</div>
+              <div className="detail-value">{getTypeName(ticket.type)}</div>
             </div>
             <div className="detail-item">
               <div className="detail-label">Statut</div>

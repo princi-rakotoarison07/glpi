@@ -18,7 +18,14 @@ const FrontOfficeTicketList = () => {
   // Filters
   const [statusFilter, setStatusFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
+  const [typeFilter, setTypeFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Temporary filter states (to apply when button is clicked)
+  const [tempStatusFilter, setTempStatusFilter] = useState('');
+  const [tempPriorityFilter, setTempPriorityFilter] = useState('');
+  const [tempTypeFilter, setTempTypeFilter] = useState('');
+  const [tempSearchQuery, setTempSearchQuery] = useState('');
 
   const navigate = useNavigate();
   const currentUser = AuthService.getCurrentUser();
@@ -42,6 +49,12 @@ const FrontOfficeTicketList = () => {
     { value: 5, label: 'Fermé', color: '#9e9e9e' },
   ];
 
+  const typeOptions = [
+    { value: '', label: 'Tous les types' },
+    { value: 1, label: 'Incident' },
+    { value: 2, label: 'Demande' },
+  ];
+
   const getStatusInfo = (statusId) => {
     const option = statusOptions.find(opt => opt.value === statusId);
     return option || { label: 'Inconnu', color: '#9e9e9e' };
@@ -50,6 +63,31 @@ const FrontOfficeTicketList = () => {
   const getPriorityInfo = (priorityId) => {
     const option = priorityOptions.find(opt => opt.value === priorityId);
     return option || { label: 'Inconnu', color: '#9e9e9e' };
+  };
+
+  const getTypeInfo = (typeId) => {
+    const option = typeOptions.find(opt => opt.value === typeId);
+    return option || { label: 'Inconnu' };
+  };
+
+  const applyFilters = () => {
+    setStatusFilter(tempStatusFilter);
+    setPriorityFilter(tempPriorityFilter);
+    setTypeFilter(tempTypeFilter);
+    setSearchQuery(tempSearchQuery);
+    setCurrentPage(1);
+  };
+
+  const resetFilters = () => {
+    setTempStatusFilter('');
+    setTempPriorityFilter('');
+    setTempTypeFilter('');
+    setTempSearchQuery('');
+    setStatusFilter('');
+    setPriorityFilter('');
+    setTypeFilter('');
+    setSearchQuery('');
+    setCurrentPage(1);
   };
 
   const fetchTickets = async () => {
@@ -93,6 +131,10 @@ const FrontOfficeTicketList = () => {
       
       if (priorityFilter) {
         filtered = filtered.filter(t => t.priority === Number(priorityFilter));
+      }
+
+      if (typeFilter) {
+        filtered = filtered.filter(t => t.type === Number(typeFilter));
       }
       
       if (searchQuery.trim()) {
@@ -138,14 +180,9 @@ const FrontOfficeTicketList = () => {
 
   useEffect(() => {
     fetchTickets();
-  }, [currentUser?.id, currentPage, itemsPerPage, statusFilter, userMap]);
+  }, [currentUser?.id, currentPage, itemsPerPage, statusFilter, priorityFilter, typeFilter, searchQuery, userMap]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-  // Handle search and priority filter changes
-  useEffect(() => {
-    fetchTickets();
-  }, [searchQuery, priorityFilter]);
 
   return (
     <FrontOfficeLayout>
@@ -159,37 +196,80 @@ const FrontOfficeTicketList = () => {
         </div>
 
         {/* Filters Section */}
-        <div className="filters-section">
-          <div className="filter-group">
-            <label><Filter size={16} /> Recherche</label>
-            <input
-              type="text"
-              placeholder="Rechercher par titre, ID..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+        <div className="filters-section" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+            <div className="filter-group">
+              <label><Filter size={16} /> Recherche</label>
+              <input
+                type="text"
+                placeholder="Rechercher par titre, ID..."
+                value={tempSearchQuery}
+                onChange={(e) => setTempSearchQuery(e.target.value)}
+              />
+            </div>
+            <div className="filter-group">
+              <label>Statut</label>
+              <select
+                value={tempStatusFilter}
+                onChange={(e) => setTempStatusFilter(e.target.value)}
+              >
+                {statusOptions.map(option => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </div>
+            <div className="filter-group">
+              <label>Priorité</label>
+              <select
+                value={tempPriorityFilter}
+                onChange={(e) => setTempPriorityFilter(e.target.value)}
+              >
+                {priorityOptions.map(option => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </div>
+            <div className="filter-group">
+              <label>Type</label>
+              <select
+                value={tempTypeFilter}
+                onChange={(e) => setTempTypeFilter(e.target.value)}
+              >
+                {typeOptions.map(option => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </div>
           </div>
-          <div className="filter-group">
-            <label>Statut</label>
-            <select
-              value={statusFilter}
-              onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
+          
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', alignItems: 'center' }}>
+            <button
+              onClick={resetFilters}
+              style={{
+                padding: '8px 16px',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                backgroundColor: '#fff',
+                cursor: 'pointer',
+                fontWeight: '500'
+              }}
             >
-              {statusOptions.map(option => (
-                <option key={option.value} value={option.value}>{option.label}</option>
-              ))}
-            </select>
-          </div>
-          <div className="filter-group">
-            <label>Priorité</label>
-            <select
-              value={priorityFilter}
-              onChange={(e) => { setPriorityFilter(e.target.value); setCurrentPage(1); }}
+              Réinitialiser
+            </button>
+            <button
+              onClick={applyFilters}
+              style={{
+                padding: '8px 16px',
+                border: 'none',
+                borderRadius: '4px',
+                backgroundColor: '#007bff',
+                color: '#fff',
+                cursor: 'pointer',
+                fontWeight: '500'
+              }}
             >
-              {priorityOptions.map(option => (
-                <option key={option.value} value={option.value}>{option.label}</option>
-              ))}
-            </select>
+              Appliquer la recherche
+            </button>
           </div>
         </div>
 
@@ -206,6 +286,7 @@ const FrontOfficeTicketList = () => {
                     <th>Utilisateur</th>
                     <th>Statut</th>
                     <th>Priorité</th>
+                    <th>Type</th>
                     <th>Date</th>
                     <th>Actions</th>
                   </tr>
@@ -215,6 +296,7 @@ const FrontOfficeTicketList = () => {
                     tickets.map((ticket) => {
                       const statusInfo = getStatusInfo(ticket.status);
                       const priorityInfo = getPriorityInfo(ticket.priority);
+                      const typeInfo = getTypeInfo(ticket.type);
                       // Get user name: ticket.User?.name or ticket.users_name or ticket.users_id
                       const userId = ticket.users_id_recipient;
                       const userName = userMap[userId] 
@@ -244,6 +326,7 @@ const FrontOfficeTicketList = () => {
                               {priorityInfo.label}
                             </span>
                           </td>
+                          <td>{typeInfo.label}</td>
                           <td>
                             <div className="ticket-date">
                               <Calendar size={14} style={{ marginRight: '4px' }} />
@@ -260,7 +343,7 @@ const FrontOfficeTicketList = () => {
                     })
                   ) : (
                     <tr>
-                      <td colSpan={7} className="empty-state">
+                      <td colSpan={8} className="empty-state">
                         Aucun ticket trouvé
                       </td>
                     </tr>

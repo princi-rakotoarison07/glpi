@@ -11,9 +11,11 @@ import PhoneService from '../../services/Phone/PhoneService';
 import ChassisService from '../../services/Chassis/ChassisService';
 import NetworkEquipmentService from '../../services/NetworkEquipment/NetworkEquipmentService';
 import SoftwareLicenseService from '../../services/SoftwareLicense/SoftwareLicenseService';
+import PeripheralService from '../../services/Peripheral/PeripheralService';
 import StateService from '../../services/State/StateService';
 import LocationService from '../../services/Location/LocationService';
 import ManufacturerService from '../../services/Manufacturer/ManufacturerService';
+import { getElementsListItemTypes } from '../../config/itemTypes';
 import '../../styles/FrontOffice.css';
 
 const ElementsList = () => {
@@ -37,18 +39,10 @@ const ElementsList = () => {
     manufacturer: ''
   });
 
+  const elementsListTypes = getElementsListItemTypes();
   const ITEM_TYPES = [
     { value: '', label: 'Tous les éléments' },
-    { value: 'Computer', label: 'Ordinateur' },
-    { value: 'Monitor', label: 'Moniteur' },
-    { value: 'Software', label: 'Logiciel' },
-    { value: 'Printer', label: 'Imprimante' },
-    { value: 'PDU', label: 'PDU' },
-    { value: 'Rack', label: 'Rack' },
-    { value: 'Phone', label: 'Téléphone' },
-    { value: 'Chassis', label: 'Châssis' },
-    { value: 'NetworkEquipment', label: 'Matériel réseau' },
-    { value: 'SoftwareLicense', label: 'Licence logiciel' }
+    ...elementsListTypes.map(type => ({ value: type.itemType, label: type.label }))
   ];
 
   // Fetch all elements with individual error handling
@@ -64,20 +58,36 @@ const ElementsList = () => {
         }
       };
 
-      const [
-        computers, monitors, software, printers, pdus, racks, phones, chassis, networkEquipment, licenses,
-        states, locations, manufacturers
-      ] = await Promise.all([
-        safeFetch(ComputerService.getAllComputers),
-        safeFetch(MonitorService.getAllMonitors),
-        safeFetch(SoftwareService.getAllSoftware),
-        safeFetch(PrinterService.getAllPrinters),
-        safeFetch(PDUService.getAllPDUs),
-        safeFetch(RackService.getAllRacks),
-        safeFetch(PhoneService.getAllPhones),
-        safeFetch(ChassisService.getAllChassis),
-        safeFetch(NetworkEquipmentService.getAllNetworkEquipments), // Fixed function name
-        safeFetch(SoftwareLicenseService.getAllSoftwareLicenses),
+      const elementsListTypes = getElementsListItemTypes();
+      
+      // Map config types to their respective service methods
+      const serviceMap = {
+        Computer: ComputerService.getAllComputers,
+        Monitor: MonitorService.getAllMonitors,
+        Software: SoftwareService.getAllSoftware,
+        Printer: PrinterService.getAllPrinters,
+        Pdu: PDUService.getAllPDUs,
+        Rack: RackService.getAllRacks,
+        Phone: PhoneService.getAllPhones,
+        Enclosure: ChassisService.getAllChassis,
+        NetworkEquipment: NetworkEquipmentService.getAllNetworkEquipment,
+        SoftwareLicense: SoftwareLicenseService.getAllSoftwareLicenses,
+        Peripheral: PeripheralService.getAllPeripherals,
+        PassiveDCEquipment: async () => [],
+        CartridgeItem: async () => [],
+        ConsumableItem: async () => [],
+        Cable: async () => [],
+        DatabaseInstance: async () => [],
+        DCRoom: async () => []
+      };
+
+      // Fetch items for all types
+      const itemPromises = elementsListTypes.map(type => 
+        safeFetch(serviceMap[type.itemType])
+      );
+
+      // Fetch related data
+      const [states, locations, manufacturers] = await Promise.all([
         safeFetch(StateService.getAllStates),
         safeFetch(LocationService.getAllLocations),
         safeFetch(ManufacturerService.getAllManufacturers)
@@ -93,19 +103,14 @@ const ElementsList = () => {
       const manufacturersMap = {};
       (manufacturers || []).forEach(mf => manufacturersMap[mf.id] = mf.name);
 
+      // Wait for all item fetches
+      const itemsResults = await Promise.all(itemPromises);
+
       // Combine all elements with type
-      const elements = [
-        ...(computers || []).map(c => ({ ...c, type: 'Computer' })),
-        ...(monitors || []).map(m => ({ ...m, type: 'Monitor' })),
-        ...(software || []).map(s => ({ ...s, type: 'Software' })),
-        ...(printers || []).map(p => ({ ...p, type: 'Printer' })),
-        ...(pdus || []).map(p => ({ ...p, type: 'PDU' })),
-        ...(racks || []).map(r => ({ ...r, type: 'Rack' })),
-        ...(phones || []).map(p => ({ ...p, type: 'Phone' })),
-        ...(chassis || []).map(c => ({ ...c, type: 'Chassis' })),
-        ...(networkEquipment || []).map(n => ({ ...n, type: 'NetworkEquipment' })),
-        ...(licenses || []).map(l => ({ ...l, type: 'SoftwareLicense' }))
-      ];
+      const elements = [];
+      elementsListTypes.forEach((type, index) => {
+        elements.push(...itemsResults[index].map(item => ({ ...item, type: type.itemType })));
+      });
 
       setRelatedData({
         states: statesMap,

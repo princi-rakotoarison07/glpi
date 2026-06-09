@@ -27,6 +27,7 @@ import {
   Layers
 } from 'lucide-react';
 import ParcService from '../../../services/ParcService';
+import { getAllItemTypes } from '../../../config/itemTypes';
 import '../../../styles/ParcDashboard.css';
 
 const Dashboard = () => {
