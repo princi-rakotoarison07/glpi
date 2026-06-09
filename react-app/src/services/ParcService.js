@@ -35,7 +35,7 @@ const ParcService = {
       { key: 'consumables', endpoint: '/ConsumableItem', label: 'Consommable' },
       { key: 'cables', endpoint: '/Cable', label: 'Câbles' },
       { key: 'databaseInstances', endpoint: '/DatabaseInstance', label: 'Base de données' },
-      { key: 'dcRooms', endpoint: '/DCRoom', label: 'Salle serveur' }
+      { key: 'dcRooms', endpoint: '/DCRoom', label: 'Srveur' }
     ];
 
     const stats = {

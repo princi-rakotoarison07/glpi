@@ -17,6 +17,7 @@ const TicketList = () => {
 
   // Filters
   const [statusFilter, setStatusFilter] = useState('');
+  const [typeFilter, setTypeFilter] = useState('');
 
   const fetchTickets = async () => {
     setLoading(true);
@@ -31,8 +32,15 @@ const TicketList = () => {
     try {
       const result = await TicketService.getTickets(params);
       console.log('Tickets data:', result.tickets);
-      setTickets(result.tickets);
-      setTotalItems(result.totalItems);
+      
+      // Apply type filter client-side
+      let filteredTickets = result.tickets;
+      if (typeFilter) {
+        filteredTickets = filteredTickets.filter(ticket => ticket.type === Number(typeFilter));
+      }
+      
+      setTickets(filteredTickets);
+      setTotalItems(result.totalItems); // Note: We'll keep totalItems from API, but displayed count is filtered
     } catch (error) {
       console.error('Error fetching tickets:', error);
       setTickets([]);
@@ -60,7 +68,7 @@ const TicketList = () => {
 
   useEffect(() => {
     fetchTickets();
-  }, [currentPage, itemsPerPage, statusFilter, userMap]);
+  }, [currentPage, itemsPerPage, statusFilter, typeFilter, userMap]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -83,6 +91,12 @@ const TicketList = () => {
     { value: 6, label: 'Majeure', color: '#b71c1c' },
   ];
 
+  const typeOptions = [
+    { value: '', label: 'Tous les types' },
+    { value: 1, label: 'Incident' },
+    { value: 2, label: 'Demande' },
+  ];
+
   const getStatusName = (statusId) => {
     const option = statusOptions.find(opt => opt.value === String(statusId));
     return option ? option.label : 'Statut inconnu';
@@ -91,6 +105,11 @@ const TicketList = () => {
   const getPriorityInfo = (priorityId) => {
     const option = priorityOptions.find(opt => opt.value === priorityId);
     return option || { label: 'Priorité inconnue', color: '#9e9e9e' };
+  };
+
+  const getTypeName = (typeId) => {
+    const option = typeOptions.find(opt => opt.value === typeId);
+    return option ? option.label : 'Type inconnu';
   };
 
   const formatDate = (dateString) => {
@@ -128,6 +147,21 @@ const TicketList = () => {
             ))}
           </select>
         </div>
+        <div className="filter-item">
+          <Filter size={16} />
+          <select
+            className="filter-select"
+            value={typeFilter}
+            onChange={(e) => {
+              setTypeFilter(e.target.value);
+              setCurrentPage(1);
+            }}
+          >
+            {typeOptions.map((option) => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Tickets Table */}
@@ -143,6 +177,7 @@ const TicketList = () => {
                 <th>Utilisateur</th>
                 <th>Statut</th>
                 <th>Priorité</th>
+                <th>Type</th>
                 <th>Dernière modification</th>
                 <th>Date d'ouverture</th>
                 <th>Actions</th>
@@ -180,6 +215,7 @@ const TicketList = () => {
                           {priorityInfo.label}
                         </span>
                       </td>
+                      <td>{getTypeName(ticket.type)}</td>
                       <td>{formatDate(ticket.date_mod)}</td>
                       <td>{formatDate(ticket.date)}</td>
                       <td className="action-cell">
@@ -193,7 +229,7 @@ const TicketList = () => {
                 })
               ) : (
                 <tr>
-                  <td colSpan="8" className="empty-state">
+                  <td colSpan="9" className="empty-state">
                     Aucun ticket trouvé.
                   </td>
                 </tr>

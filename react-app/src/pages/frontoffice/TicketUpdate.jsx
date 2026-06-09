@@ -56,8 +56,8 @@ const TicketUpdate = () => {
   ];
 
   const typeOptions = [
-    { value: 1, label: 'Demande' },
-    { value: 2, label: 'Incident' },
+    { value: 1, label: 'Incident' },
+    { value: 2, label: 'Demande' },
   ];
 
   const itemTypeOptions = [
@@ -148,6 +148,10 @@ const TicketUpdate = () => {
     setLoading(true);
     try {
       const ticket = await TicketService.getTicket(id);
+      console.log('Ticket data from API:', ticket);
+      console.log('Ticket type:', ticket.type);
+      console.log('All ticket fields:', Object.keys(ticket));
+      
       setFormData({
         name: ticket.name,
         content: ticket.content,
