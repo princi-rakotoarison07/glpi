@@ -34,6 +34,18 @@ import LicenseList from '../pages/backoffice/parc/license/LicenseList';
 import LicenseDetail from '../pages/backoffice/parc/license/LicenseDetail';
 import PeripheralList from '../pages/backoffice/parc/peripheral/PeripheralList';
 import PeripheralDetail from '../pages/backoffice/parc/peripheral/PeripheralDetail';
+import PassiveEquipmentList from '../pages/backoffice/parc/passiveEquipment/PassiveEquipmentList';
+import PassiveEquipmentDetail from '../pages/backoffice/parc/passiveEquipment/PassiveEquipmentDetail';
+import CartridgeList from '../pages/backoffice/parc/cartridge/CartridgeList';
+import CartridgeDetail from '../pages/backoffice/parc/cartridge/CartridgeDetail';
+import ConsumableList from '../pages/backoffice/parc/consumable/ConsumableList';
+import ConsumableDetail from '../pages/backoffice/parc/consumable/ConsumableDetail';
+import CableList from '../pages/backoffice/parc/cable/CableList';
+import CableDetail from '../pages/backoffice/parc/cable/CableDetail';
+import DatabaseInstanceList from '../pages/backoffice/parc/databaseInstance/DatabaseInstanceList';
+import DatabaseInstanceDetail from '../pages/backoffice/parc/databaseInstance/DatabaseInstanceDetail';
+import DCRoomList from '../pages/backoffice/parc/dcRoom/DCRoomList';
+import DCRoomDetail from '../pages/backoffice/parc/dcRoom/DCRoomDetail';
 // FrontOffice
 import FrontOfficeAccueil from '../pages/frontoffice/Accueil';
 import FrontOfficeElementsList from '../pages/frontoffice/ElementsList';
@@ -88,6 +100,21 @@ const AppRouter = () => {
             <Route path="/parc/licenses/:id" element={<LicenseDetail />} />
             <Route path="/parc/peripherals" element={<PeripheralList />} />
             <Route path="/parc/peripherals/:id" element={<PeripheralDetail />} />
+            
+            {/* Nouvelles routes spécifiques du Parc */}
+            <Route path="/parc/passiveEquipment" element={<PassiveEquipmentList />} />
+            <Route path="/parc/passiveEquipment/:id" element={<PassiveEquipmentDetail />} />
+            <Route path="/parc/cartridges" element={<CartridgeList />} />
+            <Route path="/parc/cartridges/:id" element={<CartridgeDetail />} />
+            <Route path="/parc/consumables" element={<ConsumableList />} />
+            <Route path="/parc/consumables/:id" element={<ConsumableDetail />} />
+            <Route path="/parc/cables" element={<CableList />} />
+            <Route path="/parc/cables/:id" element={<CableDetail />} />
+            <Route path="/parc/databaseInstances" element={<DatabaseInstanceList />} />
+            <Route path="/parc/databaseInstances/:id" element={<DatabaseInstanceDetail />} />
+            <Route path="/parc/dcRooms" element={<DCRoomList />} />
+            <Route path="/parc/dcRooms/:id" element={<DCRoomDetail />} />
+
             <Route path="/reset" element={<Reset />} />
             <Route path="/tickets" element={<TicketList />} />
             <Route path="/tickets/:id" element={<TicketDetail />} />
