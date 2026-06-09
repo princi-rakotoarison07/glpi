@@ -50,6 +50,7 @@ import DCRoomDetail from '../pages/backoffice/parc/dcRoom/DCRoomDetail';
 import FrontOfficeAccueil from '../pages/frontoffice/Accueil';
 import FrontOfficeElementsList from '../pages/frontoffice/ElementsList';
 import FrontOfficeTicketList from '../pages/frontoffice/TicketList';
+import TicketKanban from '../pages/frontoffice/TicketKanban';
 import TicketCreate from '../pages/frontoffice/TicketCreate';
 import TicketUpdate from '../pages/frontoffice/TicketUpdate';
 
@@ -66,6 +67,7 @@ const AppRouter = () => {
         {/* FrontOffice Tickets - protégées */}
         <Route element={<ProtectedRoute />}>
           <Route path="/frontoffice/tickets" element={<FrontOfficeTicketList />} />
+          <Route path="/frontoffice/kanban" element={<TicketKanban />} />
           <Route path="/frontoffice/tickets/add" element={<TicketCreate />} />
           <Route path="/frontoffice/tickets/:id" element={<TicketUpdate />} />
         </Route>

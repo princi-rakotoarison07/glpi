@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Box, Ticket } from 'lucide-react';
+import { Home, Box, Ticket, LayoutDashboard } from 'lucide-react';
 
 const FrontOfficeNavbar = () => {
   const location = useLocation();
@@ -22,6 +22,10 @@ const FrontOfficeNavbar = () => {
           <Link to="/frontoffice/tickets" className={`nav-link ${isActive('/frontoffice/tickets')}`}>
             <Ticket size={18} />
             Tickets
+          </Link>
+          <Link to="/frontoffice/kanban" className={`nav-link ${isActive('/frontoffice/kanban')}`}>
+            <LayoutDashboard size={18} />
+            Kanban
           </Link>
           <Link to="/frontoffice/elements" className={`nav-link ${isActive('/frontoffice/elements')}`}>
             <Box size={18} />
