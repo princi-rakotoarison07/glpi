@@ -14,10 +14,12 @@ import PhoneService from '../../services/Phone/PhoneService';
 import ChassisService from '../../services/Chassis/ChassisService';
 import NetworkEquipmentService from '../../services/NetworkEquipment/NetworkEquipmentService';
 import SoftwareLicenseService from '../../services/SoftwareLicense/SoftwareLicenseService';
+import PeripheralService from '../../services/Peripheral/PeripheralService';
 import ManufacturerService from '../../services/Manufacturer/ManufacturerService';
 import LocationService from '../../services/Location/LocationService';
 import StateService from '../../services/State/StateService';
 import ComputerModelService from '../../services/ComputerModel/ComputerModelService';
+import { getTicketItemTypes } from '../../config/itemTypes';
 import '../../styles/FrontOffice.css';
 
 const TicketUpdate = () => {
@@ -60,18 +62,10 @@ const TicketUpdate = () => {
     { value: 2, label: 'Demande' },
   ];
 
-  const itemTypeOptions = [
-    { value: 'Computer', label: 'Ordinateur' },
-    { value: 'Monitor', label: 'Moniteur' },
-    { value: 'Software', label: 'Logiciel' },
-    { value: 'Printer', label: 'Imprimante' },
-    { value: 'Pdu', label: 'PDU' },
-    { value: 'Rack', label: 'Baie' },
-    { value: 'Phone', label: 'Téléphone' },
-    { value: 'Enclosure', label: 'Châssis' },
-    { value: 'NetworkEquipment', label: 'Matériel réseau' },
-    { value: 'SoftwareLicense', label: 'Licence logiciel' },
-  ];
+  const itemTypeOptions = getTicketItemTypes().map(type => ({
+    value: type.itemType,
+    label: type.label
+  }));
 
   const generateTempId = () => Date.now() + Math.random().toString(36).substr(2, 9);
 
@@ -84,38 +78,50 @@ const TicketUpdate = () => {
   const fetchAllItems = async () => {
     setFetchingItems(true);
     try {
-      const [
-        computers, monitors, software, printers, pdus, racks, phones, chassis, networkEquipment, licenses,
-        manufacturers, locations, states, computerModels
-      ] = await Promise.all([
-        ComputerService.getAllComputers(),
-        MonitorService.getAllMonitors(),
-        SoftwareService.getAllSoftware(),
-        PrinterService.getAllPrinters(),
-        PDUService.getAllPDUs(),
-        RackService.getAllRacks(),
-        PhoneService.getAllPhones(),
-        ChassisService.getAllChassis(),
-        NetworkEquipmentService.getAllNetworkEquipment(),
-        SoftwareLicenseService.getAllSoftwareLicenses(),
+      const ticketTypes = getTicketItemTypes();
+      
+      // Map config types to their respective service methods
+      const serviceMap = {
+        Computer: ComputerService.getAllComputers,
+        Monitor: MonitorService.getAllMonitors,
+        Software: SoftwareService.getAllSoftware,
+        Printer: PrinterService.getAllPrinters,
+        Pdu: PDUService.getAllPDUs,
+        Rack: RackService.getAllRacks,
+        Phone: PhoneService.getAllPhones,
+        Enclosure: ChassisService.getAllChassis,
+        NetworkEquipment: NetworkEquipmentService.getAllNetworkEquipment,
+        SoftwareLicense: SoftwareLicenseService.getAllSoftwareLicenses,
+        Peripheral: PeripheralService.getAllPeripherals,
+        PassiveDCEquipment: async () => [], // Placeholder if service doesn't exist yet
+        CartridgeItem: async () => [],
+        ConsumableItem: async () => [],
+        Cable: async () => [],
+        DatabaseInstance: async () => [],
+        DCRoom: async () => []
+      };
+
+      // Fetch items for all ticket types
+      const itemPromises = ticketTypes.map(type => 
+        serviceMap[type.itemType] ? serviceMap[type.itemType]() : Promise.resolve([])
+      );
+
+      // Fetch related data
+      const [manufacturers, locations, states, computerModels] = await Promise.all([
         ManufacturerService.getAllManufacturers(),
         LocationService.getAllLocations(),
         StateService.getAllStates(),
         ComputerModelService.getAllComputerModels()
       ]);
 
-      const itemsByType = {
-        Computer: toArray(computers),
-        Monitor: toArray(monitors),
-        Software: toArray(software),
-        Printer: toArray(printers),
-        Pdu: toArray(pdus),
-        Rack: toArray(racks),
-        Phone: toArray(phones),
-        Enclosure: toArray(chassis),
-        NetworkEquipment: toArray(networkEquipment),
-        SoftwareLicense: toArray(licenses),
-      };
+      // Wait for all item fetches
+      const itemsResults = await Promise.all(itemPromises);
+
+      // Build itemsByType object
+      const itemsByType = {};
+      ticketTypes.forEach((type, index) => {
+        itemsByType[type.itemType] = toArray(itemsResults[index]);
+      });
 
       // Create maps for quick lookup
       const manufacturersMap = {};
