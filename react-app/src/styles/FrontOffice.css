@@ -142,6 +142,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
+  margin-top: 0;
   margin-bottom: 24px;
 }
 
@@ -238,6 +239,10 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
+}
+
+.ticket-list-header h1 {
+  margin-bottom: 0;
 }
 
 .btn-add-ticket {

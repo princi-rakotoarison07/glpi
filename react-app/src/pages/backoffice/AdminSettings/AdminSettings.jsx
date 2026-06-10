@@ -7,13 +7,23 @@ const AdminSettings = () => {
   const [saving, setSaving] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [settings, setSettings] = useState({
+  
+  const [colors, setColors] = useState({
     color_nouveau: '#3b82f6',
     color_inProgress: '#f59e0b',
-    color_termine: '#10b981',
-    label_nouveau: 'Nouveau',
-    label_inProgress: 'In progress (assigné)',
-    label_termine: 'Terminé'
+    color_termine: '#10b981'
+  });
+
+  const [languages, setLanguages] = useState([
+    { id: 1, nom: 'Français' },
+    { id: 2, nom: 'Malgache' }
+  ]);
+
+  const [selectedLanguageId, setSelectedLanguageId] = useState(1);
+
+  const [translations, setTranslations] = useState({
+    1: { label_nouveau: 'Nouveau', label_inProgress: 'In progress (assigné)', label_termine: 'Terminé' },
+    2: { label_nouveau: 'Vaovao', label_inProgress: 'Efa manao', label_termine: 'Vita' }
   });
 
   useEffect(() => {
@@ -21,14 +31,18 @@ const AdminSettings = () => {
       setLoading(true);
       try {
         const data = await SettingsService.getSettings();
-        setSettings({
+        setColors({
           color_nouveau: data.color_nouveau || '#3b82f6',
           color_inProgress: data.color_inProgress || '#f59e0b',
-          color_termine: data.color_termine || '#10b981',
-          label_nouveau: data.label_nouveau || 'Nouveau',
-          label_inProgress: data.label_inProgress || 'In progress (assigné)',
-          label_termine: data.label_termine || 'Terminé'
+          color_termine: data.color_termine || '#10b981'
         });
+        setSelectedLanguageId(parseInt(data.selected_language_id) || 1);
+        if (data.languages) {
+          setLanguages(data.languages);
+        }
+        if (data.all_translations) {
+          setTranslations(data.all_translations);
+        }
       } catch (err) {
         console.error('Error fetching settings:', err);
       } finally {
@@ -39,13 +53,31 @@ const AdminSettings = () => {
     fetchSettings();
   }, []);
 
+  const handleLabelChange = (field, value) => {
+    setTranslations(prev => ({
+      ...prev,
+      [selectedLanguageId]: {
+        ...prev[selectedLanguageId],
+        [field]: value
+      }
+    }));
+  };
+
   const handleSave = async (e) => {
     e.preventDefault();
     setSaving(true);
     setSuccessMessage('');
     setErrorMessage('');
     try {
-      await SettingsService.updateSettings(settings);
+      const payload = {
+        color_nouveau: colors.color_nouveau,
+        color_inProgress: colors.color_inProgress,
+        color_termine: colors.color_termine,
+        selected_language_id: String(selectedLanguageId),
+        all_translations: translations
+      };
+
+      await SettingsService.updateSettings(payload);
       setSuccessMessage('Paramètres enregistrés avec succès !');
       setTimeout(() => {
         setSuccessMessage('');
@@ -92,6 +124,7 @@ const AdminSettings = () => {
           <div>Chargement des paramètres...</div>
         ) : (
           <form onSubmit={handleSave}>
+            {/* Section I: Colors */}
             <div className="admin-section" style={{ marginBottom: '30px' }}>
               <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: '#1e293b', borderBottom: '2px solid #f1f5f9', paddingBottom: '10px', marginBottom: '20px' }}>
                 i. Couleurs des colonnes Kanban
@@ -102,14 +135,14 @@ const AdminSettings = () => {
                   <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                     <input
                       type="color"
-                      value={settings.color_nouveau}
-                      onChange={e => setSettings(prev => ({ ...prev, color_nouveau: e.target.value }))}
+                      value={colors.color_nouveau}
+                      onChange={e => setColors(prev => ({ ...prev, color_nouveau: e.target.value }))}
                       style={{ width: '42px', height: '42px', border: '1px solid #cbd5e1', borderRadius: '8px', cursor: 'pointer' }}
                     />
                     <input
                       type="text"
-                      value={settings.color_nouveau}
-                      onChange={e => setSettings(prev => ({ ...prev, color_nouveau: e.target.value }))}
+                      value={colors.color_nouveau}
+                      onChange={e => setColors(prev => ({ ...prev, color_nouveau: e.target.value }))}
                       style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', textTransform: 'uppercase', flex: 1 }}
                     />
                   </div>
@@ -120,14 +153,14 @@ const AdminSettings = () => {
                   <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                     <input
                       type="color"
-                      value={settings.color_inProgress}
-                      onChange={e => setSettings(prev => ({ ...prev, color_inProgress: e.target.value }))}
+                      value={colors.color_inProgress}
+                      onChange={e => setColors(prev => ({ ...prev, color_inProgress: e.target.value }))}
                       style={{ width: '42px', height: '42px', border: '1px solid #cbd5e1', borderRadius: '8px', cursor: 'pointer' }}
                     />
                     <input
                       type="text"
-                      value={settings.color_inProgress}
-                      onChange={e => setSettings(prev => ({ ...prev, color_inProgress: e.target.value }))}
+                      value={colors.color_inProgress}
+                      onChange={e => setColors(prev => ({ ...prev, color_inProgress: e.target.value }))}
                       style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', textTransform: 'uppercase', flex: 1 }}
                     />
                   </div>
@@ -138,14 +171,14 @@ const AdminSettings = () => {
                   <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                     <input
                       type="color"
-                      value={settings.color_termine}
-                      onChange={e => setSettings(prev => ({ ...prev, color_termine: e.target.value }))}
+                      value={colors.color_termine}
+                      onChange={e => setColors(prev => ({ ...prev, color_termine: e.target.value }))}
                       style={{ width: '42px', height: '42px', border: '1px solid #cbd5e1', borderRadius: '8px', cursor: 'pointer' }}
                     />
                     <input
                       type="text"
-                      value={settings.color_termine}
-                      onChange={e => setSettings(prev => ({ ...prev, color_termine: e.target.value }))}
+                      value={colors.color_termine}
+                      onChange={e => setColors(prev => ({ ...prev, color_termine: e.target.value }))}
                       style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', textTransform: 'uppercase', flex: 1 }}
                     />
                   </div>
@@ -153,17 +186,39 @@ const AdminSettings = () => {
               </div>
             </div>
 
+            {/* Section II: Language Dropdown */}
             <div className="admin-section" style={{ marginBottom: '30px' }}>
               <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: '#1e293b', borderBottom: '2px solid #f1f5f9', paddingBottom: '10px', marginBottom: '20px' }}>
-                ii. Version malgache des noms de statuts
+                ii. Choix de la langue active
+              </h3>
+              <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '300px' }}>
+                <label style={{ fontSize: '13px', fontWeight: 'bold', color: '#475569' }}>Sélectionner la langue</label>
+                <select
+                  value={selectedLanguageId}
+                  onChange={e => setSelectedLanguageId(parseInt(e.target.value))}
+                  style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#fff', fontSize: '14px', cursor: 'pointer' }}
+                >
+                  {languages.map(lang => (
+                    <option key={lang.id} value={lang.id}>
+                      {lang.nom}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Section III: Translations */}
+            <div className="admin-section" style={{ marginBottom: '30px' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: '#1e293b', borderBottom: '2px solid #f1f5f9', paddingBottom: '10px', marginBottom: '20px' }}>
+                iii. Libellés des statuts (pour la langue sélectionnée)
               </h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
                 <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   <label style={{ fontSize: '13px', fontWeight: 'bold', color: '#475569' }}>Libellé "Nouveau"</label>
                   <input
                     type="text"
-                    value={settings.label_nouveau}
-                    onChange={e => setSettings(prev => ({ ...prev, label_nouveau: e.target.value }))}
+                    value={translations[selectedLanguageId]?.label_nouveau || ''}
+                    onChange={e => handleLabelChange('label_nouveau', e.target.value)}
                     placeholder="Ex: Vaovao"
                     style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1' }}
                     required
@@ -174,8 +229,8 @@ const AdminSettings = () => {
                   <label style={{ fontSize: '13px', fontWeight: 'bold', color: '#475569' }}>Libellé "In progress"</label>
                   <input
                     type="text"
-                    value={settings.label_inProgress}
-                    onChange={e => setSettings(prev => ({ ...prev, label_inProgress: e.target.value }))}
+                    value={translations[selectedLanguageId]?.label_inProgress || ''}
+                    onChange={e => handleLabelChange('label_inProgress', e.target.value)}
                     placeholder="Ex: Efa manao"
                     style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1' }}
                     required
@@ -186,8 +241,8 @@ const AdminSettings = () => {
                   <label style={{ fontSize: '13px', fontWeight: 'bold', color: '#475569' }}>Libellé "Terminé"</label>
                   <input
                     type="text"
-                    value={settings.label_termine}
-                    onChange={e => setSettings(prev => ({ ...prev, label_termine: e.target.value }))}
+                    value={translations[selectedLanguageId]?.label_termine || ''}
+                    onChange={e => handleLabelChange('label_termine', e.target.value)}
                     placeholder="Ex: Vita"
                     style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1' }}
                     required
