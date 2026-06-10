@@ -89,7 +89,9 @@
 
 /* ── Ticket Detail Styles ── */
 .ticket-detail-page {
-  width: 100%;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
   padding: 24px;
   box-sizing: border-box;
 }

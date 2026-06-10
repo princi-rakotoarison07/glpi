@@ -109,6 +109,26 @@ const TicketService = {
       console.error('Error in createTicketForComputer:', error);
       throw error;
     }
+  },
+
+  getTicketsByStatus: async (statusId) => {
+    try {
+      await initSession();
+      const searchParams = new URLSearchParams();
+      searchParams.append('range', '0-99');
+      searchParams.append('searchText[status]', statusId);
+      
+      const response = await api.get(`/Ticket?${searchParams.toString()}`);
+      return response.data || [];
+    } catch (error) {
+      console.error(`Error fetching tickets for status ${statusId}:`, error);
+      return [];
+    }
+  },
+
+  countTicketsByStatus: (ticketsList, statusId) => {
+    if (!Array.isArray(ticketsList)) return 0;
+    return ticketsList.filter(t => Number(t.status) === statusId).length;
   }
 };
 

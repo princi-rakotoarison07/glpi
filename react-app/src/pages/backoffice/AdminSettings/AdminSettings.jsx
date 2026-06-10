@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import SettingsService from '../../../services/Settings/SettingsService';
+import './AdminSettings.css';
 
 const AdminSettings = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [settings, setSettings] = useState({
     color_nouveau: '#3b82f6',
     color_inProgress: '#f59e0b',
@@ -39,12 +42,20 @@ const AdminSettings = () => {
   const handleSave = async (e) => {
     e.preventDefault();
     setSaving(true);
+    setSuccessMessage('');
+    setErrorMessage('');
     try {
       await SettingsService.updateSettings(settings);
-      alert('Paramètres enregistrés avec succès.');
+      setSuccessMessage('Paramètres enregistrés avec succès !');
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 4000);
     } catch (err) {
       console.error('Error saving settings:', err);
-      alert("Erreur lors de l'enregistrement des paramètres.");
+      setErrorMessage("Erreur lors de l'enregistrement des paramètres.");
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 4000);
     } finally {
       setSaving(false);
     }
@@ -55,6 +66,27 @@ const AdminSettings = () => {
       <div className="card" style={{ maxWidth: 'none', width: '100%', boxSizing: 'border-box' }}>
         <h1 className="card-title">Configuration du Kanban</h1>
         <p className="card-text" style={{ marginBottom: '24px' }}>Paramètres stockés dans SQLite</p>
+
+        {successMessage && (
+          <div className="admin-settings-alert admin-settings-alert-success">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+            {successMessage}
+          </div>
+        )}
+
+        {errorMessage && (
+          <div className="admin-settings-alert admin-settings-alert-error">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            {errorMessage}
+          </div>
+        )}
 
         {loading ? (
           <div>Chargement des paramètres...</div>

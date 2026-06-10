@@ -372,7 +372,7 @@ const TicketKanban = () => {
       const updatedContent = currentContent + closingNote;
 
       await TicketService.updateTicket(ticketId, {
-        status: 5, // Fermé/Terminé
+        status: 6, // Clos/Terminé
         content: updatedContent
       });
 
@@ -402,29 +402,32 @@ const TicketKanban = () => {
         title: kanbanSettings.label_nouveau,
         tickets: [],
         color: kanbanSettings.color_nouveau,
+        count: TicketService.countTicketsByStatus(tickets, 1),
       },
       inProgress: {
         id: 'inProgress',
         title: kanbanSettings.label_inProgress,
         tickets: [],
         color: kanbanSettings.color_inProgress,
+        count: TicketService.countTicketsByStatus(tickets, 2),
       },
       termine: {
         id: 'termine',
         title: kanbanSettings.label_termine,
         tickets: [],
         color: kanbanSettings.color_termine,
+        count: TicketService.countTicketsByStatus(tickets, 6),
       },
     };
 
     tickets.forEach(ticket => {
-      // Map GLPI statuses (1: Nouveau, 2: Attribué, 3: Planifié, 4: En attente, 5: Résolu, 6: Clos...)
+      // Map GLPI statuses (1: Nouveau, 2: Assigné, 6: Clos)
       const statusNum = Number(ticket.status);
       if (statusNum === 1) {
         columns.nouveau.tickets.push(ticket);
-      } else if (statusNum >= 2 && statusNum <= 4) {
+      } else if (statusNum === 2) {
         columns.inProgress.tickets.push(ticket);
-      } else {
+      } else if (statusNum === 6) {
         columns.termine.tickets.push(ticket);
       }
     });
@@ -473,19 +476,20 @@ const TicketKanban = () => {
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => handleDrop(e, col.id)}
                 style={{ 
-                  backgroundColor: hexToRgba(col.color, 0.08),
+                  backgroundColor: col.color,
                   border: `2px solid ${col.color}`
                 }}
               >
                 <div className="column-header">
-                  <div className="column-title">
+                  <div className="column-title" style={{ color: '#ffffff' }}>
                     <span>{col.title}</span>
-                    <span className="column-count">{col.tickets.length}</span>
+                    <span className="column-count" style={{ backgroundColor: 'rgba(255, 255, 255, 0.25)', color: '#ffffff' }}>{col.count}</span>
                   </div>
                   {col.id === 'nouveau' && (
                     <button
                       className="column-add-btn"
                       onClick={openQuickAdd}
+                      style={{ backgroundColor: '#ffffff', color: col.color, border: 'none' }}
                     >
                       + Créer des tickets
                     </button>
