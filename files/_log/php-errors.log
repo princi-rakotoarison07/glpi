@@ -550,3 +550,5 @@
   .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
   .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
 
+[2026-06-09 12:21:02] glpi.WARNING:   *** Test logger
+[2026-06-09 13:04:56] glpi.WARNING:   *** Test logger
