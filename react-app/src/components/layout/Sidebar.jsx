@@ -42,7 +42,13 @@ const MENU_ITEMS = [
             { label: 'Téléphones', path: '/parc/phones' },
             { label: 'Châssis', path: '/parc/chassis' },
             { label: 'Matériel réseau', path: '/parc/network' },
-            { label: 'Licences', path: '/parc/licenses' }
+            { label: 'Licences', path: '/parc/licenses' },
+            { label: 'Matériel passif', path: '/parc/passiveEquipment' },
+            { label: 'Cartouches', path: '/parc/cartridges' },
+            { label: 'Consommables', path: '/parc/consumables' },
+            { label: 'Câbles', path: '/parc/cables' },
+            { label: 'Bases de données', path: '/parc/databaseInstances' },
+            { label: 'Salles serveur', path: '/parc/dcRooms' }
           ]
   },
   { 

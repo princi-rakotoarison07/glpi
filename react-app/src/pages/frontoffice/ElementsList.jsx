@@ -12,6 +12,12 @@ import ChassisService from '../../services/Chassis/ChassisService';
 import NetworkEquipmentService from '../../services/NetworkEquipment/NetworkEquipmentService';
 import SoftwareLicenseService from '../../services/SoftwareLicense/SoftwareLicenseService';
 import PeripheralService from '../../services/Peripheral/PeripheralService';
+import PassiveDCEquipmentService from '../../services/PassiveDCEquipment/PassiveDCEquipmentService';
+import CartridgeItemService from '../../services/CartridgeItem/CartridgeItemService';
+import ConsumableItemService from '../../services/ConsumableItem/ConsumableItemService';
+import CableService from '../../services/Cable/CableService';
+import DatabaseInstanceService from '../../services/DatabaseInstance/DatabaseInstanceService';
+import DCRoomService from '../../services/DCRoom/DCRoomService';
 import StateService from '../../services/State/StateService';
 import LocationService from '../../services/Location/LocationService';
 import ManufacturerService from '../../services/Manufacturer/ManufacturerService';
@@ -73,12 +79,12 @@ const ElementsList = () => {
         NetworkEquipment: NetworkEquipmentService.getAllNetworkEquipment,
         SoftwareLicense: SoftwareLicenseService.getAllSoftwareLicenses,
         Peripheral: PeripheralService.getAllPeripherals,
-        PassiveDCEquipment: async () => [],
-        CartridgeItem: async () => [],
-        ConsumableItem: async () => [],
-        Cable: async () => [],
-        DatabaseInstance: async () => [],
-        DCRoom: async () => []
+        PassiveDCEquipment: PassiveDCEquipmentService.getAllPassiveDCEquipments,
+        CartridgeItem: CartridgeItemService.getAllCartridgeItems,
+        ConsumableItem: ConsumableItemService.getAllConsumableItems,
+        Cable: CableService.getAllCables,
+        DatabaseInstance: DatabaseInstanceService.getAllDatabaseInstances,
+        DCRoom: DCRoomService.getAllDCRooms
       };
 
       // Fetch items for all types

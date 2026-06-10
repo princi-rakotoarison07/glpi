@@ -15,6 +15,12 @@ import ChassisService from '../../services/Chassis/ChassisService';
 import NetworkEquipmentService from '../../services/NetworkEquipment/NetworkEquipmentService';
 import SoftwareLicenseService from '../../services/SoftwareLicense/SoftwareLicenseService';
 import PeripheralService from '../../services/Peripheral/PeripheralService';
+import PassiveDCEquipmentService from '../../services/PassiveDCEquipment/PassiveDCEquipmentService';
+import CartridgeItemService from '../../services/CartridgeItem/CartridgeItemService';
+import ConsumableItemService from '../../services/ConsumableItem/ConsumableItemService';
+import CableService from '../../services/Cable/CableService';
+import DatabaseInstanceService from '../../services/DatabaseInstance/DatabaseInstanceService';
+import DCRoomService from '../../services/DCRoom/DCRoomService';
 import ManufacturerService from '../../services/Manufacturer/ManufacturerService';
 import LocationService from '../../services/Location/LocationService';
 import StateService from '../../services/State/StateService';
@@ -35,6 +41,7 @@ const TicketUpdate = () => {
   });
 
   const [linkedItems, setLinkedItems] = useState([]);
+  const [originalItems, setOriginalItems] = useState([]);
   const [itemRows, setItemRows] = useState([]);
   const [allItemsByType, setAllItemsByType] = useState({});
   const [loading, setLoading] = useState(false);
@@ -93,12 +100,12 @@ const TicketUpdate = () => {
         NetworkEquipment: NetworkEquipmentService.getAllNetworkEquipment,
         SoftwareLicense: SoftwareLicenseService.getAllSoftwareLicenses,
         Peripheral: PeripheralService.getAllPeripherals,
-        PassiveDCEquipment: async () => [], // Placeholder if service doesn't exist yet
-        CartridgeItem: async () => [],
-        ConsumableItem: async () => [],
-        Cable: async () => [],
-        DatabaseInstance: async () => [],
-        DCRoom: async () => []
+        PassiveDCEquipment: PassiveDCEquipmentService.getAllPassiveDCEquipments,
+        CartridgeItem: CartridgeItemService.getAllCartridgeItems,
+        ConsumableItem: ConsumableItemService.getAllConsumableItems,
+        Cable: CableService.getAllCables,
+        DatabaseInstance: DatabaseInstanceService.getAllDatabaseInstances,
+        DCRoom: DCRoomService.getAllDCRooms
       };
 
       // Fetch items for all ticket types
@@ -172,8 +179,10 @@ const TicketUpdate = () => {
         itemType: item.itemtype,
         name: item.item?.name || `ID: ${item.items_id}`,
         typeLabel: itemTypeOptions.find(t => t.value === item.itemtype)?.label || item.itemtype,
+        linkId: item.id,
       }));
       setLinkedItems(mappedItems);
+      setOriginalItems(mappedItems);
     } catch (error) {
       console.error('Error fetching ticket:', error);
     } finally {
@@ -247,9 +256,59 @@ const TicketUpdate = () => {
     e.preventDefault();
     setLoading(true);
 
+    // Collect ALL items to link: existing linkedItems + new complete rows
+    const allItemsToLink = [...linkedItems];
+    const itemsToAdd = [];
+    const rowsToKeep = [];
+
+    // Process each row
+    for (const row of itemRows) {
+      if (row.itemType && row.itemId) {
+        // Complete row, add to itemsToLink
+        const itemData = allItemsByType[row.itemType]?.find(i => String(i.id) === String(row.itemId));
+        if (itemData) {
+          // Check if not already in allItemsToLink
+          const alreadyExists = allItemsToLink.some(i => i.id === itemData.id && i.itemType === row.itemType);
+          if (!alreadyExists) {
+            allItemsToLink.push({
+              id: itemData.id,
+              itemType: row.itemType,
+              name: itemData.name || `ID: ${itemData.id}`,
+              typeLabel: itemTypeOptions.find(t => t.value === row.itemType)?.label || row.itemType,
+            });
+            itemsToAdd.push(row);
+          }
+        }
+      } else {
+        // Incomplete row, keep it
+        rowsToKeep.push(row);
+      }
+    }
+
     try {
-      // Note: You need to implement updateTicket in TicketService if needed
-      // For now, we'll just navigate back
+      // 1. Update ticket details
+      await TicketService.updateTicket(id, formData);
+
+      // 2. Identify items to unlink
+      const itemsToUnlink = originalItems.filter(
+        orig => !allItemsToLink.some(curr => String(curr.id) === String(orig.id) && curr.itemType === orig.itemType)
+      );
+
+      for (const item of itemsToUnlink) {
+        if (item.linkId) {
+          await ItemTicketService.unlinkItemFromTicket(item.linkId);
+        }
+      }
+
+      // 3. Identify new items to link
+      const newItemsToLink = allItemsToLink.filter(
+        curr => !originalItems.some(orig => String(orig.id) === String(curr.id) && orig.itemType === curr.itemType)
+      );
+
+      for (const item of newItemsToLink) {
+        await ItemTicketService.linkItemToTicket(id, item.id, item.itemType);
+      }
+
       navigate('/frontoffice/tickets');
     } catch (error) {
       console.error('Error saving ticket:', error);
