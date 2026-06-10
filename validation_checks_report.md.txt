@@ -1,0 +1,79 @@
+# Rapport de Validation & Vérifications du Système d'Importation GLPI
+
+Ce document détaille l'ensemble des validations et des contrôles de cohérence effectués par le système d'importation (versions **Fast** et **V2**) lors du chargement des fichiers CSV et ZIP dans l'application GLPI.
+
+---
+
+## 1. Validation de la Structure Globale (En-têtes)
+Avant toute tentative de traitement des données, le système valide la structure du fichier CSV en analysant la première ligne (les en-têtes) :
+
+| Type de Fichier | En-têtes Attendus | Contrôles Effectués |
+| :--- | :--- | :--- |
+| **1. Équipements** | `Name`, `Status`, `Location`, `Manufacturer`, `Item_Type`, `Model`, `Inventory_Number`, `User` | 1. **Nombre de colonnes** : Doit être exactement égal à 8.<br>2. **Noms des colonnes** : Vérification case-insensitive (ex: `Name` ou `name`). |
+| **2. Tickets** | `Ref_Ticket`, `Date`, `Heure`, `Type`, `Titre`, `Description`, `Status`, `Priority`, `Items` | 1. **Nombre de colonnes** : Doit être exactement égal à 9.<br>2. **Noms des colonnes** : Vérification case-insensitive. |
+| **3. Coûts** | `Num_Ticket`, `Duration_second`, `Time_Cost`, `Fixed_Cost` | 1. **Nombre de colonnes** : Doit être exactement égal à 4.<br>2. **Noms des colonnes** : Vérification case-insensitive. |
+
+---
+
+## 2. Validation du Contenu des Lignes (Ligne par Ligne)
+
+### A. Fichier Équipements (Feuille 1)
+* **Nom (`Name`)** : Obligatoire. Ne doit pas être vide ou composé uniquement d'espaces.
+* **Type d'équipement (`Item_Type`)** : Obligatoire. Doit correspondre à un type valide supporté par GLPI.
+  > [!IMPORTANT]
+  > **Sensibilité à la casse :** Ce champ est sensible à la casse car il est directement envoyé à l'API GLPI (ex: `Computer`, `Monitor`, `NetworkEquipment`).
+
+### B. Fichier Tickets (Feuille 2)
+* **Référence (`Ref_Ticket`)** : Obligatoire. Identifiant unique du ticket dans le CSV pour le lier aux coûts.
+* **Date (`Date`)** : Obligatoire. Doit respecter le format strict **`JJ/MM/AAAA`** (ex: `03/06/2026`).
+* **Heure (`Heure`)** : Obligatoire. Doit respecter le format **`HH:mm`** ou **`HH:mm:ss`** (ex: `13:45`).
+* **Titre (`Titre`)** : Obligatoire.
+* **Type de ticket (`Type`)** : Optionnel, mais s'il est renseigné, il doit valoir `Incident`, `Demande` ou `Request` (insensible à la casse).
+
+### C. Fichier Coûts (Feuille 3)
+* **ID Ticket (`Num_Ticket`)** : Obligatoire. Référence du ticket associé.
+* **Durée (`Duration_second`)** : Obligatoire. Doit être un **nombre entier positif ou nul**.
+* **Coût horaire (`Time_Cost`)** : Obligatoire. Doit être un **nombre positif ou nul** (le séparateur décimal peut être une virgule `,` ou un point `.`).
+* **Coût fixe (`Fixed_Cost`)** : Obligatoire. Doit être un **nombre positif ou nul**.
+
+---
+
+## 3. Résolution Dynamique des Relations (GLPI)
+Pendant l'importation, le système effectue des contrôles de cohérence avec la base de données GLPI existante et crée automatiquement les dépendances manquantes :
+
+1. **Statut / Lieu / Fabricant / Modèle** : 
+   - Recherche insensible à la casse dans GLPI.
+   - Si l'élément (ex: Fabricant `Dell`, Lieu `Bureau 101`) n'existe pas, le système le **crée automatiquement** à la volée.
+2. **Utilisateurs** :
+   - Recherche par login généré (ex: `jean.dupont`), par nom complet ou par nom de famille.
+   - Si l'utilisateur n'existe pas, il est **créé automatiquement** avec un statut actif.
+3. **Liaison Équipement → Ticket** :
+   - Le système cherche l'équipement par son nom dans toutes les tables de matériels GLPI (Computers, Monitors, etc.).
+   - S'il le trouve, il crée le lien d'association. Sinon, il affiche un avertissement non bloquant.
+
+---
+
+## 4. Validation et Traitement des Images (Fichier ZIP)
+* **Format des fichiers** : Seuls les fichiers avec l'extension `.png`, `.jpg`, ou `.jpeg` sont extraits du ZIP.
+* **Existence de l'équipement** : L'image doit avoir pour nom exact le nom d'un équipement existant dans GLPI (ex: `PC-ADM-001.jpg` associe l'image à l'équipement `PC-ADM-001`). Si l'équipement n'est pas trouvé, l'image est ignorée avec un avertissement.
+* **Autocorrection de format** : Si l'image est au format `.png` (non supporté pour l'affichage direct dans certains contextes GLPI), le système la **convertit automatiquement en JPEG** côté client avant de l'envoyer.
+
+---
+
+## 5. Gestion des Erreurs et Transactions (Rollback V2)
+Pour garantir la cohérence des données, l'importateur V2 intègre un système de transaction :
+
+```mermaid
+flowchart TD
+    A[Début Importation V2] --> B[Validation des En-têtes CSV]
+    B -- Invalides --> C[Blocage Immédiat]
+    B -- Valides --> D[Boucle de création des lignes]
+    D --> E{Erreur de validation ou API?}
+    E -- Oui --> F[Lancement du Rollback Global]
+    F --> G[Suppression de TOUS les équipements, tickets et coûts créés dans cette session]
+    E -- Non --> H[Fin d'importation CSV réussie]
+    H --> I[Importation des images avec Rollback Local si liaison échoue]
+```
+
+* **Rollback Global** : Si une seule ligne présente une erreur de validation ou si l'API GLPI plante à la création d'une ressource, tout est annulé immédiatement.
+* **Rollback Local (Images)** : Si le téléversement d'une image réussit mais que sa liaison avec le matériel échoue, l'image est automatiquement supprimée pour éviter d'encombrer la base de données de GLPI avec des fichiers orphelins.

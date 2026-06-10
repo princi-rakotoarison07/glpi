@@ -286,6 +286,9 @@ const GLPIImportServiceV2 = {
           cleanStr = `["${cleanStr.replace(/"/g, '')}"]`;
         }
         const itemsArray = JSON.parse(cleanStr);
+        // Pour dédoublonner les équipements et éviter l'erreur de doublon GLPI, décommentez la ligne ci-dessous :
+        // const uniqueItems = Array.isArray(itemsArray) ? [...new Set(itemsArray)] : [];
+        // et remplacez "itemsArray" par "uniqueItems" dans la boucle for ci-dessous.
         for (const itemRef of itemsArray) {
           const itemData = await GLPIImportServiceFast.resolveItem(itemRef);
           if (itemData) {
