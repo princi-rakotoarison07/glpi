@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SettingsService from '../../../services/Settings/SettingsService';
-import './AdminSettings.css';
+import '../../../styles/AdminSettings.css';
 
 const AdminSettings = () => {
   const [loading, setLoading] = useState(true);
