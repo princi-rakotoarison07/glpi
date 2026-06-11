@@ -58,6 +58,22 @@ const UserService = {
   },
 
   /**
+   * Récupérer les liaisons profils-utilisateurs
+   */
+  getProfileUsers: async () => {
+    try {
+      await initSession();
+      const response = await api.get('/Profile_User', {
+        params: { range: '0-9999' }
+      });
+      return response.data || [];
+    } catch (error) {
+      console.error('Erreur lors de la récupération des liaisons profils-utilisateurs', error);
+      return [];
+    }
+  },
+
+  /**
    * Supprimer un utilisateur
    */
   deleteUser: async (id) => {

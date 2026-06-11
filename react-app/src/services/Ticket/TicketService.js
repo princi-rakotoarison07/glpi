@@ -82,6 +82,34 @@ const TicketService = {
     }
   },
 
+  assignUserToTicket: async (ticketId, userId) => {
+    try {
+      await initSession();
+      const response = await api.post('/Ticket_User', {
+        input: {
+          tickets_id: Number(ticketId),
+          users_id: Number(userId),
+          type: 2 // ASSIGN
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error assigning user to ticket:', error);
+      throw error;
+    }
+  },
+
+  removeUserFromTicket: async (relationId) => {
+    try {
+      await initSession();
+      const response = await api.delete(`/Ticket_User/${relationId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error deleting Ticket_User relation ${relationId}:`, error);
+      throw error;
+    }
+  },
+
   // Création d'un ticket (table glpi_tickets)
   createTicket: async (ticketData) => {
     try {

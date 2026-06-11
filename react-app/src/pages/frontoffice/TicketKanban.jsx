@@ -32,7 +32,9 @@ const TicketKanban = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
+  const [technicians, setTechnicians] = useState([]);
   const [ticketRequesterMap, setTicketRequesterMap] = useState({});
+  const [ticketUserRelations, setTicketUserRelations] = useState([]);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
   const currentUser = AuthService.getCurrentUser();
   const [quickTickets, setQuickTickets] = useState([
@@ -54,6 +56,11 @@ const TicketKanban = () => {
     ticketId: null,
     comment: '',
     date: new Date().toISOString().split('T')[0]
+  });
+  const [assignModalData, setAssignModalData] = useState({
+    isOpen: false,
+    ticketId: null,
+    selectedUserId: ''
   });
   const [kanbanSettings, setKanbanSettings] = useState({
     color_nouveau: '#3b82f6',
@@ -126,6 +133,7 @@ const TicketKanban = () => {
         }
       });
       setTicketRequesterMap(reqMap);
+      setTicketUserRelations(rels);
 
       let userTickets = [...userTicketsList];
 
@@ -212,8 +220,22 @@ const TicketKanban = () => {
 
     const fetchUsers = async () => {
       try {
-        const u = await UserService.getAllUsers();
-        setUsers(Array.isArray(u) ? u : []);
+        const [u, profileUsers] = await Promise.all([
+          UserService.getAllUsers(),
+          UserService.getProfileUsers()
+        ]);
+        const uList = Array.isArray(u) ? u : [];
+        setUsers(uList);
+
+        const puList = Array.isArray(profileUsers) ? profileUsers : [];
+        const assignableProfileIds = [3, 4, 5, 6, 7]; // Admin, Super-Admin, Hotliner, Technician, Supervisor
+        const assignableUserIds = new Set(
+          puList
+            .filter(pu => assignableProfileIds.includes(Number(pu.profiles_id)))
+            .map(pu => Number(pu.users_id))
+        );
+        const techUsers = uList.filter(user => assignableUserIds.has(Number(user.id)));
+        setTechnicians(techUsers);
       } catch (err) {
         console.error('Error fetching users:', err);
       }
@@ -372,12 +394,27 @@ const TicketKanban = () => {
         comment: '',
         date: new Date().toISOString().split('T')[0]
       });
-    } else {
-      // Direct status update
-      const newStatus = targetColumnId === 'nouveau' ? 1 : 2;
+    } else if (targetColumnId === 'inProgress') {
+      // Set status to 2 immediately and open the assign modal
       try {
         setLoading(true);
-        await TicketService.updateTicket(ticketId, { status: newStatus });
+        await TicketService.updateTicket(ticketId, { status: 2 });
+        await fetchTickets();
+        setAssignModalData({
+          isOpen: true,
+          ticketId: ticketId,
+          selectedUserId: ''
+        });
+      } catch (err) {
+        console.error('Error setting status to In Progress:', err);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      // Direct status update (back to Nouveau / 1)
+      try {
+        setLoading(true);
+        await TicketService.updateTicket(ticketId, { status: 1 });
         await fetchTickets();
       } catch (err) {
         console.error('Error updating status:', err);
@@ -422,6 +459,33 @@ const TicketKanban = () => {
     } catch (err) {
       console.error('Error closing ticket:', err);
       alert('Erreur lors de la clôture du ticket: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddAssignee = async (ticketId, selectedUserId) => {
+    if (!ticketId || !selectedUserId) return;
+    try {
+      setLoading(true);
+      await TicketService.assignUserToTicket(ticketId, selectedUserId);
+      await fetchTickets();
+    } catch (err) {
+      console.error('Error assigning technician:', err);
+      alert('Erreur lors de l\'attribution du technicien : ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRemoveAssignee = async (relationId) => {
+    try {
+      setLoading(true);
+      await TicketService.removeUserFromTicket(relationId);
+      await fetchTickets();
+    } catch (err) {
+      console.error('Error removing technician:', err);
+      alert('Erreur lors du retrait du technicien : ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -536,6 +600,16 @@ const TicketKanban = () => {
                     col.tickets.map(ticket => {
                       const priority = getPriorityInfo(ticket.priority);
                       const type = getTypeInfo(ticket.type);
+
+                      // Find assigned technicians for this ticket
+                      const cardAssignees = ticketUserRelations
+                        .filter(rel => Number(rel.tickets_id) === Number(ticket.id) && Number(rel.type) === 2)
+                        .map(rel => {
+                          const tech = technicians.find(t => Number(t.id) === Number(rel.users_id));
+                          return tech ? tech.name : null;
+                        })
+                        .filter(Boolean);
+
                       return (
                         <div
                           key={ticket.id}
@@ -564,6 +638,28 @@ const TicketKanban = () => {
                                 : ticket.content
                               : 'Aucune description'}
                           </p>
+
+                          {cardAssignees.length > 0 && (
+                            <div className="card-assignees" style={{ margin: '8px 0', display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                              {cardAssignees.map((name, idx) => (
+                                <span 
+                                  key={idx} 
+                                  style={{ 
+                                    fontSize: '0.725rem', 
+                                    padding: '2px 8px', 
+                                    borderRadius: '12px', 
+                                    background: '#f1f5f9', 
+                                    color: '#475569',
+                                    border: '1px solid #e2e8f0',
+                                    fontWeight: '500'
+                                  }}
+                                >
+                                  👤 {name}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+
                           <div className="card-footer">
                             <span
                               className="priority-badge"
@@ -613,6 +709,18 @@ const TicketKanban = () => {
           onSubmit={handleConfirmClose}
           data={closeModalData}
           setData={setCloseModalData}
+        />
+
+        {/* ASSIGN TICKET MODAL */}
+        <TicketAssignModal
+          isOpen={assignModalData.isOpen}
+          onClose={() => setAssignModalData(prev => ({ ...prev, isOpen: false }))}
+          ticketId={assignModalData.ticketId}
+          tickets={tickets}
+          technicians={technicians}
+          relations={ticketUserRelations}
+          onAddAssignee={handleAddAssignee}
+          onRemoveAssignee={handleRemoveAssignee}
         />
       </div>
     </FrontOfficeLayout>
@@ -890,6 +998,183 @@ const TicketCloseModal = ({ isOpen, onClose, onSubmit, data, setData }) => {
             </button>
           </div>
         </form>
+      </div>
+    </div>
+  );
+};
+
+// Sub-component: Assign Ticket Modal (Supports multiple technicians)
+const TicketAssignModal = ({ 
+  isOpen, 
+  onClose, 
+  ticketId, 
+  tickets = [], 
+  technicians = [], 
+  relations = [], 
+  onAddAssignee, 
+  onRemoveAssignee
+}) => {
+  const [selectedTechId, setSelectedTechId] = React.useState('');
+
+  if (!isOpen) return null;
+
+  // Find the ticket
+  const ticket = tickets.find(t => Number(t.id) === Number(ticketId));
+  const ticketTitle = ticket ? ticket.name : '';
+
+  // Filter relations to get assignees (type === 2) for this ticket
+  const currentAssignees = relations.filter(
+    rel => Number(rel.tickets_id) === Number(ticketId) && Number(rel.type) === 2
+  );
+
+  // Map technician objects that are currently assigned
+  const assignedTechIds = currentAssignees.map(rel => Number(rel.users_id));
+
+  // Technicians that are NOT already assigned to this ticket
+  const availableTechs = technicians.filter(
+    tech => !assignedTechIds.includes(Number(tech.id))
+  );
+
+  const handleAddClick = (e) => {
+    e.preventDefault();
+    if (!selectedTechId) return;
+    onAddAssignee(ticketId, selectedTechId);
+    setSelectedTechId('');
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-container" onClick={e => e.stopPropagation()} style={{ maxWidth: '500px' }}>
+        <div className="modal-header">
+          <h2>Attribution du ticket #{ticketId}</h2>
+          <button className="close-btn" onClick={onClose}>
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="modal-body" style={{ padding: '24px' }}>
+          <h4 style={{ margin: '0 0 4px 0', fontSize: '1.05rem', color: '#0f172a' }}>
+            {ticketTitle || 'Sans titre'}
+          </h4>
+          <p style={{ margin: '0 0 20px 0', color: '#64748b', fontSize: '0.875rem' }}>
+            Gérez la liste des techniciens attribués à ce ticket.
+          </p>
+
+          {/* List of current assignees */}
+          <div style={{ marginBottom: '24px' }}>
+            <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px', color: '#334155', fontSize: '0.875rem' }}>
+              Techniciens attribués ({currentAssignees.length})
+            </label>
+            {currentAssignees.length === 0 ? (
+              <div style={{ padding: '12px', background: '#f8fafc', borderRadius: '8px', border: '1px dashed #e2e8f0', color: '#94a3b8', fontSize: '0.875rem', textAlign: 'center' }}>
+                Aucun technicien attribué
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {currentAssignees.map(rel => {
+                  const techObj = technicians.find(t => Number(t.id) === Number(rel.users_id));
+                  return (
+                    <div 
+                      key={rel.id} 
+                      style={{ 
+                        display: 'flex', 
+                        justifyContent: 'space-between', 
+                        alignItems: 'center', 
+                        padding: '10px 14px', 
+                        background: '#f1f5f9', 
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0'
+                      }}
+                    >
+                      <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: '500' }}>
+                        {techObj ? techObj.name : `Utilisateur #${rel.users_id}`}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => onRemoveAssignee(rel.id)}
+                        style={{ 
+                          background: '#fee2e2', 
+                          border: 'none', 
+                          color: '#ef4444', 
+                          padding: '6px', 
+                          borderRadius: '6px', 
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          transition: 'background 0.2s'
+                        }}
+                        title="Retirer ce technicien"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Add assignee section */}
+          <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+            <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px', color: '#334155', fontSize: '0.875rem' }}>
+              Ajouter un technicien
+            </label>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <select
+                value={selectedTechId}
+                onChange={e => setSelectedTechId(e.target.value)}
+                style={{ 
+                  flex: 1, 
+                  padding: '10px', 
+                  borderRadius: '8px', 
+                  border: '1px solid #cbd5e1',
+                  background: '#ffffff',
+                  fontSize: '0.9rem'
+                }}
+              >
+                <option value="">-- Choisir un technicien --</option>
+                {availableTechs.map(tech => (
+                  <option key={tech.id} value={tech.id}>
+                    {tech.name}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                onClick={handleAddClick}
+                disabled={!selectedTechId}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  backgroundColor: selectedTechId ? '#3b82f6' : '#93c5fd',
+                  color: '#ffffff',
+                  border: 'none',
+                  padding: '10px 16px',
+                  borderRadius: '8px',
+                  fontWeight: '600',
+                  cursor: selectedTechId ? 'pointer' : 'not-allowed',
+                  fontSize: '0.9rem'
+                }}
+              >
+                <Plus size={16} />
+                Ajouter
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="modal-footer" style={{ borderTop: '1px solid #f1f5f9', padding: '16px 24px' }}>
+          <button
+            type="button"
+            className="cancel-modal-btn"
+            onClick={onClose}
+            style={{ margin: 0 }}
+          >
+            Fermer
+          </button>
+        </div>
       </div>
     </div>
   );

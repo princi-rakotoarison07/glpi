@@ -15,6 +15,7 @@ const FrontOfficeTicketList = () => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [userMap, setUserMap] = useState({}); // { userId: userName }
   const [ticketRequesterMap, setTicketRequesterMap] = useState({});
+  const [ticketAssigneeMap, setTicketAssigneeMap] = useState({});
 
   // Filters
   const [statusFilter, setStatusFilter] = useState('');
@@ -114,12 +115,19 @@ const FrontOfficeTicketList = () => {
 
       const rels = Array.isArray(relations) ? relations : [];
       const reqMap = {};
+      const assignMap = {};
       rels.forEach(rel => {
         if (Number(rel.type) === 1) {
           reqMap[rel.tickets_id] = rel.users_id;
+        } else if (Number(rel.type) === 2) {
+          if (!assignMap[rel.tickets_id]) {
+            assignMap[rel.tickets_id] = [];
+          }
+          assignMap[rel.tickets_id].push(rel.users_id);
         }
       });
       setTicketRequesterMap(reqMap);
+      setTicketAssigneeMap(assignMap);
 
       // Apply ALL filters client-side
       let filtered = [...result.tickets];
@@ -293,6 +301,7 @@ const FrontOfficeTicketList = () => {
                     <th>ID</th>
                     <th>Titre</th>
                     <th>Demandeur</th>
+                    <th>Attributeur(s)</th>
                     <th>Statut</th>
                     <th>Priorité</th>
                     <th>Type</th>
@@ -310,6 +319,11 @@ const FrontOfficeTicketList = () => {
                       const userId = ticketRequesterMap[ticket.id] || ticket.users_id_recipient;
                       const userName = userMap[userId] 
                         || (userId ? `Utilisateur #${userId}` : 'Inconnu');
+
+                      // Get assignee user names
+                      const assigneeIds = ticketAssigneeMap[ticket.id] || [];
+                      const assigneeNames = assigneeIds.map(id => userMap[id] || `Utilisateur #${id}`);
+
                       return (
                         <tr key={ticket.id} className="ticket-row">
                           <td>{ticket.id}</td>
@@ -324,6 +338,30 @@ const FrontOfficeTicketList = () => {
                               <User size={14} style={{ marginRight: '4px' }} />
                               {userName}
                             </div>
+                          </td>
+                          <td>
+                            {assigneeNames.length > 0 ? (
+                              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                                {assigneeNames.map((name, idx) => (
+                                  <span 
+                                    key={idx} 
+                                    style={{ 
+                                      fontSize: '0.8rem', 
+                                      padding: '2px 8px', 
+                                      borderRadius: '12px', 
+                                      background: '#f1f5f9', 
+                                      color: '#475569',
+                                      border: '1px solid #e2e8f0',
+                                      fontWeight: '500'
+                                    }}
+                                  >
+                                    {name}
+                                  </span>
+                                ))}
+                              </div>
+                            ) : (
+                              <span style={{ color: '#94a3b8', fontStyle: 'italic', fontSize: '0.85rem' }}>Non attribué</span>
+                            )}
                           </td>
                           <td>
                             <span className="status-badge" style={{ backgroundColor: statusInfo.color + '20', color: statusInfo.color }}>

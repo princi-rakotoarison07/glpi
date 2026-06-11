@@ -4,6 +4,7 @@ import { ArrowLeft, Plus, Trash2, DollarSign } from 'lucide-react';
 import TicketService from '../../services/Ticket/TicketService';
 import ItemTicketService from '../../services/ItemTicket/ItemTicketService';
 import TicketCostService from '../../services/TicketCost/TicketCostService';
+import UserService from '../../services/User/UserService';
 import FrontOfficeLayout from '../../layouts/FrontOfficeLayout';
 import ComputerService from '../../services/Computer/ComputerService';
 import MonitorService from '../../services/Monitor/MonitorService';
@@ -51,6 +52,10 @@ const TicketUpdate = () => {
   const [costsToDelete, setCostsToDelete] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetchingItems, setFetchingItems] = useState(true);
+  const [originalAssignees, setOriginalAssignees] = useState([]);
+  const [assignees, setAssignees] = useState([]);
+  const [technicians, setTechnicians] = useState([]);
+  const [selectedTechId, setSelectedTechId] = useState('');
   
   // Related data maps
   const [relatedData, setRelatedData] = useState({
@@ -192,6 +197,14 @@ const TicketUpdate = () => {
       const costs = await TicketCostService.getTicketCosts(id);
       setTicketCosts(costs || []);
       setOriginalCosts(costs || []);
+
+      const relationsData = await TicketService.getTicketUsers();
+      const rels = Array.isArray(relationsData) ? relationsData : [];
+      const ticketAssignees = rels.filter(
+        rel => Number(rel.tickets_id) === Number(id) && Number(rel.type) === 2
+      );
+      setOriginalAssignees(ticketAssignees);
+      setAssignees(ticketAssignees);
     } catch (error) {
       console.error('Error fetching ticket:', error);
     } finally {
@@ -201,6 +214,29 @@ const TicketUpdate = () => {
 
   useEffect(() => {
     fetchAllItems();
+
+    const fetchUsers = async () => {
+      try {
+        const [u, profileUsers] = await Promise.all([
+          UserService.getAllUsers(),
+          UserService.getProfileUsers()
+        ]);
+        const uList = Array.isArray(u) ? u : [];
+        const puList = Array.isArray(profileUsers) ? profileUsers : [];
+        const assignableProfileIds = [3, 4, 5, 6, 7]; // Admin, Super-Admin, Hotliner, Technician, Supervisor
+        const assignableUserIds = new Set(
+          puList
+            .filter(pu => assignableProfileIds.includes(Number(pu.profiles_id)))
+            .map(pu => Number(pu.users_id))
+        );
+        const techUsers = uList.filter(user => assignableUserIds.has(Number(user.id)));
+        setTechnicians(techUsers);
+      } catch (err) {
+        console.error('Error fetching users for assignees:', err);
+      }
+    };
+    fetchUsers();
+
     if (id) {
       fetchTicket();
     }
@@ -287,6 +323,24 @@ const TicketUpdate = () => {
     setCostsToDelete(prev => [...prev, costId]);
   };
 
+  const handleAddAssigneeLocal = () => {
+    if (!selectedTechId) return;
+    const alreadyExists = assignees.some(rel => Number(rel.users_id) === Number(selectedTechId));
+    if (alreadyExists) return;
+
+    setAssignees(prev => [...prev, {
+      id: `temp-${Date.now()}`,
+      tickets_id: id,
+      users_id: Number(selectedTechId),
+      type: 2
+    }]);
+    setSelectedTechId('');
+  };
+
+  const handleRemoveAssigneeLocal = (relId, userId) => {
+    setAssignees(prev => prev.filter(rel => Number(rel.users_id) !== Number(userId)));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -320,9 +374,30 @@ const TicketUpdate = () => {
       }
     }
 
+    // Identify assignees to delete
+    const assigneesToDelete = originalAssignees.filter(
+      orig => !assignees.some(curr => Number(curr.users_id) === Number(orig.users_id))
+    );
+
+    // Identify assignees to add
+    const assigneesToAdd = assignees.filter(
+      curr => !originalAssignees.some(orig => Number(orig.users_id) === Number(curr.users_id))
+    );
+
     try {
       // 1. Update ticket details
       await TicketService.updateTicket(id, formData);
+
+      // Update assignees
+      for (const rel of assigneesToDelete) {
+        if (rel.id && !String(rel.id).startsWith('temp-')) {
+          await TicketService.removeUserFromTicket(rel.id);
+        }
+      }
+
+      for (const rel of assigneesToAdd) {
+        await TicketService.assignUserToTicket(id, rel.users_id);
+      }
 
       // 2. Identify items to unlink
       const itemsToUnlink = originalItems.filter(
@@ -374,6 +449,11 @@ const TicketUpdate = () => {
       setLoading(false);
     }
   };
+
+  const assignedTechIds = assignees.map(rel => Number(rel.users_id));
+  const availableTechs = technicians.filter(
+    tech => !assignedTechIds.includes(Number(tech.id))
+  );
 
   return (
     <FrontOfficeLayout>
@@ -555,6 +635,90 @@ const TicketUpdate = () => {
                 >
                   <Plus size={16} />
                   Ajouter une ligne
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="form-section">
+            <h2>Techniciens / Attributeurs</h2>
+            <div className="linked-items-section">
+              <h3>Techniciens actuellement attribués ({assignees.length})</h3>
+              {assignees.length === 0 ? (
+                <div className="empty-state small" style={{ marginBottom: '16px' }}>Aucun technicien attribué</div>
+              ) : (
+                <div className="added-items-table-container" style={{ marginBottom: '16px' }}>
+                  <table className="added-items-table">
+                    <thead>
+                      <tr>
+                        <th>Nom du technicien</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {assignees.map((rel, index) => {
+                        const techObj = technicians.find(t => Number(t.id) === Number(rel.users_id));
+                        return (
+                          <tr key={index} className="added-item-row">
+                            <td className="item-name-cell">
+                              {techObj ? techObj.name : `Utilisateur #${rel.users_id}`}
+                            </td>
+                            <td>
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveAssigneeLocal(rel.id, rel.users_id)}
+                                className="remove-item-btn"
+                                title="Retirer ce technicien"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              <h3>Ajouter un technicien</h3>
+              <div style={{ display: 'flex', gap: '8px', maxWidth: '450px', marginTop: '8px' }}>
+                <select
+                  value={selectedTechId}
+                  onChange={(e) => setSelectedTechId(e.target.value)}
+                  style={{
+                    flex: 1,
+                    padding: '8px 12px',
+                    borderRadius: '6px',
+                    border: '1px solid #cbd5e1',
+                    background: '#ffffff',
+                    fontSize: '0.9rem'
+                  }}
+                >
+                  <option value="">-- Choisir un technicien --</option>
+                  {availableTechs.map(tech => (
+                    <option key={tech.id} value={tech.id}>
+                      {tech.name}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={handleAddAssigneeLocal}
+                  disabled={!selectedTechId}
+                  className="add-row-btn"
+                  style={{
+                    margin: 0,
+                    padding: '8px 16px',
+                    backgroundColor: selectedTechId ? '#2563eb' : '#93c5fd',
+                    color: '#ffffff',
+                    border: 'none',
+                    borderRadius: '6px',
+                    fontWeight: '600',
+                    cursor: selectedTechId ? 'pointer' : 'not-allowed'
+                  }}
+                >
+                  Ajouter
                 </button>
               </div>
             </div>

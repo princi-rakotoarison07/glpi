@@ -82,6 +82,7 @@ const GLPIImportServiceFast = {
       'Assign': 2,
       'Assigned': 2,
       'In Progress': 2,
+      'In progress (assigned)': 2,
       'Planned': 3,
       'Pending': 4,
       'Solved': 5,
