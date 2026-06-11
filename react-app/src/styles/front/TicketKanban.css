@@ -24,7 +24,7 @@
 }
 
 .title-icon {
-  color: #2563eb;
+  color: #2f3f64;
 }
 
 .kanban-header h1 {
@@ -35,20 +35,20 @@
 }
 
 .add-ticket-btn {
-  background: #2563eb;
+  background: #2f3f64;
   color: #ffffff;
   padding: 10px 20px;
-  border-radius: 12px;
+  border-radius: 0;
   font-weight: 600;
   text-decoration: none;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+  box-shadow: 0 4px 10px rgba(47, 63, 100, 0.2);
 }
 
 .add-ticket-btn:hover {
-  background: #1d4ed8;
+  background: #1e2942;
   transform: translateY(-1px);
-  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 6px 14px rgba(47, 63, 100, 0.3);
 }
 
 .kanban-loading {
@@ -69,7 +69,7 @@
 
 .kanban-column {
   background: #f1f5f9;
-  border-radius: 16px;
+  border-radius: 0;
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -100,7 +100,7 @@
   color: #475569;
   font-size: 12px;
   padding: 2px 8px;
-  border-radius: 999px;
+  border-radius: 0;
   font-weight: 600;
 }
 
@@ -124,12 +124,12 @@
 
 .column-cards-container::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-  border-radius: 99px;
+  border-radius: 0;
 }
 
 .kanban-card {
   background: #ffffff;
-  border-radius: 12px;
+  border-radius: 0;
   padding: 16px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
   border: 1px solid #e2e8f0;
@@ -162,7 +162,7 @@
   font-size: 11px;
   font-weight: 700;
   padding: 2px 8px;
-  border-radius: 6px;
+  border-radius: 0;
   text-transform: uppercase;
 }
 
@@ -195,7 +195,7 @@
   font-size: 11px;
   font-weight: 600;
   padding: 2px 8px;
-  border-radius: 6px;
+  border-radius: 0;
 }
 
 .card-date {
@@ -212,7 +212,7 @@
   font-size: 13px;
   color: #94a3b8;
   border: 2px dashed #cbd5e1;
-  border-radius: 12px;
+  border-radius: 0;
 }
 
 /* Modals */
@@ -233,7 +233,7 @@
 
 .modal-container {
   background: #ffffff;
-  border-radius: 16px;
+  border-radius: 0;
   width: 90%;
   max-width: 650px;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -265,7 +265,7 @@
   color: #64748b;
   cursor: pointer;
   padding: 4px;
-  border-radius: 8px;
+  border-radius: 0;
   transition: all 0.15s ease;
   display: flex;
   align-items: center;
@@ -303,7 +303,7 @@
   font-size: 12px;
   font-weight: 600;
   padding: 4px 10px;
-  border-radius: 8px;
+  border-radius: 0;
 }
 
 .description-section h4,
@@ -318,7 +318,7 @@
 
 .description-box {
   background: #f8fafc;
-  border-radius: 12px;
+  border-radius: 0;
   padding: 16px;
   font-size: 14px;
   color: #334155;
@@ -332,7 +332,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   background: #f8fafc;
-  border-radius: 12px;
+  border-radius: 0;
   padding: 16px;
   border: 1px solid #e2e8f0;
 }
@@ -383,7 +383,7 @@
   color: #1e88e5;
   font-size: 13px;
   padding: 6px 12px;
-  border-radius: 8px;
+  border-radius: 0;
   border: 1px solid #bbdefb;
 }
 
@@ -408,11 +408,11 @@
 }
 
 .edit-nav-btn {
-  background: #2563eb;
+  background: #2f3f64;
   color: #ffffff;
   border: none;
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 0;
   font-weight: 600;
   font-size: 14px;
   display: flex;
@@ -423,7 +423,7 @@
 }
 
 .edit-nav-btn:hover {
-  background: #1d4ed8;
+  background: #1e2942;
 }
 
 .cancel-modal-btn {
@@ -431,7 +431,7 @@
   color: #475569;
   border: 1px solid #e2e8f0;
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 0;
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
@@ -441,17 +441,6 @@
 .cancel-modal-btn:hover {
   background: #e2e8f0;
   color: #0f172a;
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
 }
 
 /* Responsive */
@@ -468,24 +457,24 @@
 
 /* Quick Add Button and Form */
 .column-add-btn {
-  background: #2563eb;
+  background: #2f3f64;
   color: #ffffff;
   border: none;
   font-size: 12px;
   font-weight: 700;
   padding: 6px 12px;
-  border-radius: 8px;
+  border-radius: 0;
   cursor: pointer;
   margin-top: 8px;
   align-self: stretch;
   text-align: center;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 2px 4px rgba(47, 63, 100, 0.1);
 }
 
 .column-add-btn:hover {
-  background: #1d4ed8;
-  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+  background: #1e2942;
+  box-shadow: 0 4px 6px rgba(47, 63, 100, 0.2);
 }
 
 .column-header {
@@ -511,7 +500,7 @@
 .form-group textarea,
 .form-group select {
   padding: 10px 14px;
-  border-radius: 8px;
+  border-radius: 0;
   border: 1px solid #cbd5e1;
   font-size: 14px;
   color: #0f172a;
@@ -523,8 +512,8 @@
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  border-color: #2f3f64;
+  box-shadow: 0 0 0 3px rgba(47, 63, 100, 0.1);
 }
 
 .form-group input:disabled {
@@ -548,7 +537,7 @@
 .quick-ticket-card {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  border-radius: 0;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
   position: relative;
@@ -578,9 +567,9 @@
 }
 
 .quick-ticket-badge {
-  background: #2563eb;
+  background: #2f3f64;
   color: #fff;
-  border-radius: 50%;
+  border-radius: 0;
   width: 24px;
   height: 24px;
   display: inline-flex;
@@ -600,7 +589,7 @@
   font-size: 13px;
   font-weight: 600;
   padding: 4px 8px;
-  border-radius: 6px;
+  border-radius: 0;
   transition: all 0.15s ease;
 }
 
@@ -637,11 +626,11 @@
 }
 
 .add-equipment-btn {
-  background-color: #2563eb;
+  background-color: #2f3f64;
   color: #ffffff;
   border: none;
   padding: 6px 12px;
-  border-radius: 8px;
+  border-radius: 0;
   font-weight: 600;
   cursor: pointer;
   font-size: 11px;
@@ -652,7 +641,7 @@
 }
 
 .add-equipment-btn:hover {
-  background-color: #1d4ed8;
+  background-color: #1e2942;
 }
 
 .quick-equipment-rows-list {
@@ -687,7 +676,7 @@
   color: #ffffff;
   border: none;
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: 0;
   font-weight: 600;
   cursor: pointer;
   height: 38px;
@@ -713,10 +702,10 @@
 
 .add-more-ticket-form-btn {
   background-color: #f1f5f9;
-  color: #2563eb;
+  color: #2f3f64;
   border: 1.5px dashed #cbd5e1;
   padding: 12px 24px;
-  border-radius: 12px;
+  border-radius: 0;
   font-weight: 700;
   cursor: pointer;
   font-size: 14px;
@@ -730,7 +719,7 @@
 
 .add-more-ticket-form-btn:hover {
   background-color: #e2e8f0;
-  border-color: #2563eb;
+  border-color: #2f3f64;
 }
 
 /* Ticket Detail Page Styles */
@@ -755,7 +744,7 @@
 
 .ticket-detail-main {
   background: #ffffff;
-  border-radius: 12px;
+  border-radius: 0;
   padding: 24px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   display: flex;
@@ -791,20 +780,20 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background-color: #2563eb;
+  background-color: #2f3f64;
   color: #ffffff;
   padding: 12px 20px;
-  border-radius: 8px;
+  border-radius: 0;
   font-weight: 600;
   text-decoration: none;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 2px 4px rgba(47, 63, 100, 0.1);
   border: none;
   cursor: pointer;
 }
 
 .edit-ticket-btn-action:hover {
-  background-color: #1d4ed8;
+  background-color: #1e2942;
   transform: translateY(-1px);
 }
 
@@ -812,7 +801,7 @@
 .linked-items-table-container {
   overflow-x: auto;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  border-radius: 0;
   background: #ffffff;
   margin-top: 12px;
 }
@@ -853,4 +842,3 @@
   font-weight: 600;
   color: #0f172a;
 }
-

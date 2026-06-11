@@ -13,7 +13,7 @@ const FrontOfficeNavbar = () => {
   return (
     <nav className="frontoffice-navbar">
       <div className="nav-container">
-        <div className="nav-logo">GLPI FrontOffice</div>
+        <div className="nav-logo">GLPI</div>
         <div className="nav-links">
           <Link to="/frontoffice" className={`nav-link ${isActive('/frontoffice', true)}`}>
             <Home size={18} />

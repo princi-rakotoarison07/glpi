@@ -13,11 +13,11 @@
 
 /* Navbar */
 .frontoffice-navbar {
-  background: #2563eb;
+  background: #2f3f64;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 4px 12px rgba(47, 63, 100, 0.15);
 }
 
 .nav-container {
@@ -46,7 +46,7 @@
   width: 10px;
   height: 10px;
   background: #ffffff;
-  border-radius: 3px;
+  border-radius: 0;
 }
 
 .nav-links {
@@ -64,7 +64,7 @@
   font-weight: 600;
   font-size: 14px;
   padding: 8px 16px;
-  border-radius: 10px;
+  border-radius: 0;
   transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -75,7 +75,7 @@
 
 .nav-link.active {
   background: #ffffff;
-  color: #2563eb;
+  color: #2f3f64;
 }
 
 .back-link {
@@ -88,8 +88,6 @@
   background: rgba(255, 255, 255, 0.25);
   color: #ffffff;
 }
-
-
 
 /* Page Styles */
 .frontoffice-page {
@@ -114,9 +112,9 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: #2563eb;
+  background: #2f3f64;
   color: white;
-  border-radius: 8px;
+  border-radius: 0;
   text-decoration: none;
   font-weight: 500;
   font-size: 16px;
@@ -124,9 +122,9 @@
 }
 
 .btn-elements:hover {
-  background: #1d4ed8;
+  background: #1e2942;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 12px rgba(47, 63, 100, 0.3);
 }
 
 /* Elements Page */
@@ -137,7 +135,7 @@
 .filters-section {
   background: white;
   padding: 24px;
-  border-radius: 12px;
+  border-radius: 0;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   display: flex;
   flex-wrap: wrap;
@@ -166,7 +164,7 @@
 .filter-group input {
   padding: 10px 14px;
   border: 1px solid #cbd5e1;
-  border-radius: 8px;
+  border-radius: 0;
   font-size: 14px;
   outline: none;
   transition: all 0.2s;
@@ -174,14 +172,14 @@
 
 .filter-group select:focus,
 .filter-group input:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+  border-color: #2f3f64;
+  box-shadow: 0 0 0 3px rgba(47,63,100,0.1);
 }
 
 /* Table */
 .results-table-container {
   background: white;
-  border-radius: 12px;
+  border-radius: 0;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   overflow: hidden;
   overflow-x: auto;
@@ -250,9 +248,9 @@
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
-  background: #2563eb;
+  background: #2f3f64;
   color: white;
-  border-radius: 8px;
+  border-radius: 0;
   text-decoration: none;
   font-weight: 500;
   font-size: 14px;
@@ -260,13 +258,13 @@
 }
 
 .btn-add-ticket:hover {
-  background: #1d4ed8;
+  background: #1e2942;
   transform: translateY(-1px);
 }
 
 .tickets-table-container {
   background: white;
-  border-radius: 12px;
+  border-radius: 0;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   overflow: hidden;
   overflow-x: auto;
@@ -316,7 +314,7 @@
 .priority-badge {
   display: inline-flex;
   padding: 4px 12px;
-  border-radius: 9999px;
+  border-radius: 0;
   font-size: 12px;
   font-weight: 600;
 }
@@ -336,7 +334,7 @@
 }
 
 .view-details-link {
-  color: #2563eb;
+  color: #2f3f64;
   font-weight: 500;
   text-decoration: none;
   font-size: 14px;
@@ -365,7 +363,7 @@
   padding: 8px 16px;
   background: #f1f5f9;
   color: #334155;
-  border-radius: 8px;
+  border-radius: 0;
   text-decoration: none;
   font-weight: 500;
   font-size: 14px;
@@ -385,7 +383,7 @@
 .form-section {
   background: white;
   padding: 24px;
-  border-radius: 12px;
+  border-radius: 0;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
@@ -417,7 +415,7 @@
 .form-group select {
   padding: 10px 14px;
   border: 1px solid #cbd5e1;
-  border-radius: 8px;
+  border-radius: 0;
   font-size: 14px;
   outline: none;
   transition: all 0.2s;
@@ -426,8 +424,8 @@
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  border-color: #2f3f64;
+  box-shadow: 0 0 0 3px rgba(47, 63, 100, 0.1);
 }
 
 .form-group textarea {
@@ -470,7 +468,7 @@
   gap: 8px;
   padding: 8px 12px;
   background: #eff6ff;
-  border-radius: 8px;
+  border-radius: 0;
   border: 1px solid #bfdbfe;
 }
 
@@ -484,9 +482,9 @@
   font-size: 11px;
   font-weight: 600;
   padding: 2px 8px;
-  background: #2563eb;
+  background: #2f3f64;
   color: white;
-  border-radius: 4px;
+  border-radius: 0;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
@@ -511,7 +509,7 @@
   color: #dc2626;
   cursor: pointer;
   padding: 4px;
-  border-radius: 4px;
+  border-radius: 0;
   transition: all 0.2s;
 }
 
@@ -544,18 +542,18 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #2563eb;
+  background: #2f3f64;
   border: none;
   color: white;
   cursor: pointer;
   padding: 8px;
-  border-radius: 4px;
+  border-radius: 0;
   transition: all 0.2s;
   margin-bottom: 16px;
 }
 
 .add-item-btn:hover {
-  background: #1d4ed8;
+  background: #1e2942;
 }
 
 .remove-row-btn {
@@ -567,7 +565,7 @@
   color: #dc2626;
   cursor: pointer;
   padding: 8px;
-  border-radius: 4px;
+  border-radius: 0;
   transition: all 0.2s;
   margin-bottom: 16px;
 }
@@ -583,7 +581,7 @@
   padding: 10px 20px;
   background: #f1f5f9;
   color: #334155;
-  border-radius: 8px;
+  border-radius: 0;
   font-weight: 500;
   font-size: 14px;
   border: none;
@@ -609,7 +607,7 @@
   padding: 10px 20px;
   background: #f1f5f9;
   color: #334155;
-  border-radius: 8px;
+  border-radius: 0;
   text-decoration: none;
   font-weight: 500;
   font-size: 14px;
@@ -626,9 +624,9 @@
   display: inline-flex;
   align-items: center;
   padding: 10px 20px;
-  background: #2563eb;
+  background: #2f3f64;
   color: white;
-  border-radius: 8px;
+  border-radius: 0;
   font-weight: 500;
   font-size: 14px;
   border: none;
@@ -637,7 +635,7 @@
 }
 
 .btn-save:hover:not(:disabled) {
-  background: #1d4ed8;
+  background: #1e2942;
   transform: translateY(-1px);
 }
 
@@ -649,7 +647,7 @@
 /* Added Items Table */
 .added-items-table-container {
   background: white;
-  border-radius: 8px;
+  border-radius: 0;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   overflow: hidden;
   overflow-x: auto;
@@ -703,7 +701,7 @@
 .per-page-select {
   padding: 8px 12px;
   border: 1px solid #cbd5e1;
-  border-radius: 8px;
+  border-radius: 0;
   background: white;
   color: #334155;
   font-size: 14px;
@@ -712,8 +710,8 @@
 }
 
 .per-page-select:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+  border-color: #2f3f64;
+  box-shadow: 0 0 0 3px rgba(47,63,100,0.1);
 }
 
 .pagination-controls {
@@ -725,7 +723,7 @@
 .pagination-btn {
   padding: 8px 16px;
   border: 1px solid #cbd5e1;
-  border-radius: 8px;
+  border-radius: 0;
   background: white;
   color: #334155;
   font-size: 14px;

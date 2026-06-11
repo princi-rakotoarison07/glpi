@@ -213,8 +213,8 @@ const FrontOfficeTicketList = () => {
         </div>
 
         {/* Filters Section */}
-        <div className="filters-section" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+        <div className="filters-section" style={{ display: 'block', padding: '16px 20px', marginBottom: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '12px' }}>
             <div className="filter-group">
               <label><Filter size={16} /> Recherche</label>
               <input
@@ -265,7 +265,7 @@ const FrontOfficeTicketList = () => {
               style={{
                 padding: '8px 16px',
                 border: '1px solid #ccc',
-                borderRadius: '4px',
+                borderRadius: '0',
                 backgroundColor: '#fff',
                 cursor: 'pointer',
                 fontWeight: '500'
@@ -278,8 +278,8 @@ const FrontOfficeTicketList = () => {
               style={{
                 padding: '8px 16px',
                 border: 'none',
-                borderRadius: '4px',
-                backgroundColor: '#007bff',
+                borderRadius: '0',
+                backgroundColor: '#2f3f64',
                 color: '#fff',
                 cursor: 'pointer',
                 fontWeight: '500'
