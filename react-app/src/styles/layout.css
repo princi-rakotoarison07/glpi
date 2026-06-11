@@ -299,6 +299,15 @@ a.nav-item:hover,
   color: #ffffff;
 }
 
+.sidebar-footer {
+  padding: 12px 10px;
+  border-top: 1px solid #233150;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
 a.nav-item.active,
 .nav-item.active {
   background: #f59f00;

@@ -45,9 +45,9 @@ const Login = () => {
           <div className="login-group">
             <label htmlFor="singleCode">Code unique</label>
             <div className="login-input-wrapper">
-              <Lock className="login-icon" size={20} />
+              <Lock className="login-icon" size={18} />
               <input
-                type="text"
+                type="password"
                 id="singleCode"
                 placeholder="Entrez votre code unique"
                 value={singleCode}
@@ -62,7 +62,7 @@ const Login = () => {
               'Connexion en cours...'
             ) : (
               <>
-                <LogIn size={20} />
+                <LogIn size={18} />
                 Se connecter
               </>
             )}

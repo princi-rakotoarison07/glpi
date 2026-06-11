@@ -12,6 +12,7 @@ import {
   Ticket,
   ShieldCheck,
   Kanban,
+  ExternalLink,
 } from 'lucide-react';
 import '../../styles/layout.css';
 
@@ -180,6 +181,16 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
           );
         })}
       </nav>
+
+      <div className="sidebar-footer">
+        <Link
+          to="/frontoffice"
+          className="nav-item"
+        >
+          <ExternalLink size={20} />
+          <span>Front Office</span>
+        </Link>
+      </div>
     </aside>
   );
 };
