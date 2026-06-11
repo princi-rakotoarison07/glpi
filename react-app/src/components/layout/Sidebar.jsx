@@ -11,6 +11,7 @@ import {
   RefreshCw,
   Ticket,
   ShieldCheck,
+  Kanban,
 } from 'lucide-react';
 import '../../styles/layout.css';
 
@@ -21,48 +22,57 @@ const MENU_ITEMS = [
     path: '/accueil' 
   },
   {
-    icon: <Ticket size={20} />,
-    label: 'Assistance',
-    submenu: [
-      { label: 'Tickets', path: '/tickets' },
-      { label: 'Configuration Kanban', path: '/admin' }
-    ]
-  },
-  {
     icon: <Monitor size={20} />,
     label: 'Parc',
     submenu: [
-            { label: 'Tableau de bord', path: '/parc/dashboard' },
-            { label: 'Ordinateurs', path: '/parc/computers' },
-            { label: 'Moniteurs', path: '/parc/monitors' },
-            { label: 'Périphériques', path: '/parc/peripherals' },
-            { label: 'Logiciels', path: '/parc/software' },
-            { label: 'Imprimantes', path: '/parc/printers' },
-            { label: 'PDUs', path: '/parc/pdus' },
-            { label: 'Baies', path: '/parc/racks' },
-            { label: 'Téléphones', path: '/parc/phones' },
-            { label: 'Châssis', path: '/parc/chassis' },
-            { label: 'Matériel réseau', path: '/parc/network' },
-            { label: 'Licences', path: '/parc/licenses' },
-            { label: 'Matériel passif', path: '/parc/passiveEquipment' },
-            { label: 'Cartouches', path: '/parc/cartridges' },
-            { label: 'Consommables', path: '/parc/consumables' },
-            { label: 'Câbles', path: '/parc/cables' },
-            { label: 'Bases de données', path: '/parc/databaseInstances' },
-            { label: 'Salles serveur', path: '/parc/dcRooms' }
-          ]
+      { label: 'Tableau de bord', path: '/parc/dashboard' },
+      { label: 'Ordinateurs', path: '/parc/computers' },
+      { label: 'Moniteurs', path: '/parc/monitors' },
+      // { label: 'Périphériques', path: '/parc/peripherals' },
+      // { label: 'Logiciels', path: '/parc/software' },
+      // { label: 'Imprimantes', path: '/parc/printers' },
+      // { label: 'PDUs', path: '/parc/pdus' },
+      // { label: 'Baies', path: '/parc/racks' },
+      { label: 'Téléphones', path: '/parc/phones' },
+      // { label: 'Châssis', path: '/parc/chassis' },
+      // { label: 'Matériel réseau', path: '/parc/network' },
+      // { label: 'Licences', path: '/parc/licenses' },
+      // { label: 'Matériel passif', path: '/parc/passiveEquipment' },
+      // { label: 'Cartouches', path: '/parc/cartridges' },
+      // { label: 'Consommables', path: '/parc/consumables' },
+      // { label: 'Câbles', path: '/parc/cables' },
+      // { label: 'Bases de données', path: '/parc/databaseInstances' },
+      // { label: 'Salles serveur', path: '/parc/dcRooms' }
+    ]
+  },
+  {
+    icon: <Ticket size={20} />,
+    label: 'Assistance',
+    submenu: [
+      { label: 'Tickets', path: '/tickets' }
+    ]
+  },
+  {
+    icon: <Kanban size={20} />,
+    label: 'Kanban',
+    submenu: [
+      { label: 'Tableau Kanban', path: '/frontoffice/kanban' },
+      { label: 'Configuration', path: '/admin' }
+    ]
+  },
+  {
+    icon: <Box size={20} />,
+    label: 'Importation des données',
+    submenu: [
+      { label: 'Import CSV', path: '/import' },
+      { label: 'Import v2 (Rollback)', path: '/import-images', icon: <ShieldCheck size={13} /> },
+    ]
   },
   { 
     icon: <RefreshCw size={20} />, 
     label: 'Réinitialisation', 
-    path: '/reset' 
-  },
-  {
-    icon: <Box size={20} />,
-    label: 'Import',
     submenu: [
-      { label: 'Import CSV', path: '/import' },
-      { label: 'Import v2 (Rollback)', path: '/import-images', icon: <ShieldCheck size={13} /> },
+      { label: 'Réinitialiser', path: '/reset' }
     ]
   }
 ];

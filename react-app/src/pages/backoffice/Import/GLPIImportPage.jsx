@@ -238,7 +238,6 @@ const GLPIImportPage = () => {
       <div className="import-panel">
         <div className="import-panel__header">
           <h2 className="import-panel__title">Fichiers sources</h2>
-          <p className="import-panel__subtitle">Sélectionnez les fichiers CSV ou ZIP pour lancer l'importation.</p>
         </div>
 
         <div className="import-panel__body">
