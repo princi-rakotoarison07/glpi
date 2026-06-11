@@ -43,10 +43,11 @@ const FrontOfficeTicketList = () => {
   const statusOptions = [
     { value: '', label: 'Tous les statuts' },
     { value: 1, label: 'Nouveau', color: '#03a9f4' },
-    { value: 2, label: 'Attribué', color: '#2196f3' },
-    { value: 3, label: 'En attente', color: '#ffc107' },
-    { value: 4, label: 'Résolu', color: '#4caf50' },
-    { value: 5, label: 'Fermé', color: '#9e9e9e' },
+    { value: 2, label: 'En cours (Attribué)', color: '#2196f3' },
+    { value: 3, label: 'En cours (Planifié)', color: '#673ab7' },
+    { value: 4, label: 'En attente', color: '#ffc107' },
+    { value: 5, label: 'Résolu', color: '#4caf50' },
+    { value: 6, label: 'Clos', color: '#9e9e9e' },
   ];
 
   const typeOptions = [
@@ -196,7 +197,7 @@ const FrontOfficeTicketList = () => {
         </div>
 
         {/* Filters Section */}
-        <div className="filters-section" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div className="filters-section" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
             <div className="filter-group">
               <label><Filter size={16} /> Recherche</label>
