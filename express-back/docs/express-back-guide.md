@@ -1,6 +1,6 @@
 # 📦 Guide Express-Back + SQLite
 
-> Stack : **Node.js + Express + better-sqlite3**  
+> Stack : **Node.js + Express + better-sqlite3**
 > Projet : `D:\xampp\htdocs\glpi\express-back`
 
 ---
@@ -30,12 +30,14 @@ express-back/
 ## ⚙️ Configuration
 
 ### `.env`
+
 ```
 PORT=3001
 DB_PATH=./database/glpi.db
 ```
 
 ### `database/db.js`
+
 ```js
 const Database = require('better-sqlite3');
 const path = require('path');
@@ -52,9 +54,11 @@ module.exports = db;
 
 ---
 
+
 ## 🗄️ Gestion de la base SQLite
 
 ### Créer les tables — `database/init.js`
+
 ```js
 const db = require('./db');
 
@@ -77,6 +81,7 @@ node database/init.js
 ---
 
 ### Insérer des données de test — `database/seed.js`
+
 ```js
 const db = require('./db');
 
@@ -107,6 +112,7 @@ node database/seed.js
 ---
 
 ### Réinitialiser la base — `database/reset.js`
+
 ```js
 const db = require('./db');
 
@@ -131,6 +137,7 @@ node database/reset.js
 ---
 
 ### Reset total (supprimer les fichiers DB)
+
 ```powershell
 # 1. Arrêter nodemon (Ctrl+C)
 # 2. Supprimer les fichiers
@@ -147,10 +154,10 @@ npm run dev
 
 ### Fichiers WAL (normaux, ne pas supprimer)
 
-| Fichier | Rôle |
-|---------|------|
-| `glpi.db` | Base principale |
-| `glpi.db-wal` | Écritures en attente (Write-Ahead Log) |
+| Fichier         | Rôle                                         |
+| --------------- | --------------------------------------------- |
+| `glpi.db`     | Base principale                               |
+| `glpi.db-wal` | Écritures en attente (Write-Ahead Log)       |
 | `glpi.db-shm` | Coordination entre connexions (Shared Memory) |
 
 ---
@@ -158,6 +165,7 @@ npm run dev
 ## 🔍 Requêtes SQL SQLite
 
 ### SELECT
+
 ```sql
 -- Tous les enregistrements
 SELECT * FROM items;
@@ -179,12 +187,14 @@ SELECT * FROM items WHERE nom LIKE '%clavier%';
 ```
 
 ### INSERT
+
 ```sql
 INSERT INTO items (nom, description)
 VALUES ('Webcam', 'Logitech C920');
 ```
 
 ### UPDATE
+
 ```sql
 UPDATE items
 SET nom = 'Webcam HD', description = 'Logitech C920 Pro'
@@ -192,6 +202,7 @@ WHERE id = 1;
 ```
 
 ### DELETE
+
 ```sql
 -- Supprimer un enregistrement
 DELETE FROM items WHERE id = 1;
@@ -205,11 +216,13 @@ DELETE FROM sqlite_sequence WHERE name = 'items';
 ```
 
 ### Vérifier les tables existantes
+
 ```sql
 SELECT name FROM sqlite_master WHERE type = 'table';
 ```
 
 ### Voir la structure d'une table
+
 ```sql
 PRAGMA table_info(items);
 ```
@@ -242,12 +255,12 @@ db.prepare('DELETE FROM items WHERE id = ?').run(id);
 
 ## 🚀 Commandes utiles
 
-| Commande | Description |
-|----------|-------------|
-| `npm run dev` | Lancer le serveur avec nodemon |
-| `npm start` | Lancer le serveur sans nodemon |
-| `node database/init.js` | Créer les tables |
-| `node database/seed.js` | Insérer des données de test |
+| Commande                   | Description                      |
+| -------------------------- | -------------------------------- |
+| `npm run dev`            | Lancer le serveur avec nodemon   |
+| `npm start`              | Lancer le serveur sans nodemon   |
+| `node database/init.js`  | Créer les tables                |
+| `node database/seed.js`  | Insérer des données de test    |
 | `node database/reset.js` | Supprimer et recréer les tables |
 
 ---
@@ -277,6 +290,7 @@ proxy: {
 ```
 
 Appel depuis React :
+
 ```js
 axios.get('/api/items') // Vite redirige vers Express
 ```

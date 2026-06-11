@@ -6528,9 +6528,601 @@
 [login] 3:  se connecte depuis l'IP ::1
 2026-06-10 14:00:40 [@TENDRY-V15]
 [login] 3:  se connecte depuis l'IP ::1
+<<<<<<< HEAD
 2026-06-11 05:47:12 [@TENDRY-V15]
 [login] 3: glpi se connecte depuis l'IP ::1
 2026-06-11 05:47:14 [@TENDRY-V15]
 [login] 3:  se connecte depuis l'IP ::1
 2026-06-11 05:47:14 [@TENDRY-V15]
+=======
+2026-06-10 16:34:30 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:34:30 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:01 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:01 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:01 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:01 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:01 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:02 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:02 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:02 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:02 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:02 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:02 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:02 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:02 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:04 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:04 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:04 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:04 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:04 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:04 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:04 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:04 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:05 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:05 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:05 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:05 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:05 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:05 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:05 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:12 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:12 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:12 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:12 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:12 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:12 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:12 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:13 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:13 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:13 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:13 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:13 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:13 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:13 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:13 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:13 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:14 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:14 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:14 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:14 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:14 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:14 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:14 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:14 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:14 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:16 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:16 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:16 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:16 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:21 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:21 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:22 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:22 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:22 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:22 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:22 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:22 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:22 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:22 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:22 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:35:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:22 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:22 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:23 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:26 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:26 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:26 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:26 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:26 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:26 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:26 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:26 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:37:26 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:26 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:26 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:27 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:27 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:27 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:27 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:27 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:27 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:27 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:27 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:27 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:28 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:28 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:28 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:28 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:28 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:28 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:49:28 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:14 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:14 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:14 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:14 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:14 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:14 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:15 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:16 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:16 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:56:16 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 16:59:28 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:01:08 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:01:08 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:01:08 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:01:09 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:01:09 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:01:09 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:01:09 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:01:09 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:01:09 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:01:09 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:01:09 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:01:10 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:01:10 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:01:10 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:01:10 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:01:10 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:02 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:02 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:02 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:02 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:03 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:04 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:04 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:04 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:05 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:05 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:05 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:05 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:05 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:05 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:05 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:06 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:06 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:06 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:06 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:06 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:06 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:06 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:06 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:06 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:16 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:16 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:16 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:16 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:16 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:17 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:17 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:17 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:17 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:17 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:17 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:17 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:17 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:17 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:18 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:02:18 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:03:18 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:03:18 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:03:18 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:03:18 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:03:18 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:03:18 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:11:43 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:11:43 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:11:43 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:11:43 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:11:43 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:11:43 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:24 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:25 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:35 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:35 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:36 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:36 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:36 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:36 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:47 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:47 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:47 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:48 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:48 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:12:48 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:13:06 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:13:06 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:13:06 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:13:06 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:13:06 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-10 17:13:07 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-11 05:44:01 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-11 05:45:13 [@DESKTOP-IGPSA86]
+[login] 3: glpi se connecte depuis l'IP ::1
+2026-06-11 05:45:13 [@DESKTOP-IGPSA86]
+[login] 3:  se connecte depuis l'IP ::1
+2026-06-11 05:45:13 [@DESKTOP-IGPSA86]
+>>>>>>> f17caa38d17531b4dbd2cfaf5a916d6b8066f7e0
 [login] 3:  se connecte depuis l'IP ::1
