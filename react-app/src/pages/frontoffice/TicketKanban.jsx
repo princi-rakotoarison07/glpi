@@ -63,9 +63,9 @@ const TicketKanban = () => {
     selectedUserId: ''
   });
   const [kanbanSettings, setKanbanSettings] = useState({
-    color_nouveau: '#3b82f6',
-    color_inProgress: '#f59e0b',
-    color_termine: '#10b981',
+    color_nouveau: '#899bb8ff',
+    color_inProgress: '#899bb8ff',
+    color_termine: '#899bb8ff',
     label_nouveau: 'Nouveau',
     label_inProgress: 'In progress (assigné)',
     label_termine: 'Terminé'

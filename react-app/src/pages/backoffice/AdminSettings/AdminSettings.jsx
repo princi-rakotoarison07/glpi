@@ -10,8 +10,8 @@ const AdminSettings = () => {
   
   const [colors, setColors] = useState({
     color_nouveau: '#3b82f6',
-    color_inProgress: '#f59e0b',
-    color_termine: '#10b981'
+    color_inProgress: '#3b82f6',
+    color_termine: '#3b82f6'
   });
 
   const [languages, setLanguages] = useState([

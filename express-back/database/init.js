@@ -34,9 +34,9 @@ db.exec(`
 
 // Seed default settings
 const defaultSettings = [
-  { key: 'color_nouveau', value: '#3b82f6' },
-  { key: 'color_inProgress', value: '#f59e0b' },
-  { key: 'color_termine', value: '#10b981' },
+  { key: 'color_nouveau', value: '#dbeafe' },
+  { key: 'color_inProgress', value: '#fef3c7' },
+  { key: 'color_termine', value: '#dcfce7' },
   { key: 'selected_language_id', value: '1' }
 ];
 
