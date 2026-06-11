@@ -196,3 +196,17 @@ CSRF check failed for User ID: 2 at /glpi/install/update.php
   .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
   .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
   .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+2026-06-11 07:23:37 [2@TENDRY-V15]
+CSRF check failed for User ID: 2 at /glpi/front/ticket.form.php
+[2026-06-11 07:23:37] User ID: `2` tried to execute an invalid request on `/front/ticket.form.php`.
+
+  Backtrace :
+  .\src\Session.php:1817                             
+  ...ner\ControllerListener\CheckCsrfListener.php:89 Session::checkCSRF()
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\ControllerListener\CheckCsrfListener->onKernelController()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:169    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()

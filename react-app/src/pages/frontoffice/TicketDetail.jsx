@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Edit, Calendar, Clock, User, Link as LinkIcon } from 'lucide-react';
+import { ArrowLeft, Edit, Calendar, Clock, User, Link as LinkIcon, DollarSign } from 'lucide-react';
 import TicketService from '../../services/Ticket/TicketService';
 import ItemTicketService from '../../services/ItemTicket/ItemTicketService';
 import UserService from '../../services/User/UserService';
+import TicketCostService from '../../services/TicketCost/TicketCostService';
 import FrontOfficeLayout from '../../layouts/FrontOfficeLayout';
 import ComputerService from '../../services/Computer/ComputerService';
 import MonitorService from '../../services/Monitor/MonitorService';
@@ -34,7 +35,10 @@ const TicketDetail = () => {
   const [loading, setLoading] = useState(true);
   const [linkedItems, setLinkedItems] = useState([]);
   const [loadingLinkedItems, setLoadingLinkedItems] = useState(false);
+  const [ticketCosts, setTicketCosts] = useState([]);
+  const [loadingCosts, setLoadingCosts] = useState(false);
   const [userMap, setUserMap] = useState({});
+  const [requesterId, setRequesterId] = useState(null);
   const [relatedData, setRelatedData] = useState({
     manufacturers: {},
     locations: {},
@@ -58,10 +62,11 @@ const TicketDetail = () => {
 
   const statusOptions = [
     { value: 1, label: 'Nouveau', color: '#03a9f4', bg: '#e1f5fe' },
-    { value: 2, label: 'Attribué', color: '#2196f3', bg: '#e3f2fd' },
-    { value: 3, label: 'En attente', color: '#ffc107', bg: '#fffde7' },
-    { value: 4, label: 'Résolu', color: '#4caf50', bg: '#e8f5e9' },
-    { value: 5, label: 'Fermé', color: '#9e9e9e', bg: '#f5f5f5' },
+    { value: 2, label: 'En cours (Attribué)', color: '#2196f3', bg: '#e3f2fd' },
+    { value: 3, label: 'En cours (Planifié)', color: '#673ab7', bg: '#f3e5f5' },
+    { value: 4, label: 'En attente', color: '#ffc107', bg: '#fffde7' },
+    { value: 5, label: 'Résolu', color: '#4caf50', bg: '#e8f5e9' },
+    { value: 6, label: 'Clos', color: '#9e9e9e', bg: '#f5f5f5' },
   ];
 
   const typeOptions = [
@@ -159,17 +164,30 @@ const TicketDetail = () => {
           statesData,
           locationsData,
           manufacturersData,
-          computerModelsData
+          computerModelsData,
+          costsData,
+          relationsData
         ] = await Promise.all([
           TicketService.getTicket(id),
           ItemTicketService.getItemsForTicket(id),
           StateService.getAllStates().catch(() => []),
           LocationService.getAllLocations().catch(() => []),
           ManufacturerService.getAllManufacturers().catch(() => []),
-          ComputerModelService.getAllComputerModels().catch(() => [])
+          ComputerModelService.getAllComputerModels().catch(() => []),
+          TicketCostService.getTicketCosts(id).catch(() => []),
+          TicketService.getTicketUsers().catch(() => [])
         ]);
 
         setTicket(ticketData);
+        setTicketCosts(Array.isArray(costsData) ? costsData : []);
+
+        const rels = Array.isArray(relationsData) ? relationsData : [];
+        const reqLink = rels.find(rel => Number(rel.tickets_id) === Number(id) && Number(rel.type) === 1);
+        if (reqLink) {
+          setRequesterId(reqLink.users_id);
+        } else {
+          setRequesterId(null);
+        }
 
         // Build mapping lookup tables
         const manufacturersMap = {};
@@ -365,8 +383,8 @@ const TicketDetail = () => {
               <div className="info-cell">
                 <User size={16} />
                 <div>
-                  <strong>Destinataire</strong>
-                  <span>{userMap[ticket.users_id_recipient] || `Utilisateur ID: ${ticket.users_id_recipient}`}</span>
+                  <strong>Demandeur</strong>
+                  <span>{userMap[requesterId] || userMap[ticket.users_id_recipient] || (requesterId || ticket.users_id_recipient ? `Utilisateur ID: ${requesterId || ticket.users_id_recipient}` : 'Inconnu')}</span>
                 </div>
               </div>
             </div>
@@ -410,6 +428,127 @@ const TicketDetail = () => {
                 </div>
               ) : (
                 <div className="no-assets">Aucun équipement lié à ce ticket.</div>
+              )}
+            </div>
+
+            <div className="ticket-detail-section costs-section" style={{ marginTop: '24px' }}>
+              <h3>
+                <DollarSign size={18} style={{ marginRight: '8px', display: 'inline-block', verticalAlign: 'middle' }} />
+                Coûts associés
+              </h3>
+              {ticketCosts.length > 0 ? (
+                <div className="linked-items-table-container">
+                  <table className="linked-items-table">
+                    <thead>
+                      <tr>
+                        <th>Nom</th>
+                        <th>Date de début</th>
+                        <th>Date de fin</th>
+                        <th>Budget</th>
+                        <th>Durée</th>
+                        <th>Coût horaire (€)</th>
+                        <th>Coût fixe (€)</th>
+                        <th>Coût matériel (€)</th>
+                        <th>Coût total (€)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {ticketCosts.map((cost) => {
+                        const costFixed = parseFloat(cost.cost_fixed || 0);
+                        const costMaterial = parseFloat(cost.cost_material || 0);
+                        const hourlyRate = parseFloat(cost.cost_time || 0);
+                        const durationHours = (parseInt(cost.actiontime) || 0) / 3600;
+                        const timeCost = durationHours * hourlyRate;
+                        const total = costFixed + costMaterial + timeCost;
+                        
+                        // Formater la durée (secondes -> format lisible)
+                        const formatDuration = (seconds) => {
+                          const secs = parseInt(seconds) || 0;
+                          if (secs === 0) return '0 seconde';
+                          
+                          const h = Math.floor(secs / 3600);
+                          const m = Math.floor((secs % 3600) / 60);
+                          const s = secs % 60;
+                          
+                          let result = [];
+                          if (h > 0) result.push(`${h} h`);
+                          if (m > 0) result.push(`${m} m`);
+                          if (s > 0) result.push(`${s} s`);
+                          
+                          return result.join(' ');
+                        };
+
+                        // Formater la date
+                        const formatCostDate = (dateStr) => {
+                          if (!dateStr) return '';
+                          const date = new Date(dateStr);
+                          return date.toLocaleDateString('fr-FR', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          });
+                        };
+
+                        return (
+                          <tr key={cost.id}>
+                            <td>{cost.name || 'Sans description'}</td>
+                            <td>{formatCostDate(cost.begin_date)}</td>
+                            <td>{formatCostDate(cost.end_date)}</td>
+                            <td>{cost.budget ? parseFloat(cost.budget).toFixed(2) + ' €' : '-'}</td>
+                            <td>{formatDuration(cost.actiontime)}</td>
+                            <td>{hourlyRate.toFixed(2)} €</td>
+                            <td>{costFixed.toFixed(2)} €</td>
+                            <td>{costMaterial.toFixed(2)} €</td>
+                            <td style={{ fontWeight: 'bold' }}>{total.toFixed(2)} €</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                    <tfoot>
+                      <tr style={{ fontWeight: 'bold', borderTop: '2px solid #cbd5e1', backgroundColor: '#f8fafc' }}>
+                        <td colSpan={4}>Total</td>
+                        <td>
+                          {(() => {
+                            const totalSecs = ticketCosts.reduce((sum, c) => sum + (parseInt(c.actiontime) || 0), 0);
+                            if (totalSecs === 0) return '0 s';
+                            const h = Math.floor(totalSecs / 3600);
+                            const m = Math.floor((totalSecs % 3600) / 60);
+                            const s = totalSecs % 60;
+                            const parts = [];
+                            if (h > 0) parts.push(`${h} h`);
+                            if (m > 0) parts.push(`${m} m`);
+                            if (s > 0) parts.push(`${s} s`);
+                            return parts.join(' ');
+                          })()}
+                        </td>
+                        <td>
+                          {ticketCosts.reduce((sum, c) => {
+                            const rate = parseFloat(c.cost_time || 0);
+                            const h = (parseInt(c.actiontime) || 0) / 3600;
+                            return sum + h * rate;
+                          }, 0).toFixed(2)} €
+                        </td>
+                        <td>
+                          {ticketCosts.reduce((sum, c) => sum + parseFloat(c.cost_fixed || 0), 0).toFixed(2)} €
+                        </td>
+                        <td>
+                          {ticketCosts.reduce((sum, c) => sum + parseFloat(c.cost_material || 0), 0).toFixed(2)} €
+                        </td>
+                        <td style={{ color: '#2563eb' }}>
+                          {ticketCosts.reduce((sum, c) => {
+                            const rate = parseFloat(c.cost_time || 0);
+                            const h = (parseInt(c.actiontime) || 0) / 3600;
+                            return sum + h * rate + parseFloat(c.cost_fixed || 0) + parseFloat(c.cost_material || 0);
+                          }, 0).toFixed(2)} €
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              ) : (
+                <div className="no-assets">Aucun coût associé à ce ticket.</div>
               )}
             </div>
           </div>

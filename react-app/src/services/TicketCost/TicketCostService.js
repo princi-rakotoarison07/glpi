@@ -47,6 +47,22 @@ const TicketCostService = {
       console.error(`Error fetching costs for ticket ${ticketId}:`, error);
       throw error;
     }
+  },
+
+  /**
+   * Supprimer un coût associé à un ticket
+   * 
+   * @param {number|string} costId - L'ID du coût à supprimer
+   */
+  deleteTicketCost: async (costId) => {
+    try {
+      await initSession();
+      const response = await api.delete(`/TicketCost/${costId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error deleting ticket cost ${costId}:`, error);
+      throw error;
+    }
   }
 };
 

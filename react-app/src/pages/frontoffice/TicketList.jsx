@@ -14,6 +14,7 @@ const FrontOfficeTicketList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [userMap, setUserMap] = useState({}); // { userId: userName }
+  const [ticketRequesterMap, setTicketRequesterMap] = useState({});
 
   // Filters
   const [statusFilter, setStatusFilter] = useState('');
@@ -105,24 +106,31 @@ const FrontOfficeTicketList = () => {
         params.status = statusFilter;
       }
 
-      const result = await TicketService.getTickets(params);
+      const [result, relations] = await Promise.all([
+        TicketService.getTickets(params),
+        TicketService.getTicketUsers()
+      ]);
       console.log('Result from getTickets:', result);
-      if (result.tickets.length > 0) {
-        console.log('First ticket object:', result.tickets[0]);
-        console.log('All fields in first ticket:', Object.keys(result.tickets[0]));
-      }
+
+      const rels = Array.isArray(relations) ? relations : [];
+      const reqMap = {};
+      rels.forEach(rel => {
+        if (Number(rel.type) === 1) {
+          reqMap[rel.tickets_id] = rel.users_id;
+        }
+      });
+      setTicketRequesterMap(reqMap);
 
       // Apply ALL filters client-side
       let filtered = [...result.tickets];
       
-      // Filter for current user's tickets (using users_id_recipient!)
+      // Filter for current user's tickets (using users_id_recipient OR requester ID!)
       console.log('Current user id:', currentUser?.id);
       if (currentUser?.id) {
-        console.log(`Filtering tickets for user ${currentUser.id}. All tickets users_id_recipient:`, 
-          result.tickets.map(t => ({ id: t.id, users_id_recipient: t.users_id_recipient, name: t.name }))
-        );
         filtered = filtered.filter(t => {
-          const match = Number(t.users_id_recipient) === Number(currentUser.id);
+          const reqId = reqMap[t.id];
+          const match = Number(t.users_id_recipient) === Number(currentUser.id) ||
+                        (reqId && Number(reqId) === Number(currentUser.id));
           if (match) {
             console.log('Match found:', t);
           }
@@ -284,7 +292,7 @@ const FrontOfficeTicketList = () => {
                   <tr>
                     <th>ID</th>
                     <th>Titre</th>
-                    <th>Utilisateur</th>
+                    <th>Demandeur</th>
                     <th>Statut</th>
                     <th>Priorité</th>
                     <th>Type</th>
@@ -298,8 +306,8 @@ const FrontOfficeTicketList = () => {
                       const statusInfo = getStatusInfo(ticket.status);
                       const priorityInfo = getPriorityInfo(ticket.priority);
                       const typeInfo = getTypeInfo(ticket.type);
-                      // Get user name: ticket.User?.name or ticket.users_name or ticket.users_id
-                      const userId = ticket.users_id_recipient;
+                      // Get requester user ID from ticketRequesterMap, fallback to users_id_recipient
+                      const userId = ticketRequesterMap[ticket.id] || ticket.users_id_recipient;
                       const userName = userMap[userId] 
                         || (userId ? `Utilisateur #${userId}` : 'Inconnu');
                       return (

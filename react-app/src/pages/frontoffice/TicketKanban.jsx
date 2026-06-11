@@ -4,6 +4,7 @@ import { Calendar, Ticket, X, Trash2, Plus, Settings } from 'lucide-react';
 import TicketService from '../../services/Ticket/TicketService';
 import ItemTicketService from '../../services/ItemTicket/ItemTicketService';
 import AuthService from '../../services/AuthService';
+import UserService from '../../services/User/UserService';
 import FrontOfficeLayout from '../../layouts/FrontOfficeLayout';
 import ComputerService from '../../services/Computer/ComputerService';
 import MonitorService from '../../services/Monitor/MonitorService';
@@ -30,7 +31,10 @@ import '../../styles/front/TicketKanban.css';
 const TicketKanban = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState([]);
+  const [ticketRequesterMap, setTicketRequesterMap] = useState({});
   const [showQuickAdd, setShowQuickAdd] = useState(false);
+  const currentUser = AuthService.getCurrentUser();
   const [quickTickets, setQuickTickets] = useState([
     {
       tempId: 'init-ticket-1',
@@ -38,6 +42,7 @@ const TicketKanban = () => {
       content: '',
       type: 1,
       priority: 3,
+      users_id_recipient: currentUser?.id || '',
       itemRows: []
     }
   ]);
@@ -60,7 +65,6 @@ const TicketKanban = () => {
   });
 
   const navigate = useNavigate();
-  const currentUser = AuthService.getCurrentUser();
 
   const priorityOptions = [
     { value: 1, label: 'Très basse', color: '#9e9e9e', bg: '#f5f5f5' },
@@ -107,14 +111,31 @@ const TicketKanban = () => {
   const fetchTickets = async () => {
     try {
       setLoading(true);
-      const result = await TicketService.getTickets({ start: 0, limit: 999 });
-      let userTickets = result.tickets || [];
+      const [result, relations] = await Promise.all([
+        TicketService.getTickets({ start: 0, limit: 999 }),
+        TicketService.getTicketUsers()
+      ]);
 
-      // Filter for current user's tickets
+      const userTicketsList = result.tickets || [];
+      const rels = Array.isArray(relations) ? relations : [];
+
+      const reqMap = {};
+      rels.forEach(rel => {
+        if (Number(rel.type) === 1) {
+          reqMap[rel.tickets_id] = rel.users_id;
+        }
+      });
+      setTicketRequesterMap(reqMap);
+
+      let userTickets = [...userTicketsList];
+
+      // Filter for current user's tickets (where current user is creator/recipient OR requester)
       if (currentUser?.id) {
-        userTickets = userTickets.filter(
-          t => Number(t.users_id_recipient) === Number(currentUser.id)
-        );
+        userTickets = userTickets.filter(t => {
+          const reqId = reqMap[t.id];
+          return Number(t.users_id_recipient) === Number(currentUser.id) || 
+                 (reqId && Number(reqId) === Number(currentUser.id));
+        });
       }
 
       setTickets(userTickets);
@@ -188,6 +209,16 @@ const TicketKanban = () => {
     fetchTickets();
     fetchAllItems();
     fetchKanbanSettings();
+
+    const fetchUsers = async () => {
+      try {
+        const u = await UserService.getAllUsers();
+        setUsers(Array.isArray(u) ? u : []);
+      } catch (err) {
+        console.error('Error fetching users:', err);
+      }
+    };
+    fetchUsers();
   }, [currentUser?.id]);
 
   const generateTempId = () => Date.now() + Math.random().toString(36).substr(2, 9);
@@ -200,6 +231,7 @@ const TicketKanban = () => {
         content: '',
         type: 1,
         priority: 3,
+        users_id_recipient: currentUser?.id || '',
         itemRows: []
       }
     ]);
@@ -213,6 +245,7 @@ const TicketKanban = () => {
       content: '',
       type: 1,
       priority: 3,
+      users_id_recipient: currentUser?.id || '',
       itemRows: []
     }]);
   };
@@ -281,6 +314,7 @@ const TicketKanban = () => {
           status: 1, // Nouveau
           priority: Number(t.priority),
           users_id_recipient: currentUser?.id || 0,
+          _users_id_requester: Number(t.users_id_recipient) || currentUser?.id || 0,
         };
 
         const ticketRes = await TicketService.createTicket(payload);
@@ -303,6 +337,7 @@ const TicketKanban = () => {
           content: '',
           type: 1,
           priority: 3,
+          users_id_recipient: currentUser?.id || '',
           itemRows: []
         }
       ]);
@@ -562,6 +597,7 @@ const TicketKanban = () => {
           quickSubmitting={quickSubmitting}
           itemTypeOptions={itemTypeOptions}
           allItemsByType={allItemsByType}
+          users={users}
           handleAddQuickTicket={handleAddQuickTicket}
           handleRemoveQuickTicket={handleRemoveQuickTicket}
           handleQuickTicketChange={handleQuickTicketChange}
@@ -592,6 +628,7 @@ const TicketQuickAddModal = ({
   quickSubmitting,
   itemTypeOptions,
   allItemsByType,
+  users = [],
   handleAddQuickTicket,
   handleRemoveQuickTicket,
   handleQuickTicketChange,
@@ -656,6 +693,23 @@ const TicketQuickAddModal = ({
                     placeholder="Décrivez votre problème en détail..."
                     required
                   ></textarea>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor={`quickRecipient-${ticket.tempId}`}>Demandeur *</label>
+                  <select
+                    id={`quickRecipient-${ticket.tempId}`}
+                    value={ticket.users_id_recipient || ''}
+                    onChange={e => handleQuickTicketChange(ticket.tempId, 'users_id_recipient', e.target.value)}
+                    required
+                  >
+                    <option value="">-- Sélectionner le demandeur --</option>
+                    {users.map(u => (
+                      <option key={u.id} value={u.id}>
+                        {u.realname || u.firstname ? `${u.realname || ''} ${u.firstname || ''}`.trim() : u.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div className="form-row quick-ticket-form-row">

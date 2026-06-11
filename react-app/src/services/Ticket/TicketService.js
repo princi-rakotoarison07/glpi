@@ -67,6 +67,21 @@ const TicketService = {
     }
   },
 
+  getTicketUsers: async () => {
+    try {
+      await initSession();
+      const response = await api.get('/Ticket_User', {
+        params: {
+          range: '0-9999'
+        }
+      });
+      return response.data || [];
+    } catch (error) {
+      console.error('Error fetching Ticket_User relations:', error);
+      return [];
+    }
+  },
+
   // Création d'un ticket (table glpi_tickets)
   createTicket: async (ticketData) => {
     try {

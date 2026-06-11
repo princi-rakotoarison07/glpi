@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, DollarSign } from 'lucide-react';
 import TicketService from '../../services/Ticket/TicketService';
 import ItemTicketService from '../../services/ItemTicket/ItemTicketService';
+import TicketCostService from '../../services/TicketCost/TicketCostService';
 import FrontOfficeLayout from '../../layouts/FrontOfficeLayout';
 import ComputerService from '../../services/Computer/ComputerService';
 import MonitorService from '../../services/Monitor/MonitorService';
@@ -44,6 +45,10 @@ const TicketUpdate = () => {
   const [originalItems, setOriginalItems] = useState([]);
   const [itemRows, setItemRows] = useState([]);
   const [allItemsByType, setAllItemsByType] = useState({});
+  const [ticketCosts, setTicketCosts] = useState([]);
+  const [originalCosts, setOriginalCosts] = useState([]);
+  const [costRows, setCostRows] = useState([]);
+  const [costsToDelete, setCostsToDelete] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetchingItems, setFetchingItems] = useState(true);
   
@@ -183,6 +188,10 @@ const TicketUpdate = () => {
       }));
       setLinkedItems(mappedItems);
       setOriginalItems(mappedItems);
+
+      const costs = await TicketCostService.getTicketCosts(id);
+      setTicketCosts(costs || []);
+      setOriginalCosts(costs || []);
     } catch (error) {
       console.error('Error fetching ticket:', error);
     } finally {
@@ -252,6 +261,32 @@ const TicketUpdate = () => {
     setLinkedItems(prev => prev.filter((_, i) => i !== index));
   };
 
+  const handleAddCostRow = () => {
+    setCostRows(prev => [...prev, {
+      tempId: generateTempId(),
+      name: '',
+      cost_fixed: '',
+      cost_material: '',
+      cost_time: '',
+      duration_hours: '',
+    }]);
+  };
+
+  const handleCostRowChange = (tempId, field, value) => {
+    setCostRows(prev => prev.map(row => 
+      row.tempId === tempId ? { ...row, [field]: value } : row
+    ));
+  };
+
+  const handleRemoveCostRow = (tempId) => {
+    setCostRows(prev => prev.filter(row => row.tempId !== tempId));
+  };
+
+  const handleRemoveExistingCost = (costId) => {
+    setTicketCosts(prev => prev.filter(c => c.id !== costId));
+    setCostsToDelete(prev => [...prev, costId]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -307,6 +342,28 @@ const TicketUpdate = () => {
 
       for (const item of newItemsToLink) {
         await ItemTicketService.linkItemToTicket(id, item.id, item.itemType);
+      }
+
+      // 4. Delete removed costs
+      for (const costId of costsToDelete) {
+        await TicketCostService.deleteTicketCost(costId);
+      }
+
+      // 5. Add new costs from costRows
+      for (const row of costRows) {
+        if (row.name || row.cost_fixed || row.cost_material || row.cost_time || row.duration_hours) {
+          const actiontime = Math.round((parseFloat(row.duration_hours) || 0) * 3600);
+          const nowStr = new Date().toISOString().slice(0, 19).replace('T', ' ');
+          await TicketCostService.addCostToTicket(id, {
+            name: row.name || 'Coût ajouté via frontoffice',
+            cost_fixed: parseFloat(row.cost_fixed) || 0,
+            cost_material: parseFloat(row.cost_material) || 0,
+            cost_time: parseFloat(row.cost_time) || 0,
+            actiontime: actiontime,
+            begin_date: nowStr,
+            end_date: nowStr
+          });
+        }
       }
 
       navigate(`/frontoffice/tickets/${id}`);
@@ -498,6 +555,185 @@ const TicketUpdate = () => {
                 >
                   <Plus size={16} />
                   Ajouter une ligne
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="form-section">
+            <h2>
+              <DollarSign size={20} style={{ marginRight: '8px', display: 'inline-block', verticalAlign: 'middle' }} />
+              Coûts du ticket
+            </h2>
+
+            <div className="linked-items-section">
+              <h3>Coûts existants ({ticketCosts.length})</h3>
+              {ticketCosts.length > 0 ? (
+                <div className="added-items-table-container">
+                  <table className="added-items-table">
+                    <thead>
+                      <tr>
+                        <th>Nom</th>
+                        <th>Coût fixe (€)</th>
+                        <th>Coût matériel (€)</th>
+                        <th>Coût horaire (€)</th>
+                        <th>Durée</th>
+                        <th>Coût total (€)</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {ticketCosts.map((cost) => {
+                        const costFixed = parseFloat(cost.cost_fixed || 0);
+                        const costMaterial = parseFloat(cost.cost_material || 0);
+                        const hourlyRate = parseFloat(cost.cost_time || 0);
+                        const durationHours = (parseInt(cost.actiontime) || 0) / 3600;
+                        const timeCost = durationHours * hourlyRate;
+                        const total = costFixed + costMaterial + timeCost;
+
+                        const formatDuration = (seconds) => {
+                          const secs = parseInt(seconds) || 0;
+                          if (secs === 0) return '0 s';
+                          const h = Math.floor(secs / 3600);
+                          const m = Math.floor((secs % 3600) / 60);
+                          const s = secs % 60;
+                          const parts = [];
+                          if (h > 0) parts.push(`${h} h`);
+                          if (m > 0) parts.push(`${m} m`);
+                          if (s > 0) parts.push(`${s} s`);
+                          return parts.join(' ');
+                        };
+
+                        return (
+                          <tr key={cost.id} className="added-item-row">
+                            <td>{cost.name || 'Sans description'}</td>
+                            <td>{costFixed.toFixed(2)} €</td>
+                            <td>{costMaterial.toFixed(2)} €</td>
+                            <td>{hourlyRate.toFixed(2)} €</td>
+                            <td>{formatDuration(cost.actiontime)}</td>
+                            <td style={{ fontWeight: 'bold' }}>{total.toFixed(2)} €</td>
+                            <td>
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveExistingCost(cost.id)}
+                                className="remove-item-btn"
+                                title="Supprimer ce coût"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="empty-state small">Aucun coût enregistré</div>
+              )}
+
+              <h3>Saisir de nouveaux coûts</h3>
+              <div className="costs-rows-container" style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px' }}>
+                {costRows.map((row) => (
+                  <div key={row.tempId} className="cost-row-edit-card" style={{
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '8px',
+                    padding: '16px',
+                    backgroundColor: '#f8fafc',
+                    position: 'relative'
+                  }}>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveCostRow(row.tempId)}
+                      style={{
+                        position: 'absolute',
+                        top: '12px',
+                        right: '12px',
+                        background: 'none',
+                        border: 'none',
+                        color: '#ef4444',
+                        cursor: 'pointer'
+                      }}
+                      title="Supprimer la ligne"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px', marginRight: '32px' }}>
+                      <div className="form-group" style={{ margin: 0 }}>
+                        <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748b' }}>Nom / Description</label>
+                        <input
+                          type="text"
+                          value={row.name}
+                          onChange={(e) => handleCostRowChange(row.tempId, 'name', e.target.value)}
+                          placeholder="ex: Main d'œuvre"
+                          style={{ padding: '8px', fontSize: '13px' }}
+                        />
+                      </div>
+                      
+                      <div className="form-group" style={{ margin: 0 }}>
+                        <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748b' }}>Coût fixe (€)</label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          value={row.cost_fixed}
+                          onChange={(e) => handleCostRowChange(row.tempId, 'cost_fixed', e.target.value)}
+                          placeholder="0.00"
+                          style={{ padding: '8px', fontSize: '13px' }}
+                        />
+                      </div>
+
+                      <div className="form-group" style={{ margin: 0 }}>
+                        <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748b' }}>Coût matériel (€)</label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          value={row.cost_material}
+                          onChange={(e) => handleCostRowChange(row.tempId, 'cost_material', e.target.value)}
+                          placeholder="0.00"
+                          style={{ padding: '8px', fontSize: '13px' }}
+                        />
+                      </div>
+
+                      <div className="form-group" style={{ margin: 0 }}>
+                        <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748b' }}>Coût horaire (€)</label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          value={row.cost_time}
+                          onChange={(e) => handleCostRowChange(row.tempId, 'cost_time', e.target.value)}
+                          placeholder="0.00"
+                          style={{ padding: '8px', fontSize: '13px' }}
+                        />
+                      </div>
+
+                      <div className="form-group" style={{ margin: 0 }}>
+                        <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748b' }}>Durée (heures)</label>
+                        <input
+                          type="number"
+                          step="0.1"
+                          min="0"
+                          value={row.duration_hours}
+                          onChange={(e) => handleCostRowChange(row.tempId, 'duration_hours', e.target.value)}
+                          placeholder="1.5"
+                          style={{ padding: '8px', fontSize: '13px' }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                <button
+                  type="button"
+                  onClick={handleAddCostRow}
+                  className="add-row-btn"
+                  style={{ alignSelf: 'flex-start' }}
+                >
+                  <Plus size={16} />
+                  Ajouter un coût
                 </button>
               </div>
             </div>
