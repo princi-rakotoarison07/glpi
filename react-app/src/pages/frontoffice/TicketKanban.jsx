@@ -59,6 +59,13 @@ const TicketKanban = () => {
     date: new Date().toISOString().split('T')[0],
     superCost: ''
   });
+  const [reopenModalData, setReopenModalData] = useState({
+    isOpen: false,
+    ticketId: null,
+    targetColumnId: null,
+    showPercentage: false,
+    percentage: ''
+  });
   const [assignModalData, setAssignModalData] = useState({
     isOpen: false,
     ticketId: null,
@@ -382,12 +389,63 @@ const TicketKanban = () => {
     e.dataTransfer.setData('fromColumn', fromColumnId);
   };
 
+  const handleCancelSuperCost = async (ticketId, targetColumnId) => {
+    try {
+      setLoading(true);
+      await SuperCostService.deleteSuperCost(ticketId);
+      setReopenModalData(prev => ({ ...prev, isOpen: false }));
+      if (targetColumnId === 'inProgress') {
+        await TicketService.updateTicket(ticketId, { status: 2 });
+        await fetchTickets();
+        setAssignModalData({ isOpen: true, ticketId: ticketId, selectedUserId: '' });
+      } else {
+        await TicketService.updateTicket(ticketId, { status: 1 });
+        await fetchTickets();
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleReopenTicket = async (ticketId, percentage, targetColumnId) => {
+    try {
+      setLoading(true);
+      if (percentage) {
+        await SuperCostService.saveReopenCost(ticketId, parseFloat(percentage));
+      }
+      setReopenModalData(prev => ({ ...prev, isOpen: false }));
+      if (targetColumnId === 'inProgress') {
+        await TicketService.updateTicket(ticketId, { status: 2 });
+        await fetchTickets();
+        setAssignModalData({ isOpen: true, ticketId: ticketId, selectedUserId: '' });
+      } else {
+        await TicketService.updateTicket(ticketId, { status: 1 });
+        await fetchTickets();
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleDrop = async (e, targetColumnId) => {
     e.preventDefault();
     const ticketId = e.dataTransfer.getData('text/plain');
     const fromColumnId = e.dataTransfer.getData('fromColumn');
 
     if (!ticketId || fromColumnId === targetColumnId) return;
+
+    if (fromColumnId === 'termine') {
+      setReopenModalData({
+        isOpen: true,
+        ticketId: ticketId,
+        targetColumnId: targetColumnId,
+        showPercentage: false,
+        percentage: ''
+      });
+      return;
+    }
 
     if (targetColumnId === 'termine') {
       setCloseModalData({
@@ -691,6 +749,15 @@ const TicketKanban = () => {
             ))}
           </div>
         )}
+
+        <TicketReopenModal
+          isOpen={reopenModalData.isOpen}
+          onClose={() => setReopenModalData(prev => ({ ...prev, isOpen: false }))}
+          data={reopenModalData}
+          setData={setReopenModalData}
+          onCancelSuperCost={handleCancelSuperCost}
+          onReopenTicket={handleReopenTicket}
+        />
 
         {/* QUICK ADD MODAL */}
         <TicketQuickAddModal
@@ -1195,6 +1262,42 @@ const TicketAssignModal = ({
             Fermer
           </button>
         </div>
+    </div>
+    </div>
+  );
+};
+
+const TicketReopenModal = ({ isOpen, onClose, data, setData, onCancelSuperCost, onReopenTicket }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div>
+      <div>
+        <h2>Ticket #{data.ticketId}</h2>
+        <button type="button" onClick={onClose}>
+          X
+        </button>
+        <div>
+          <button type="button" onClick={() => onCancelSuperCost(data.ticketId, data.targetColumnId)}>
+            Annulation
+          </button>
+          <button type="button" onClick={() => setData(prev => ({ ...prev, showPercentage: true }))}>
+            Réouverture
+          </button>
+        </div>
+        {data.showPercentage && (
+          <div>
+            <label>Pourcentage</label>
+            <input
+              type="number"
+              value={data.percentage || ''}
+              onChange={e => setData(prev => ({ ...prev, percentage: e.target.value }))}
+            />
+            <button type="button" onClick={() => onReopenTicket(data.ticketId, data.percentage, data.targetColumnId)}>
+              Valider
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

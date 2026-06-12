@@ -31,6 +31,30 @@ const SuperCostService = {
       console.error('Error getting super cost:', error);
       throw error;
     }
+  },
+  deleteSuperCost: async (ticket_id) => {
+    try {
+      const response = await axios.delete(`${SUPERCOST_API_URL}/${ticket_id}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  saveReopenCost: async (ticket_id, percentage) => {
+    try {
+      const response = await axios.post(`${SUPERCOST_API_URL}/reopen`, { ticket_id, percentage });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getAllReopenCosts: async () => {
+    try {
+      const response = await axios.get(`${SUPERCOST_API_URL}/reopen/all`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
 };
 

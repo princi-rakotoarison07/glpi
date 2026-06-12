@@ -1,5 +1,7 @@
 # Documentation Technique : API Backend Express (SQLite Settings)
 
+node database/init.js
+
 Ce document détaille l'architecture, le modèle de données, les routes et la logique métier du serveur backend développé en Node.js/Express (`express-back`). Ce service assure la persistance locale de la configuration du Kanban (couleurs et libellés traduits en Français et Malgache) à l'aide d'une base de données relationnelle SQLite.
 
 ---

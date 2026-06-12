@@ -59,6 +59,19 @@ const TicketCostRepartition = () => {
           superCostPerTicket[Number(sc.ticket_id)] = parseFloat(sc.super_cost || 0);
         });
 
+        // 3.5 Fetch all reopen costs from Express backend
+        let allReopenCosts = [];
+        try {
+          allReopenCosts = await SuperCostService.getAllReopenCosts();
+        } catch (err) {
+          console.warn('Erreur lors de la récupération des Reopen Costs', err);
+        }
+
+        const reopenCostPerTicket = {};
+        allReopenCosts.forEach(rc => {
+          reopenCostPerTicket[Number(rc.ticket_id)] = parseFloat(rc.reopen_cost || 0);
+        });
+
         // 4. Calculate total costs per element
         const elementsMap = {};
 
@@ -77,7 +90,8 @@ const TicketCostRepartition = () => {
               name: link.item?.name || `Élément #${itemId}`,
               coutFixe: 0,
               coutTotal: 0,
-              superCost: 0
+              superCost: 0,
+              reopenCost: 0
             };
           }
 
@@ -91,6 +105,10 @@ const TicketCostRepartition = () => {
           
           if (superCostPerTicket[tId]) {
             elementsMap[elementKey].superCost += (superCostPerTicket[tId] / numElementsInThisTicket);
+          }
+          
+          if (reopenCostPerTicket[tId]) {
+            elementsMap[elementKey].reopenCost += (reopenCostPerTicket[tId] / numElementsInThisTicket);
           }
         });
 
@@ -142,9 +160,10 @@ const TicketCostRepartition = () => {
                   <tr>
                     <th>Type</th>
                     <th>Nom de l'élément</th>
-                    <th>Coût Total</th>
+                    <th>Coût Fixe Total(GLPI)</th>
+                    <th>Coût Total(GLPI)</th>
                     <th>Super Cost Total</th>
-                    <th>Total (Coût + Super Cost)</th>
+                    <th>Coût Réouverture</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -152,6 +171,11 @@ const TicketCostRepartition = () => {
                     <tr key={index}>
                       <td><span className="item-type">{el.type}</span></td>
                       <td className="item-id">{el.name}</td>
+                      <td>
+                        <span className="cost-badge blue">
+                          {el.coutFixe > 0 ? el.coutFixe.toFixed(2) : '-'}
+                        </span>
+                      </td>
                       <td>
                         <span className="cost-badge green">
                           {el.coutTotal > 0 ? el.coutTotal.toFixed(2) : '-'}
@@ -163,8 +187,8 @@ const TicketCostRepartition = () => {
                         </span>
                       </td>
                       <td>
-                        <span className="cost-badge" style={{ backgroundColor: '#fff7ed', color: '#ea580c', border: '1px solid #ffedd5' }}>
-                          {(el.coutTotal + el.superCost) > 0 ? (el.coutTotal + el.superCost).toFixed(2) : '-'}
+                        <span className="cost-badge" style={{ backgroundColor: '#fdf4ff', color: '#c026d3', border: '1px solid #f0abfc' }}>
+                          {el.reopenCost > 0 ? el.reopenCost.toFixed(2) : '-'}
                         </span>
                       </td>
                     </tr>
