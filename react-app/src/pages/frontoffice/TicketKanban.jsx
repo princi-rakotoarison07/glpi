@@ -436,7 +436,7 @@ const TicketKanban = () => {
 
     if (!ticketId || fromColumnId === targetColumnId) return;
 
-    if (fromColumnId === 'termine') {
+    if (fromColumnId === 'termine' && targetColumnId === 'inProgress') {
       setReopenModalData({
         isOpen: true,
         ticketId: ticketId,
@@ -1271,33 +1271,63 @@ const TicketReopenModal = ({ isOpen, onClose, data, setData, onCancelSuperCost, 
   if (!isOpen) return null;
 
   return (
-    <div>
-      <div>
-        <h2>Ticket #{data.ticketId}</h2>
-        <button type="button" onClick={onClose}>
-          X
-        </button>
-        <div>
-          <button type="button" onClick={() => onCancelSuperCost(data.ticketId, data.targetColumnId)}>
-            Annulation
-          </button>
-          <button type="button" onClick={() => setData(prev => ({ ...prev, showPercentage: true }))}>
-            Réouverture
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-container" onClick={e => e.stopPropagation()} style={{ maxWidth: '450px' }}>
+        <div className="modal-header">
+          <h2>Réouverture du ticket #{data.ticketId}</h2>
+          <button className="close-btn" onClick={onClose}>
+            <X size={20} />
           </button>
         </div>
-        {data.showPercentage && (
-          <div>
-            <label>Pourcentage</label>
-            <input
-              type="number"
-              value={data.percentage || ''}
-              onChange={e => setData(prev => ({ ...prev, percentage: e.target.value }))}
-            />
-            <button type="button" onClick={() => onReopenTicket(data.ticketId, data.percentage, data.targetColumnId)}>
-              Valider
+        
+        <div className="modal-body">
+          <p style={{ marginBottom: '20px', color: '#64748b' }}>
+            Choisissez l'action à effectuer pour la réouverture de ce ticket.
+          </p>
+          
+          <div style={{ display: 'flex', gap: '12px', marginBottom: data.showPercentage ? '20px' : '0' }}>
+            <button 
+              type="button" 
+              className="cancel-modal-btn" 
+              style={{ flex: 1, backgroundColor: '#fee2e2', color: '#ef4444', border: 'none', margin: 0 }}
+              onClick={() => onCancelSuperCost(data.ticketId, data.targetColumnId)}
+            >
+              Annulation
+            </button>
+            <button 
+              type="button" 
+              className="edit-nav-btn" 
+              style={{ flex: 1, margin: 0 }}
+              onClick={() => setData(prev => ({ ...prev, showPercentage: true }))}
+            >
+              Réouverture
             </button>
           </div>
-        )}
+
+          {data.showPercentage && (
+            <div className="form-group" style={{ marginTop: '16px', padding: '16px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#334155' }}>Pourcentage du coût (%)</label>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <input
+                  type="number"
+                  style={{ flex: 1, padding: '10px', borderRadius: '6px', border: '1px solid #cbd5e1' }}
+                  value={data.percentage || ''}
+                  onChange={e => setData(prev => ({ ...prev, percentage: e.target.value }))}
+                  placeholder="Ex: 50"
+                  min="0"
+                />
+                <button 
+                  type="button" 
+                  className="edit-nav-btn"
+                  style={{ backgroundColor: '#10b981', margin: 0 }}
+                  onClick={() => onReopenTicket(data.ticketId, data.percentage, data.targetColumnId)}
+                >
+                  Valider
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
