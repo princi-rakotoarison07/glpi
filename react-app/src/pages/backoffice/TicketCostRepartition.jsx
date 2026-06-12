@@ -142,9 +142,9 @@ const TicketCostRepartition = () => {
                   <tr>
                     <th>Type</th>
                     <th>Nom de l'élément</th>
-                    <th>Coût Fixe Total</th>
                     <th>Coût Total</th>
                     <th>Super Cost Total</th>
+                    <th>Total (Coût + Super Cost)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -153,11 +153,6 @@ const TicketCostRepartition = () => {
                       <td><span className="item-type">{el.type}</span></td>
                       <td className="item-id">{el.name}</td>
                       <td>
-                        <span className="cost-badge blue">
-                          {el.coutFixe > 0 ? el.coutFixe.toFixed(2) : '-'}
-                        </span>
-                      </td>
-                      <td>
                         <span className="cost-badge green">
                           {el.coutTotal > 0 ? el.coutTotal.toFixed(2) : '-'}
                         </span>
@@ -165,6 +160,11 @@ const TicketCostRepartition = () => {
                       <td>
                         <span className="cost-badge purple">
                           {el.superCost > 0 ? el.superCost.toFixed(2) : '-'}
+                        </span>
+                      </td>
+                      <td>
+                        <span className="cost-badge" style={{ backgroundColor: '#fff7ed', color: '#ea580c', border: '1px solid #ffedd5' }}>
+                          {(el.coutTotal + el.superCost) > 0 ? (el.coutTotal + el.superCost).toFixed(2) : '-'}
                         </span>
                       </td>
                     </tr>
