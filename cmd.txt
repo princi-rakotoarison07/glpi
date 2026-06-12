@@ -1,1 +1,1 @@
-Get-ChildItem D:\Mahery\S6\Evaluation\2 -Recurse -File | Where-Object {$_.LastWriteTime -gt (Get-Date).AddMinutes(-30)} | Sort-Object LastWriteTime -Descending | select-Object LastWriteTime, FullName
+Get-ChildItem D:\xampp\htdocs\glpi -Recurse -File | Where-Object {$_.LastWriteTime -gt (Get-Date).AddMinutes(-30)} | Sort-Object LastWriteTime -Descending | select-Object LastWriteTime, FullName
