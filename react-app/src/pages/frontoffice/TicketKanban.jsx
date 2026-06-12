@@ -25,6 +25,7 @@ import DatabaseInstanceService from '../../services/DatabaseInstance/DatabaseIns
 import DCRoomService from '../../services/DCRoom/DCRoomService';
 import { getTicketItemTypes } from '../../config/itemTypes';
 import SettingsService from '../../services/Settings/SettingsService';
+import SuperCostService from '../../services/SuperCost/SuperCostService';
 import '../../styles/FrontOffice.css';
 import '../../styles/front/TicketKanban.css';
 
@@ -55,7 +56,8 @@ const TicketKanban = () => {
     isOpen: false,
     ticketId: null,
     comment: '',
-    date: new Date().toISOString().split('T')[0]
+    date: new Date().toISOString().split('T')[0],
+    superCost: ''
   });
   const [assignModalData, setAssignModalData] = useState({
     isOpen: false,
@@ -392,7 +394,8 @@ const TicketKanban = () => {
         isOpen: true,
         ticketId: ticketId,
         comment: '',
-        date: new Date().toISOString().split('T')[0]
+        date: new Date().toISOString().split('T')[0],
+        superCost: ''
       });
     } else if (targetColumnId === 'inProgress') {
       // Set status to 2 immediately and open the assign modal
@@ -427,7 +430,7 @@ const TicketKanban = () => {
 
   const handleConfirmClose = async (e) => {
     if (e) e.preventDefault();
-    const { ticketId, comment, date } = closeModalData;
+    const { ticketId, comment, date, superCost } = closeModalData;
 
     if (!ticketId) return;
 
@@ -448,11 +451,16 @@ const TicketKanban = () => {
         content: updatedContent
       });
 
+      if (superCost !== '') {
+        await SuperCostService.saveSuperCost(ticketId, parseFloat(superCost));
+      }
+
       setCloseModalData({
         isOpen: false,
         ticketId: null,
         comment: '',
-        date: ''
+        date: '',
+        superCost: ''
       });
 
       await fetchTickets();
@@ -970,6 +978,18 @@ const TicketCloseModal = ({ isOpen, onClose, onSubmit, data, setData }) => {
                 value={data.date}
                 onChange={e => setData(prev => ({ ...prev, date: e.target.value }))}
                 required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="superCost">Super Coût (optionnel)</label>
+              <input
+                type="number"
+                step="0.01"
+                id="superCost"
+                value={data.superCost || ''}
+                onChange={e => setData(prev => ({ ...prev, superCost: e.target.value }))}
+                placeholder="Ex: 150.50"
               />
             </div>
 

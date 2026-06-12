@@ -28,6 +28,24 @@ const TicketCostService = {
   },
 
   /**
+   * Récupérer tous les coûts de tous les tickets
+   */
+  getAllCosts: async () => {
+    try {
+      await initSession();
+      const response = await api.get('/TicketCost', {
+        params: {
+          range: '0-9999'
+        }
+      });
+      return response.data || [];
+    } catch (error) {
+      console.error('Error fetching all ticket costs:', error);
+      return [];
+    }
+  },
+
+  /**
    * Récupérer les coûts associés à un ticket
    * Note : searchText fait un match partiel (ticket 1 matche aussi 10, 11, 12...)
    * donc on récupère tout et on filtre côté client par tickets_id exact.

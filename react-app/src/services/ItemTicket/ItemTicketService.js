@@ -28,6 +28,23 @@ const ItemTicketService = {
     }
   },
 
+  // Récupérer tous les liens Item_Ticket
+  getAllItemTickets: async () => {
+    try {
+      await initSession();
+      const response = await api.get(`/Item_Ticket`, {
+        params: {
+          expand: ['item', 'item.State', 'item.Location'],
+          range: '0-9999'
+        }
+      });
+      return response.data || [];
+    } catch (error) {
+      console.error('Error fetching all Item_Ticket links:', error);
+      return [];
+    }
+  },
+
   // Récupérer tous les items liés à un ticket
   getItemsForTicket: async (ticketId) => {
     try {

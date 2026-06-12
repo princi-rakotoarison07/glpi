@@ -1,0 +1,182 @@
+import { useState, useEffect } from 'react';
+import TicketCostService from '../../services/TicketCost/TicketCostService';
+import ItemTicketService from '../../services/ItemTicket/ItemTicketService';
+import SuperCostService from '../../services/SuperCost/SuperCostService';
+import { Calculator, LayoutList } from 'lucide-react';
+import '../../styles/TicketCostRepartition.css';
+
+const TicketCostRepartition = () => {
+  const [elements, setElements] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        setLoading(true);
+
+        // 1. Fetch all item-ticket relations
+        const itemTickets = await ItemTicketService.getAllItemTickets();
+        
+        // Count elements per ticket to divide costs equally
+        const elementsCountPerTicket = {};
+        itemTickets.forEach(link => {
+          const tId = Number(link.tickets_id);
+          if (!elementsCountPerTicket[tId]) {
+            elementsCountPerTicket[tId] = 0;
+          }
+          elementsCountPerTicket[tId]++;
+        });
+
+        // 2. Fetch all regular costs from GLPI
+        const allCosts = await TicketCostService.getAllCosts();
+        const costPerTicket = {};
+        allCosts.forEach(cost => {
+          const tId = Number(cost.tickets_id);
+          const costFixed = parseFloat(cost.cost_fixed || 0);
+          const costMaterial = parseFloat(cost.cost_material || 0);
+          const hourlyRate = parseFloat(cost.cost_time || 0);
+          const durationHours = (parseInt(cost.actiontime) || 0) / 3600;
+          const timeCost = durationHours * hourlyRate;
+          const total = costFixed + costMaterial + timeCost;
+
+          if (!costPerTicket[tId]) {
+            costPerTicket[tId] = { coutFixe: 0, coutTotal: 0 };
+          }
+          costPerTicket[tId].coutFixe += costFixed;
+          costPerTicket[tId].coutTotal += total;
+        });
+
+        // 3. Fetch all super costs from Express backend
+        let allSuperCosts = [];
+        try {
+          allSuperCosts = await SuperCostService.getAllSuperCosts();
+        } catch (err) {
+          console.warn('Erreur lors de la récupération des Super Costs', err);
+        }
+
+        const superCostPerTicket = {};
+        allSuperCosts.forEach(sc => {
+          superCostPerTicket[Number(sc.ticket_id)] = parseFloat(sc.super_cost || 0);
+        });
+
+        // 4. Calculate total costs per element
+        const elementsMap = {};
+
+        itemTickets.forEach(link => {
+          const tId = Number(link.tickets_id);
+          const itemId = link.items_id;
+          const itemType = link.itemtype;
+          
+          // Unique key for the element
+          const elementKey = `${itemType}_${itemId}`;
+          
+          if (!elementsMap[elementKey]) {
+            elementsMap[elementKey] = {
+              id: itemId,
+              type: itemType,
+              name: link.item?.name || `Élément #${itemId}`,
+              coutFixe: 0,
+              coutTotal: 0,
+              superCost: 0
+            };
+          }
+
+          const numElementsInThisTicket = elementsCountPerTicket[tId] || 1;
+          
+          // Add proportion of ticket costs
+          if (costPerTicket[tId]) {
+            elementsMap[elementKey].coutFixe += (costPerTicket[tId].coutFixe / numElementsInThisTicket);
+            elementsMap[elementKey].coutTotal += (costPerTicket[tId].coutTotal / numElementsInThisTicket);
+          }
+          
+          if (superCostPerTicket[tId]) {
+            elementsMap[elementKey].superCost += (superCostPerTicket[tId] / numElementsInThisTicket);
+          }
+        });
+
+        // Convert map to array and sort by type then name
+        const elementsArray = Object.values(elementsMap).sort((a, b) => {
+          if (a.type !== b.type) return a.type.localeCompare(b.type);
+          return a.name.localeCompare(b.name);
+        });
+
+        setElements(elementsArray);
+
+      } catch (error) {
+        console.error('Erreur lors du calcul de la répartition globale:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllData();
+  }, []);
+
+  return (
+    <div className="cost-repartition-container">
+      <div className="repartition-header">
+        <h1 className="repartition-title">
+          <Calculator size={32} className="title-icon" />
+          Répartition Globale des Coûts par Élément
+        </h1>
+        <p style={{ color: '#64748b', marginTop: '12px', fontSize: '1rem' }}>
+          Ce tableau liste tous les éléments liés à des tickets et affiche la somme de leurs coûts proportionnels (coût du ticket divisé par le nombre d'éléments liés).
+        </p>
+      </div>
+
+      <div className="repartition-card">
+        {loading ? (
+          <div className="repartition-loading">Calcul de la répartition globale des coûts...</div>
+        ) : elements.length === 0 ? (
+          <div className="repartition-empty">
+            <LayoutList size={48} className="repartition-empty-icon" />
+            <h3>Aucun élément lié trouvé</h3>
+            <p>Il semble qu'aucun ticket avec des coûts ne possède d'éléments liés dans le système.</p>
+          </div>
+        ) : (
+          <>
+            <h2 className="repartition-section-title">Liste des éléments et leurs coûts cumulés</h2>
+            <div className="repartition-table-container">
+              <table className="repartition-table">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Nom de l'élément</th>
+                    <th>Coût Fixe Total</th>
+                    <th>Coût Total</th>
+                    <th>Super Cost Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {elements.map((el, index) => (
+                    <tr key={index}>
+                      <td><span className="item-type">{el.type}</span></td>
+                      <td className="item-id">{el.name}</td>
+                      <td>
+                        <span className="cost-badge blue">
+                          {el.coutFixe > 0 ? el.coutFixe.toFixed(2) : '-'}
+                        </span>
+                      </td>
+                      <td>
+                        <span className="cost-badge green">
+                          {el.coutTotal > 0 ? el.coutTotal.toFixed(2) : '-'}
+                        </span>
+                      </td>
+                      <td>
+                        <span className="cost-badge purple">
+                          {el.superCost > 0 ? el.superCost.toFixed(2) : '-'}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default TicketCostRepartition;

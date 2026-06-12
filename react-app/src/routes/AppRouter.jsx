@@ -55,6 +55,7 @@ import TicketCreate from '../pages/frontoffice/TicketCreate';
 import TicketUpdate from '../pages/frontoffice/TicketUpdate';
 import FrontOfficeTicketDetail from '../pages/frontoffice/TicketDetail';
 import AdminSettings from '../pages/backoffice/AdminSettings/AdminSettings';
+import TicketCostRepartition from '../pages/backoffice/TicketCostRepartition';
 
 const AppRouter = () => {
   return (
@@ -123,6 +124,7 @@ const AppRouter = () => {
             <Route path="/reset" element={<Reset />} />
             <Route path="/tickets" element={<TicketList />} />
             <Route path="/tickets/:id" element={<TicketDetail />} />
+            <Route path="/tickets/costs" element={<TicketCostRepartition />} />
             <Route path="/import" element={<GLPIImportPage />} />
             <Route path="/import-images" element={<GLPIImageImportPageV2 />} />
             <Route path="/admin" element={<AdminSettings />} />

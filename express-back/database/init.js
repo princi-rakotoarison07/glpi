@@ -4,6 +4,7 @@ const db = require('./db');
 db.exec(`DROP TABLE IF EXISTS settings_langue;`);
 db.exec(`DROP TABLE IF EXISTS langue;`);
 db.exec(`DROP TABLE IF EXISTS settings;`);
+db.exec(`DROP TABLE IF EXISTS ticket_super_cost;`);
 
 // Create settings table
 db.exec(`
@@ -29,6 +30,14 @@ db.exec(`
     valeur TEXT NOT NULL,
     PRIMARY KEY (id_ordre, id_langue),
     FOREIGN KEY (id_langue) REFERENCES langue(id) ON DELETE CASCADE
+  )
+`);
+
+// Create ticket_super_cost table
+db.exec(`
+  CREATE TABLE IF NOT EXISTS ticket_super_cost (
+    ticket_id INTEGER PRIMARY KEY,
+    super_cost REAL NOT NULL
   )
 `);
 
