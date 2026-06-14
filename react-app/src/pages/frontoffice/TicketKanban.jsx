@@ -25,7 +25,7 @@ import DatabaseInstanceService from '../../services/DatabaseInstance/DatabaseIns
 import DCRoomService from '../../services/DCRoom/DCRoomService';
 import { getTicketItemTypes } from '../../config/itemTypes';
 import SettingsService from '../../services/Settings/SettingsService';
-import SuperCostService from '../../services/SuperCost/SuperCostService';
+import TicketCostService from '../../services/TicketCost/TicketCostService';
 import '../../styles/FrontOffice.css';
 import '../../styles/front/TicketKanban.css';
 
@@ -392,7 +392,7 @@ const TicketKanban = () => {
   const handleCancelSuperCost = async (ticketId, targetColumnId) => {
     try {
       setLoading(true);
-      await SuperCostService.deleteSuperCost(ticketId);
+      await TicketCostService.deleteSuperCost(ticketId);
       setReopenModalData(prev => ({ ...prev, isOpen: false }));
       if (targetColumnId === 'inProgress') {
         await TicketService.updateTicket(ticketId, { status: 2 });
@@ -412,7 +412,16 @@ const TicketKanban = () => {
     try {
       setLoading(true);
       if (percentage) {
-        await SuperCostService.saveReopenCost(ticketId, parseFloat(percentage));
+        const linkedItems = await ItemTicketService.getItemsForTicket(ticketId);
+        const groupId = Date.now().toString();
+
+        if (linkedItems && linkedItems.length > 0) {
+          for (const item of linkedItems) {
+            await TicketCostService.saveReopenCost(ticketId, parseFloat(percentage), item.items_id, item.itemtype, groupId);
+          }
+        } else {
+          await TicketCostService.saveReopenCost(ticketId, parseFloat(percentage), null, null, groupId);
+        }
       }
       setReopenModalData(prev => ({ ...prev, isOpen: false }));
       if (targetColumnId === 'inProgress') {
@@ -510,7 +519,18 @@ const TicketKanban = () => {
       });
 
       if (superCost !== '') {
-        await SuperCostService.saveSuperCost(ticketId, parseFloat(superCost));
+        const linkedItems = await ItemTicketService.getItemsForTicket(ticketId);
+        const groupId = Date.now().toString();
+        const costValue = parseFloat(superCost);
+
+        if (linkedItems && linkedItems.length > 0) {
+          const dividedCost = costValue / linkedItems.length;
+          for (const item of linkedItems) {
+            await TicketCostService.saveSuperCost(ticketId, dividedCost, item.items_id, item.itemtype, groupId);
+          }
+        } else {
+          await TicketCostService.saveSuperCost(ticketId, costValue, null, null, groupId);
+        }
       }
 
       setCloseModalData({

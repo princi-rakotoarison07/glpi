@@ -1,4 +1,7 @@
 import api, { initSession } from '../../config/api';
+import axios from 'axios';
+
+const TICKETCOST_API_URL = 'http://localhost:3001/api/ticket-cost';
 
 const TicketCostService = {
   /**
@@ -79,6 +82,64 @@ const TicketCostService = {
       return response.data;
     } catch (error) {
       console.error(`Error deleting ticket cost ${costId}:`, error);
+      throw error;
+    }
+  },
+
+  // --- SUPER COST & REOPEN COST (Express backend) ---
+  saveSuperCost: async (ticket_id, super_cost, id_item = null, id_category = null, group_id = null) => {
+    try {
+      const response = await axios.post(TICKETCOST_API_URL, { ticket_id, super_cost, id_item, id_category, group_id });
+      return response.data;
+    } catch (error) {
+      console.error('Error saving super cost:', error);
+      throw error;
+    }
+  },
+
+  getAllSuperCosts: async () => {
+    try {
+      const response = await axios.get(TICKETCOST_API_URL);
+      return response.data;
+    } catch (error) {
+      console.error('Error getting all super costs:', error);
+      throw error;
+    }
+  },
+
+  getSuperCost: async (ticket_id) => {
+    try {
+      const response = await axios.get(`${TICKETCOST_API_URL}/${ticket_id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error getting super cost:', error);
+      throw error;
+    }
+  },
+
+  deleteSuperCost: async (ticket_id) => {
+    try {
+      const response = await axios.delete(`${TICKETCOST_API_URL}/${ticket_id}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  saveReopenCost: async (ticket_id, percentage, id_item = null, id_category = null, group_id = null) => {
+    try {
+      const response = await axios.post(`${TICKETCOST_API_URL}/reopen`, { ticket_id, percentage, id_item, id_category, group_id });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  getAllReopenCosts: async () => {
+    try {
+      const response = await axios.get(`${TICKETCOST_API_URL}/reopen/all`);
+      return response.data;
+    } catch (error) {
       throw error;
     }
   }

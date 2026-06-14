@@ -4,8 +4,9 @@ const db = require('./db');
 db.exec(`DROP TABLE IF EXISTS settings_langue;`);
 db.exec(`DROP TABLE IF EXISTS langue;`);
 db.exec(`DROP TABLE IF EXISTS settings;`);
-db.exec(`DROP TABLE IF EXISTS ticket_super_cost;`);
+db.exec(`DROP TABLE IF EXISTS ticket_costs;`);
 db.exec(`DROP TABLE IF EXISTS ticket_reopen_cost;`);
+db.exec(`DROP TABLE IF EXISTS ticket_super_cost;`);
 
 // Create settings table
 db.exec(`
@@ -34,20 +35,16 @@ db.exec(`
   )
 `);
 
-// Create ticket_super_cost table
+// Create ticket_costs table
 db.exec(`
-  CREATE TABLE IF NOT EXISTS ticket_super_cost (
+  CREATE TABLE IF NOT EXISTS ticket_costs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    ticket_id INTEGER,
-    super_cost REAL NOT NULL
-  )
-`);
-
-db.exec(`
-  CREATE TABLE IF NOT EXISTS ticket_reopen_cost (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    ticket_id INTEGER,
-    reopen_cost REAL NOT NULL
+    id_ticket INTEGER,
+    type_cout TEXT,
+    cout REAL NOT NULL,
+    id_item INTEGER,
+    id_category TEXT,
+    group_id TEXT
   )
 `);
 

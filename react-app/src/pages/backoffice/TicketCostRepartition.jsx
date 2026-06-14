@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import TicketCostService from '../../services/TicketCost/TicketCostService';
 import ItemTicketService from '../../services/ItemTicket/ItemTicketService';
-import SuperCostService from '../../services/SuperCost/SuperCostService';
+
 import { Calculator, LayoutList } from 'lucide-react';
 import '../../styles/TicketCostRepartition.css';
 
@@ -49,7 +49,7 @@ const TicketCostRepartition = () => {
         // 3. Fetch all super costs from Express backend
         let allSuperCosts = [];
         try {
-          allSuperCosts = await SuperCostService.getAllSuperCosts();
+          allSuperCosts = await TicketCostService.getAllSuperCosts();
         } catch (err) {
           console.warn('Erreur lors de la récupération des Super Costs', err);
         }
@@ -64,7 +64,7 @@ const TicketCostRepartition = () => {
         // 3.5 Fetch all reopen costs from Express backend
         let allReopenCosts = [];
         try {
-          allReopenCosts = await SuperCostService.getAllReopenCosts();
+          allReopenCosts = await TicketCostService.getAllReopenCosts();
         } catch (err) {
           console.warn('Erreur lors de la récupération des Reopen Costs', err);
         }

@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 const settingsRoutes = require('./settings.routes');
-const superCostRoutes = require('./superCost');
+const ticketCostRoutes = require('./ticketCost.routes');
 
 router.use('/settings', settingsRoutes);
-router.use('/super-cost', superCostRoutes);
+router.use('/ticket-cost', ticketCostRoutes);
 
 module.exports = router;
