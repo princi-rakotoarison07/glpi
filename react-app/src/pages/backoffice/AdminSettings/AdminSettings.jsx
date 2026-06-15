@@ -7,44 +7,33 @@ const AdminSettings = () => {
   const [saving, setSaving] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [apiError, setApiError] = useState('');
   
-  const [colors, setColors] = useState({
-    color_nouveau: '#3b82f6',
-    color_inProgress: '#3b82f6',
-    color_termine: '#3b82f6'
-  });
-
-  const [languages, setLanguages] = useState([
-    { id: 1, nom: 'Français' },
-    { id: 2, nom: 'Malgache' }
-  ]);
-
-  const [selectedLanguageId, setSelectedLanguageId] = useState(1);
-
-  const [translations, setTranslations] = useState({
-    1: { label_nouveau: 'Nouveau', label_inProgress: 'In progress (assigné)', label_termine: 'Terminé' },
-    2: { label_nouveau: 'Vaovao', label_inProgress: 'Efa manao', label_termine: 'Vita' }
-  });
+  const [colors, setColors] = useState({});
+  const [languages, setLanguages] = useState([]);
+  const [selectedLanguageId, setSelectedLanguageId] = useState(null);
+  const [translations, setTranslations] = useState({});
 
   useEffect(() => {
     const fetchSettings = async () => {
       setLoading(true);
+      setApiError('');
       try {
         const data = await SettingsService.getSettings();
+        
+        // Use only API data
         setColors({
-          color_nouveau: data.color_nouveau || '#3b82f6',
-          color_inProgress: data.color_inProgress || '#f59e0b',
-          color_termine: data.color_termine || '#10b981'
+          color_nouveau: data.color_nouveau,
+          color_inProgress: data.color_inProgress,
+          color_termine: data.color_termine
         });
-        setSelectedLanguageId(parseInt(data.selected_language_id) || 1);
-        if (data.languages) {
-          setLanguages(data.languages);
-        }
-        if (data.all_translations) {
-          setTranslations(data.all_translations);
-        }
+        setSelectedLanguageId(parseInt(data.selected_language_id));
+        setLanguages(data.languages || []);
+        setTranslations(data.all_translations || {});
+        
       } catch (err) {
         console.error('Error fetching settings:', err);
+        setApiError('Impossible de se connecter à l\'API. La page de configuration n\'est pas disponible.');
       } finally {
         setLoading(false);
       }
@@ -142,6 +131,16 @@ const AdminSettings = () => {
 
         {loading ? (
           <div style={{ color: '#64748b', fontSize: '14px' }}>Chargement des paramètres...</div>
+        ) : apiError ? (
+          <div style={{ 
+            padding: '24px', 
+            background: '#fee2e2', 
+            color: '#991b1b', 
+            borderRadius: '8px',
+            textAlign: 'center'
+          }}>
+            {apiError}
+          </div>
         ) : (
           <form onSubmit={handleSave}>
             

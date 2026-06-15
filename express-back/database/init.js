@@ -4,6 +4,8 @@ const db = require('./db');
 db.exec(`DROP TABLE IF EXISTS settings_langue;`);
 db.exec(`DROP TABLE IF EXISTS langue;`);
 db.exec(`DROP TABLE IF EXISTS settings;`);
+db.exec(`DROP TABLE IF EXISTS couts;`);
+db.exec(`DROP TABLE IF EXISTS couts_independant;`);
 
 // Create settings table
 db.exec(`
@@ -83,4 +85,25 @@ const insertTranslationTransaction = db.transaction((translations) => {
 });
 insertTranslationTransaction(defaultTranslations);
 
-console.log('✅ Database successfully initialized. Tables settings, langue, and settings_langue created and seeded.');
+db.exec(`
+  CREATE TABLE IF NOT EXISTS couts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_ticket INTEGER NOT NULL,
+    superCost REAL NOT NULL,
+    coutReouverture REAL DEFAULT 0
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS couts_independant (
+    id_Auto INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_Ticket INTEGER NOT NULL,
+    type_cout TEXT NOT NULL,
+    cout REAL NOT NULL,
+    id_item TEXT,
+    category TEXT,
+    [group] INTEGER NOT NULL
+  )
+`);
+
+console.log('✅ Database successfully initialized. Tables settings, langue, settings_langue, couts, and couts_independant created and seeded.');

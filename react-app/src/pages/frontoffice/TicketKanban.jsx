@@ -23,6 +23,9 @@ import ConsumableItemService from '../../services/ConsumableItem/ConsumableItemS
 import CableService from '../../services/Cable/CableService';
 import DatabaseInstanceService from '../../services/DatabaseInstance/DatabaseInstanceService';
 import DCRoomService from '../../services/DCRoom/DCRoomService';
+import CostService from '../../services/Cost/CostService';
+import IndependentCostService from '../../services/Cost/IndependentCostService';
+import TicketCostService from '../../services/TicketCost/TicketCostService';
 import { getTicketItemTypes } from '../../config/itemTypes';
 import SettingsService from '../../services/Settings/SettingsService';
 import '../../styles/FrontOffice.css';
@@ -55,12 +58,19 @@ const TicketKanban = () => {
     isOpen: false,
     ticketId: null,
     comment: '',
-    date: new Date().toISOString().split('T')[0]
+    date: new Date().toISOString().split('T')[0],
+    superCost: ''
   });
   const [assignModalData, setAssignModalData] = useState({
     isOpen: false,
     ticketId: null,
     selectedUserId: ''
+  });
+  const [reopenModalData, setReopenModalData] = useState({
+    isOpen: false,
+    ticketId: null,
+    action: '', // 'deleteCost' or 'addReopenCost'
+    coutReouverture: ''
   });
   const [kanbanSettings, setKanbanSettings] = useState({
     color_nouveau: '#899bb8ff',
@@ -387,12 +397,22 @@ const TicketKanban = () => {
 
     if (!ticketId || fromColumnId === targetColumnId) return;
 
-    if (targetColumnId === 'termine') {
+    if (fromColumnId === 'termine') {
+      // Reopening from closed state - show reopen modal
+      setReopenModalData({
+        isOpen: true,
+        ticketId: ticketId,
+        targetColumnId: targetColumnId,
+        action: '',
+        coutReouverture: ''
+      });
+    } else if (targetColumnId === 'termine') {
       setCloseModalData({
         isOpen: true,
         ticketId: ticketId,
         comment: '',
-        date: new Date().toISOString().split('T')[0]
+        date: new Date().toISOString().split('T')[0],
+        superCost: ''
       });
     } else if (targetColumnId === 'inProgress') {
       // Set status to 2 immediately and open the assign modal
@@ -427,36 +447,84 @@ const TicketKanban = () => {
 
   const handleConfirmClose = async (e) => {
     if (e) e.preventDefault();
-    const { ticketId, comment, date } = closeModalData;
+    const { ticketId, comment, date, superCost } = closeModalData;
+    console.log('=== handleConfirmClose START ===');
+    console.log('closeModalData:', closeModalData);
+    console.log('superCost value:', superCost, 'typeof:', typeof superCost, 'parsed:', parseFloat(superCost));
 
     if (!ticketId) return;
 
     try {
+      console.log('Step 1: Set loading true');
       setLoading(true);
       
-      // Fetch ticket to get existing content
+      console.log('Step 2: Fetch ticket');
       const ticketObj = await TicketService.getTicket(ticketId);
-      const currentContent = ticketObj.content || '';
+      console.log('ticketObj received:', ticketObj);
       
+      const currentContent = ticketObj.content || '';
       const formattedDate = date ? new Date(date).toLocaleDateString('fr-FR') : new Date().toLocaleDateString('fr-FR');
       const closingNote = `\n\n[Clôture - Date de réalisation : ${formattedDate}]${comment.trim() ? ` Commentaire : ${comment.trim()}` : ''}`;
-      
       const updatedContent = currentContent + closingNote;
 
-      await TicketService.updateTicket(ticketId, {
-        status: 6, // Clos/Terminé
-        content: updatedContent
+      console.log('Step 3: Update ticket status');
+      await TicketService.updateTicket(ticketId, { status: 6, content: updatedContent });
+      console.log('Ticket updated successfully');
+
+      if (superCost) {
+        console.log('Step 4: Create cost with CostService');
+        const costResult = await CostService.createCost({
+          id_ticket: ticketId,
+          superCost: parseFloat(superCost)
+        });
+        console.log('CostService.createCost result:', costResult);
+      }
+
+      console.log('Step 5: Fetch items and GLPI costs');
+      const items = await ItemTicketService.getItemsForTicket(ticketId).catch((err) => { 
+        console.error('ItemTicketService error:', err); 
+        return []; 
+      });
+      console.log('items:', items);
+      
+      const glpiCosts = await TicketCostService.getTicketCosts(ticketId).catch((err) => { 
+        console.error('TicketCostService error:', err); 
+        return []; 
+      });
+      console.log('glpiCosts:', glpiCosts);
+      
+      const totalNormalCost = glpiCosts.reduce((sum, cost) => {
+        const costFixed = parseFloat(cost.cost_fixed || 0);
+        const costMaterial = parseFloat(cost.cost_material || 0);
+        const hourlyRate = parseFloat(cost.cost_time || 0);
+        const durationHours = (parseInt(cost.actiontime) || 0) / 3600;
+        const timeCost = durationHours * hourlyRate;
+        return sum + costFixed + costMaterial + timeCost;
+      }, 0);
+      console.log('totalNormalCost:', totalNormalCost);
+
+      const independentResult = await IndependentCostService.createCloseCosts({
+        id_Ticket: Number(ticketId),
+        superCost: parseFloat(superCost) || 0,
+        glpiCost: totalNormalCost,
+        items: items.map(item => {
+          const name = item.item ? item.item.name : '';
+          return {
+            id_item: name ? `${item.items_id} (${name})` : String(item.items_id),
+            category: item.itemtype
+          };
+        })
       });
 
-      setCloseModalData({
-        isOpen: false,
-        ticketId: null,
-        comment: '',
-        date: ''
-      });
+      console.log('Step 7: Reset modal');
+      setCloseModalData({ isOpen: false, ticketId: null, comment: '', date: '', superCost: '' });
 
+      console.log('Step 8: Fetch tickets');
       await fetchTickets();
+      
+      console.log('=== handleConfirmClose COMPLETE ===');
     } catch (err) {
+      console.error('=== handleConfirmClose ERROR ===');
       console.error('Error closing ticket:', err);
       alert('Erreur lors de la clôture du ticket: ' + err.message);
     } finally {
@@ -486,6 +554,68 @@ const TicketKanban = () => {
     } catch (err) {
       console.error('Error removing technician:', err);
       alert('Erreur lors du retrait du technicien : ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteTicket = async (ticketId, e) => {
+    e.stopPropagation(); // Prevent navigating to ticket detail when clicking delete
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer ce ticket ?')) {
+      try {
+        setLoading(true);
+        await TicketService.deleteTicket(ticketId);
+        await fetchTickets();
+      } catch (err) {
+        console.error('Error deleting ticket:', err);
+        alert('Erreur lors de la suppression du ticket : ' + err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleConfirmReopen = async (e) => {
+    if (e) e.preventDefault();
+    const { ticketId, targetColumnId, action, coutReouverture } = reopenModalData;
+    if (!ticketId) return;
+
+    try {
+      setLoading(true);
+
+      // Determine new status based on target column
+      let newStatus;
+      if (targetColumnId === 'nouveau') newStatus = 1;
+      else if (targetColumnId === 'inProgress') newStatus = 2;
+      else newStatus = 1;
+
+      // Handle cost action
+      if (action === 'deleteCost') {
+        await CostService.deleteCostByTicketId(ticketId);
+        await IndependentCostService.deleteLatestCostGroup(ticketId);
+      } else if (action === 'addReopenCost' && coutReouverture) {
+        await CostService.updateCostReouverture(ticketId, parseFloat(coutReouverture));
+        await IndependentCostService.createReopenCost({
+          id_Ticket: Number(ticketId),
+          coutReouverture: parseFloat(coutReouverture)
+        });
+      }
+
+      // Update ticket status
+      await TicketService.updateTicket(ticketId, { status: newStatus });
+
+      // Reset modal and refresh
+      setReopenModalData({
+        isOpen: false,
+        ticketId: null,
+        targetColumnId: '',
+        action: '',
+        coutReouverture: ''
+      });
+      await fetchTickets();
+    } catch (err) {
+      console.error('Error reopening ticket:', err);
+      alert('Erreur lors de la réouverture du ticket: ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -553,8 +683,8 @@ const TicketKanban = () => {
             <Ticket size={24} className="title-icon" />
             <h1>Tableau de suivi (Kanban)</h1>
           </div>
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <Link to="/admin" className="cancel-modal-btn" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 16px', margin: 0 }}>
+          <div>
+            <Link to="/admin" className="cancel-modal-btn">
               <Settings size={16} />
               Configuration
             </Link>
@@ -574,21 +704,16 @@ const TicketKanban = () => {
                 className={`kanban-column col-${col.id}`}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => handleDrop(e, col.id)}
-                style={{ 
-                  backgroundColor: col.color,
-                  border: `2px solid ${col.color}`
-                }}
               >
                 <div className="column-header">
-                  <div className="column-title" style={{ color: '#ffffff' }}>
+                  <div className="column-title">
                     <span>{col.title}</span>
-                    <span className="column-count" style={{ backgroundColor: 'rgba(255, 255, 255, 0.25)', color: '#ffffff' }}>{col.count}</span>
+                    <span className="column-count">{col.count}</span>
                   </div>
                   {col.id === 'nouveau' && (
                     <button
                       className="column-add-btn"
                       onClick={openQuickAdd}
-                      style={{ backgroundColor: '#ffffff', color: col.color, border: 'none' }}
                     >
                       + Créer des tickets
                     </button>
@@ -623,12 +748,17 @@ const TicketKanban = () => {
                         >
                           <div className="card-top">
                             <span className="ticket-id">#{ticket.id}</span>
-                            <span
-                              className="type-badge"
-                              style={{ color: type.color, backgroundColor: type.bg }}
-                            >
-                              {type.label}
-                            </span>
+                            <div>
+                              <span className="type-badge">
+                                {type.label}
+                              </span>
+                              <button
+                                onClick={(e) => handleDeleteTicket(ticket.id, e)}
+                                title="Supprimer le ticket"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            </div>
                           </div>
                           <h3 className="card-title">{ticket.name || 'Sans titre'}</h3>
                           <p className="card-desc">
@@ -640,20 +770,9 @@ const TicketKanban = () => {
                           </p>
 
                           {cardAssignees.length > 0 && (
-                            <div className="card-assignees" style={{ margin: '8px 0', display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                            <div className="card-assignees">
                               {cardAssignees.map((name, idx) => (
-                                <span 
-                                  key={idx} 
-                                  style={{ 
-                                    fontSize: '0.725rem', 
-                                    padding: '2px 8px', 
-                                    borderRadius: '12px', 
-                                    background: '#f1f5f9', 
-                                    color: '#475569',
-                                    border: '1px solid #e2e8f0',
-                                    fontWeight: '500'
-                                  }}
-                                >
+                                <span key={idx}>
                                   👤 {name}
                                 </span>
                               ))}
@@ -661,10 +780,7 @@ const TicketKanban = () => {
                           )}
 
                           <div className="card-footer">
-                            <span
-                              className="priority-badge"
-                              style={{ color: priority.color, backgroundColor: priority.bg }}
-                            >
+                            <span className="priority-badge">
                               {priority.label}
                             </span>
                             <div className="card-date">
@@ -721,6 +837,15 @@ const TicketKanban = () => {
           relations={ticketUserRelations}
           onAddAssignee={handleAddAssignee}
           onRemoveAssignee={handleRemoveAssignee}
+        />
+
+        {/* REOPEN TICKET MODAL */}
+        <TicketReopenModal
+          isOpen={reopenModalData.isOpen}
+          onClose={() => setReopenModalData(prev => ({ ...prev, isOpen: false }))}
+          onSubmit={handleConfirmReopen}
+          data={reopenModalData}
+          setData={setReopenModalData}
         />
       </div>
     </FrontOfficeLayout>
@@ -952,7 +1077,7 @@ const TicketCloseModal = ({ isOpen, onClose, onSubmit, data, setData }) => {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-container" onClick={e => e.stopPropagation()} style={{ maxWidth: '450px' }}>
+      <div className="modal-container" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Clôture du ticket #{data.ticketId}</h2>
           <button className="close-btn" onClick={onClose}>
@@ -982,6 +1107,18 @@ const TicketCloseModal = ({ isOpen, onClose, onSubmit, data, setData }) => {
                 onChange={e => setData(prev => ({ ...prev, comment: e.target.value }))}
                 placeholder="Indiquez les détails de la résolution ou remarques de clôture..."
               ></textarea>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="superCost">Super Cost</label>
+              <input
+                type="number"
+                id="superCost"
+                step="0.01"
+                value={data.superCost}
+                onChange={e => setData(prev => ({ ...prev, superCost: e.target.value }))}
+                placeholder="Entrez le coût..."
+              />
             </div>
           </div>
 
@@ -1044,7 +1181,7 @@ const TicketAssignModal = ({
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-container" onClick={e => e.stopPropagation()} style={{ maxWidth: '500px' }}>
+      <div className="modal-container" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Attribution du ticket #{ticketId}</h2>
           <button className="close-btn" onClick={onClose}>
@@ -1052,58 +1189,35 @@ const TicketAssignModal = ({
           </button>
         </div>
 
-        <div className="modal-body" style={{ padding: '24px' }}>
-          <h4 style={{ margin: '0 0 4px 0', fontSize: '1.05rem', color: '#0f172a' }}>
+        <div className="modal-body">
+          <h4>
             {ticketTitle || 'Sans titre'}
           </h4>
-          <p style={{ margin: '0 0 20px 0', color: '#64748b', fontSize: '0.875rem' }}>
+          <p>
             Gérez la liste des techniciens attribués à ce ticket.
           </p>
 
           {/* List of current assignees */}
-          <div style={{ marginBottom: '24px' }}>
-            <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px', color: '#334155', fontSize: '0.875rem' }}>
+          <div>
+            <label>
               Techniciens attribués ({currentAssignees.length})
             </label>
             {currentAssignees.length === 0 ? (
-              <div style={{ padding: '12px', background: '#f8fafc', borderRadius: '8px', border: '1px dashed #e2e8f0', color: '#94a3b8', fontSize: '0.875rem', textAlign: 'center' }}>
+              <div>
                 Aucun technicien attribué
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div>
                 {currentAssignees.map(rel => {
                   const techObj = technicians.find(t => Number(t.id) === Number(rel.users_id));
                   return (
-                    <div 
-                      key={rel.id} 
-                      style={{ 
-                        display: 'flex', 
-                        justifyContent: 'space-between', 
-                        alignItems: 'center', 
-                        padding: '10px 14px', 
-                        background: '#f1f5f9', 
-                        borderRadius: '8px',
-                        border: '1px solid #e2e8f0'
-                      }}
-                    >
-                      <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: '500' }}>
+                    <div key={rel.id}>
+                      <span>
                         {techObj ? techObj.name : `Utilisateur #${rel.users_id}`}
                       </span>
                       <button
                         type="button"
                         onClick={() => onRemoveAssignee(rel.id)}
-                        style={{ 
-                          background: '#fee2e2', 
-                          border: 'none', 
-                          color: '#ef4444', 
-                          padding: '6px', 
-                          borderRadius: '6px', 
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          transition: 'background 0.2s'
-                        }}
                         title="Retirer ce technicien"
                       >
                         <Trash2 size={15} />
@@ -1116,22 +1230,14 @@ const TicketAssignModal = ({
           </div>
 
           {/* Add assignee section */}
-          <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-            <label style={{ display: 'block', fontWeight: '600', marginBottom: '8px', color: '#334155', fontSize: '0.875rem' }}>
+          <div>
+            <label>
               Ajouter un technicien
             </label>
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div>
               <select
                 value={selectedTechId}
                 onChange={e => setSelectedTechId(e.target.value)}
-                style={{ 
-                  flex: 1, 
-                  padding: '10px', 
-                  borderRadius: '8px', 
-                  border: '1px solid #cbd5e1',
-                  background: '#ffffff',
-                  fontSize: '0.9rem'
-                }}
               >
                 <option value="">-- Choisir un technicien --</option>
                 {availableTechs.map(tech => (
@@ -1144,19 +1250,6 @@ const TicketAssignModal = ({
                 type="button"
                 onClick={handleAddClick}
                 disabled={!selectedTechId}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  backgroundColor: selectedTechId ? '#3b82f6' : '#93c5fd',
-                  color: '#ffffff',
-                  border: 'none',
-                  padding: '10px 16px',
-                  borderRadius: '8px',
-                  fontWeight: '600',
-                  cursor: selectedTechId ? 'pointer' : 'not-allowed',
-                  fontSize: '0.9rem'
-                }}
               >
                 <Plus size={16} />
                 Ajouter
@@ -1165,16 +1258,101 @@ const TicketAssignModal = ({
           </div>
         </div>
 
-        <div className="modal-footer" style={{ borderTop: '1px solid #f1f5f9', padding: '16px 24px' }}>
+        <div className="modal-footer">
           <button
             type="button"
             className="cancel-modal-btn"
             onClick={onClose}
-            style={{ margin: 0 }}
           >
             Fermer
           </button>
         </div>
+      </div>
+    </div>
+  );
+};
+
+// Sub-component: Reopen Ticket Modal
+const TicketReopenModal = ({ isOpen, onClose, onSubmit, data, setData }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-container" onClick={e => e.stopPropagation()}>
+        <div className="modal-header">
+          <h2>Réouverture du ticket #{data.ticketId}</h2>
+          <button className="close-btn" onClick={onClose}>
+            <X size={20} />
+          </button>
+        </div>
+
+        <form onSubmit={onSubmit}>
+          <div className="modal-body">
+            <div className="form-group">
+              <label>Action sur le coût</label>
+              <div>
+                <label>
+                  <input
+                    type="radio"
+                    name="costAction"
+                    value="deleteCost"
+                    checked={data.action === 'deleteCost'}
+                    onChange={e => setData(prev => ({ ...prev, action: e.target.value }))}
+                  />
+                  Supprimer le Super Cost
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="costAction"
+                    value="addReopenCost"
+                    checked={data.action === 'addReopenCost'}
+                    onChange={e => setData(prev => ({ ...prev, action: e.target.value }))}
+                  />
+                  Ajouter un coût de réouverture (pourcentage du Super Cost)
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="costAction"
+                    value="noAction"
+                    checked={data.action === 'noAction' || !data.action}
+                    onChange={e => setData(prev => ({ ...prev, action: e.target.value }))}
+                  />
+                  Aucune action sur le coût
+                </label>
+              </div>
+            </div>
+
+            {data.action === 'addReopenCost' && (
+              <div className="form-group">
+                <label htmlFor="coutReouverture">Pourcentage de réouverture (%)</label>
+                <input
+                  type="number"
+                  id="coutReouverture"
+                  step="0.01"
+                  value={data.coutReouverture}
+                  onChange={e => setData(prev => ({ ...prev, coutReouverture: e.target.value }))}
+                  placeholder="Entrez le pourcentage..."
+                  required
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="cancel-modal-btn"
+              onClick={onClose}
+            >
+              Annuler
+            </button>
+            <button type="submit" className="edit-nav-btn">
+              Confirmer la réouverture
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

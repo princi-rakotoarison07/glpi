@@ -1,0 +1,27 @@
+Je veux que tu développes cette fonctionnalité directement :
+
+
+
+
+
+RÈGLES À SUIVRE ABSOLUMENT
+1-ZÉRO COMMENTAIRE
+N'ajoute aucun commentaire dans le code généré. Pas de //, /* */, ni #. Le code doit être totalement silencieux.
+
+2-ZÉRO CSS
+Aucun style CSS, sous quelque forme que ce soit : pas de fichier .css, pas de classes, pas de style={{...}}, pas de className. Utilise uniquement des balises HTML brutes. Seule la logique compte, pas l'apparence.
+
+3-FIDÉLITÉ AU FICHIER ORIGINAL
+Le code fourni doit être une copie conforme du fichier original, enrichie uniquement par la nouvelle fonctionnalité. Rien d'autre ne doit changer.
+
+4-CRÉATION COMPLÈTE UNIQUEMENT SI NÉCESSAIRE
+Si le fichier cible n'existe pas, génère-le entièrement. Sinon, applique toutes les règles ci-dessus.
+
+5-PAS DE CODE INUTILE
+N'ajoute aucune ligne de code qui ne soit strictement nécessaire à la fonctionnalité demandée.
+
+6-Pas de majuscules ni d’accents (sauf obligation, ex. nom de classe)
+Écris tout en minuscules sans accents :
+erreur au lieu de Erreur, etre au lieu de Être, creation au lieu de Création
+
+Objectif final : réduire drastiquement le volume de code et produire un code minimal, efficace et parfaitement fonctionnel.

@@ -9,4 +9,4 @@ db.pragma('journal_mode = WAL');
 
 console.log('✅ SQLite connecté');
 
-module.exports = db;
+module.exports = db;

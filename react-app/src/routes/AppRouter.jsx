@@ -55,6 +55,8 @@ import TicketCreate from '../pages/frontoffice/TicketCreate';
 import TicketUpdate from '../pages/frontoffice/TicketUpdate';
 import FrontOfficeTicketDetail from '../pages/frontoffice/TicketDetail';
 import AdminSettings from '../pages/backoffice/AdminSettings/AdminSettings';
+import CostReport from '../pages/backoffice/CostReport';
+import IndependentCostReport from '../pages/backoffice/IndependentCostReport';
 
 const AppRouter = () => {
   return (
@@ -126,6 +128,8 @@ const AppRouter = () => {
             <Route path="/import" element={<GLPIImportPage />} />
             <Route path="/import-images" element={<GLPIImageImportPageV2 />} />
             <Route path="/admin" element={<AdminSettings />} />
+            <Route path="/cost-report" element={<CostReport />} />
+            <Route path="/independent-cost-report" element={<IndependentCostReport />} />
           </Route>
         </Route>
 

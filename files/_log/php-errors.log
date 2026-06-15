@@ -563,3 +563,34 @@
   .\src\Glpi\Kernel\Kernel.php:295                   Symfony\Component\HttpFoundation\Response->send()
   .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
 
+[2026-06-12 04:50:15] glpi.WARNING:   *** Test logger
+[2026-06-12 04:52:29] glpi.ERROR:   *** Caught RuntimeException: Failed to write cache file "./files/_cache/11.0.7-49a93008-production/templates/d4/d48f6fce05d91a7984ece0672ec97d03.php".
+  Backtrace :
+  ...ndor\twig\twig\src\Cache\FilesystemCache.php:76 
+  .\vendor\twig\twig\src\Environment.php:410         Twig\Cache\FilesystemCache->write()
+  .\vendor\twig\twig\src\Environment.php:461         Twig\Environment->loadTemplate()
+  ...\Glpi\Application\View\TemplateRenderer.php:206 Twig\Environment->createTemplate()
+  .\src\Glpi\Dashboard\Widget.php:1287               Glpi\Application\View\TemplateRenderer->renderFromStringTemplate()
+  .\src\Glpi\Dashboard\Widget.php:957                Glpi\Dashboard\Widget::getBarsGraph()
+  .\src\Glpi\Dashboard\Widget.php:969                Glpi\Dashboard\Widget::simpleBar()
+  .\src\Glpi\Dashboard\Grid.php:1104                 Glpi\Dashboard\Widget::simpleHbar()
+  .\ajax\dashboard.php:232                           Glpi\Dashboard\Grid->getCardHtml()
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-14 15:29:42] glpi.WARNING:   *** Test logger
+[2026-06-14 15:29:49] glpi.WARNING:   *** Warning: rmdir(./files/_cache/11.0.7-49a93008-production/templates/d4): Directory not empty at filesystem.php line 1575
+  Backtrace :
+  ...gmachine\safe\generated\8.3\filesystem.php:1575 
+  .\src\Glpi\Cache\CacheManager.php:344              Safe\rmdir()
+  .\src\Glpi\Controller\InstallController.php:133    Glpi\Cache\CacheManager->resetAllCaches()
+  ...ts\AsyncOperationProgressControllerTrait.php:83 Glpi\Controller\InstallController->Glpi\Controller\{closure}()
+  .\vendor\symfony\http-kernel\HttpKernel.php:101    Glpi\Controller\InstallController->Glpi\Controller\Traits\{closure}()
+  ...ymfony\http-foundation\StreamedResponse.php:106 Symfony\Component\HttpKernel\HttpKernel::Symfony\Component\HttpKernel\{closure}()
+  .\vendor\symfony\http-foundation\Response.php:423  Symfony\Component\HttpFoundation\StreamedResponse->sendContent()
+  .\src\Glpi\Kernel\Kernel.php:295                   Symfony\Component\HttpFoundation\Response->send()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+

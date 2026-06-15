@@ -50,7 +50,9 @@ const MENU_ITEMS = [
     icon: <Ticket size={20} />,
     label: 'Assistance',
     submenu: [
-      { label: 'Tickets', path: '/tickets' }
+      { label: 'Tickets', path: '/tickets' },
+      { label: 'Rapport des Coûts', path: '/cost-report' },
+      { label: 'Cout Independant', path: '/independent-cost-report' }
     ]
   },
   {

@@ -172,6 +172,17 @@ const TicketService = {
   countTicketsByStatus: (ticketsList, statusId) => {
     if (!Array.isArray(ticketsList)) return 0;
     return ticketsList.filter(t => Number(t.status) === statusId).length;
+  },
+
+  deleteTicket: async (id) => {
+    try {
+      await initSession();
+      const response = await api.delete(`/Ticket/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error deleting ticket ${id}:`, error);
+      throw error;
+    }
   }
 };
 
