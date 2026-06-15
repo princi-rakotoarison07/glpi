@@ -6,8 +6,15 @@ import {
   ChevronDown,
   LayoutDashboard,
   Box,
+  List,
+  Monitor,
+  RefreshCw,
+  Ticket,
+  ShieldCheck,
+  Kanban,
+  ExternalLink,
 } from 'lucide-react';
-import '../../styles/layout/Sidebar.css';
+import '../../styles/layout.css';
 
 const MENU_ITEMS = [
   { 
@@ -15,16 +22,68 @@ const MENU_ITEMS = [
     label: 'Accueil', 
     path: '/accueil' 
   },
-  { 
-    icon: <Box size={20} />, 
-    label: 'Autre Page', 
-    path: '/autre-page' 
+  {
+    icon: <Monitor size={20} />,
+    label: 'Parc',
+    submenu: [
+      { label: 'Tableau de bord', path: '/parc/dashboard' },
+      { label: 'Ordinateurs', path: '/parc/computers' },
+      { label: 'Moniteurs', path: '/parc/monitors' },
+      // { label: 'Périphériques', path: '/parc/peripherals' },
+      // { label: 'Logiciels', path: '/parc/software' },
+      // { label: 'Imprimantes', path: '/parc/printers' },
+      // { label: 'PDUs', path: '/parc/pdus' },
+      // { label: 'Baies', path: '/parc/racks' },
+      { label: 'Téléphones', path: '/parc/phones' },
+      // { label: 'Châssis', path: '/parc/chassis' },
+      // { label: 'Matériel réseau', path: '/parc/network' },
+      // { label: 'Licences', path: '/parc/licenses' },
+      // { label: 'Matériel passif', path: '/parc/passiveEquipment' },
+      // { label: 'Cartouches', path: '/parc/cartridges' },
+      // { label: 'Consommables', path: '/parc/consumables' },
+      // { label: 'Câbles', path: '/parc/cables' },
+      // { label: 'Bases de données', path: '/parc/databaseInstances' },
+      // { label: 'Salles serveur', path: '/parc/dcRooms' }
+    ]
   },
+  {
+    icon: <Ticket size={20} />,
+    label: 'Assistance',
+    submenu: [
+      { label: 'Tickets', path: '/tickets' },
+      { label: 'Rapport des Coûts', path: '/cost-report' },
+      { label: 'Cout Independant', path: '/independent-cost-report' }
+    ]
+  },
+  {
+    icon: <Kanban size={20} />,
+    label: 'Kanban',
+    submenu: [
+      { label: 'Tableau Kanban', path: '/frontoffice/kanban' },
+      { label: 'Configuration', path: '/admin' }
+    ]
+  },
+  {
+    icon: <Box size={20} />,
+    label: 'Importation des données',
+    submenu: [
+      { label: 'Import CSV', path: '/import' },
+      { label: 'Import v2 (Rollback)', path: '/import-images', icon: <ShieldCheck size={13} /> },
+    ]
+  },
+  { 
+    icon: <RefreshCw size={20} />, 
+    label: 'Réinitialisation', 
+    submenu: [
+      { label: 'Réinitialiser', path: '/reset' }
+    ]
+  }
 ];
 
 const Sidebar = ({ isCollapsed, toggleSidebar }) => {
   const location = useLocation();
-  const [openSubmenu, setOpenSubmenu] = useState('');
+  // Set "Parc" submenu open by default
+  const [openSubmenu, setOpenSubmenu] = useState('Parc');
 
   const toggleSubmenu = (label) => {
     setOpenSubmenu(openSubmenu === label ? '' : label);
@@ -102,7 +161,9 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
                           key={subIndex}
                           to={sub.path}
                           className={`submenu-item ${isSubActive ? 'active' : ''}`}
+                          style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
                         >
+                          {sub.icon && <span style={{ opacity: 0.75, display: 'flex', alignItems: 'center' }}>{sub.icon}</span>}
                           <span>{sub.label}</span>
                         </Link>
                       );
@@ -122,6 +183,16 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
           );
         })}
       </nav>
+
+      <div className="sidebar-footer">
+        <Link
+          to="/frontoffice"
+          className="nav-item"
+        >
+          <ExternalLink size={20} />
+          <span>Front Office</span>
+        </Link>
+      </div>
     </aside>
   );
 };

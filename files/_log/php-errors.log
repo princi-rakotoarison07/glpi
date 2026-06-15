@@ -1,1 +1,596 @@
-[2026-06-03 10:11:17] glpi.WARNING:   *** Test logger
+[2026-06-03 13:51:21] glpi.WARNING:   *** Test logger
+[2026-06-03 13:51:37] glpi.CRITICAL:   *** Uncaught PHP Exception RuntimeException: "Empty IN are not allowed" at DBmysqlIterator.php line 619
+  Backtrace :
+  .\src\DBmysqlIterator.php:619                      
+  .\src\DBmysqlIterator.php:585                      DBmysqlIterator->analyseCriterion()
+  .\src\DBmysqlIterator.php:576                      DBmysqlIterator->analyseCrit()
+  .\src\DBmysqlIterator.php:569                      DBmysqlIterator->analyseCrit()
+  .\src\DBmysqlIterator.php:312                      DBmysqlIterator->analyseCrit()
+  .\src\DBmysqlIterator.php:128                      DBmysqlIterator->buildQuery()
+  .\src\DBmysql.php:1088                             DBmysqlIterator->execute()
+  .\src\DBmysql.php:683                              DBmysql->request()
+  ...agnostic\DatabaseSchemaIntegrityChecker.php:318 DBmysql->listTables()
+  .\src\Update.php:156                               Glpi\System\Diagnostic\DatabaseSchemaIntegrityChecker->checkCompleteSchema()
+  .\install\update.php:195                           Update->isUpdatedSchemaConsistent()
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 13:51:51] glpi.CRITICAL:   *** Uncaught PHP Exception RuntimeException: "Empty IN are not allowed" at DBmysqlIterator.php line 619
+  Backtrace :
+  .\src\DBmysqlIterator.php:619                      
+  .\src\DBmysqlIterator.php:585                      DBmysqlIterator->analyseCriterion()
+  .\src\DBmysqlIterator.php:576                      DBmysqlIterator->analyseCrit()
+  .\src\DBmysqlIterator.php:569                      DBmysqlIterator->analyseCrit()
+  .\src\DBmysqlIterator.php:312                      DBmysqlIterator->analyseCrit()
+  .\src\DBmysqlIterator.php:128                      DBmysqlIterator->buildQuery()
+  .\src\DBmysql.php:1088                             DBmysqlIterator->execute()
+  .\src\DBmysql.php:683                              DBmysql->request()
+  ...agnostic\DatabaseSchemaIntegrityChecker.php:318 DBmysql->listTables()
+  .\src\Update.php:156                               Glpi\System\Diagnostic\DatabaseSchemaIntegrityChecker->checkCompleteSchema()
+  .\install\update.php:195                           Update->isUpdatedSchemaConsistent()
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 13:52:22] glpi.CRITICAL:   *** Uncaught PHP Exception TypeError: "GLPIKey::getExpectedKeyPath(): Argument #1 ($glpi_version) must be of type string, null given, called in .\src\Update.php on line 483" at GLPIKey.php line 115
+  Backtrace :
+  .\src\GLPIKey.php:115                              
+  .\src\Update.php:483                               GLPIKey->getExpectedKeyPath()
+  .\src\Update.php:465                               Update->getExpectedSecurityKeyFilePath()
+  .\install\update.php:157                           Update->isExpectedSecurityKeyFileMissing()
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 13:52:33] glpi.CRITICAL:   *** Uncaught PHP Exception TypeError: "GLPIKey::getExpectedKeyPath(): Argument #1 ($glpi_version) must be of type string, null given, called in .\src\Update.php on line 483" at GLPIKey.php line 115
+  Backtrace :
+  .\src\GLPIKey.php:115                              
+  .\src\Update.php:483                               GLPIKey->getExpectedKeyPath()
+  .\src\Update.php:465                               Update->getExpectedSecurityKeyFilePath()
+  .\install\update.php:157                           Update->isExpectedSecurityKeyFileMissing()
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 13:52:43] glpi.CRITICAL:   *** Uncaught PHP Exception TypeError: "GLPIKey::getExpectedKeyPath(): Argument #1 ($glpi_version) must be of type string, null given, called in .\src\Update.php on line 483" at GLPIKey.php line 115
+  Backtrace :
+  .\src\GLPIKey.php:115                              
+  .\src\Update.php:483                               GLPIKey->getExpectedKeyPath()
+  .\src\Update.php:465                               Update->getExpectedSecurityKeyFilePath()
+  .\install\update.php:157                           Update->isExpectedSecurityKeyFileMissing()
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 15:21:33] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\Http\HttpException: "" at CheckDatabaseStatusListener.php line 111
+  Backtrace :
+  ...estListener\CheckDatabaseStatusListener.php:111 
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\RequestListener\CheckDatabaseStatusListener->onKernelRequest()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:157    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 15:21:36] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\Http\HttpException: "" at CheckDatabaseStatusListener.php line 111
+  Backtrace :
+  ...estListener\CheckDatabaseStatusListener.php:111 
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\RequestListener\CheckDatabaseStatusListener->onKernelRequest()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:157    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 15:21:39] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\Http\HttpException: "" at CheckDatabaseStatusListener.php line 111
+  Backtrace :
+  ...estListener\CheckDatabaseStatusListener.php:111 
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\RequestListener\CheckDatabaseStatusListener->onKernelRequest()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:157    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 15:21:44] glpi.CRITICAL:   *** Uncaught PHP Exception Glpi\Exception\Http\HttpException: "" at CheckDatabaseStatusListener.php line 111
+  Backtrace :
+  ...estListener\CheckDatabaseStatusListener.php:111 
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Glpi\Kernel\Listener\RequestListener\CheckDatabaseStatusListener->onKernelRequest()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\vendor\symfony\http-kernel\HttpKernel.php:157    Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-03 15:27:27] glpi.WARNING:   *** Test logger
+[2026-06-03 15:27:43] glpi.CRITICAL:   *** Uncaught PHP Exception RuntimeException: "Empty IN are not allowed" at DBmysqlIterator.php line 619
+  Backtrace :
+  .\src\DBmysqlIterator.php:619                      
+  .\src\DBmysqlIterator.php:585                      DBmysqlIterator->analyseCriterion()
+  .\src\DBmysqlIterator.php:576                      DBmysqlIterator->analyseCrit()
+  .\src\DBmysqlIterator.php:569                      DBmysqlIterator->analyseCrit()
+  .\src\DBmysqlIterator.php:312                      DBmysqlIterator->analyseCrit()
+  .\src\DBmysqlIterator.php:128                      DBmysqlIterator->buildQuery()
+  .\src\DBmysql.php:1088                             DBmysqlIterator->execute()
+  .\src\DBmysql.php:683                              DBmysql->request()
+  ...agnostic\DatabaseSchemaIntegrityChecker.php:318 DBmysql->listTables()
+  .\src\Update.php:156                               Glpi\System\Diagnostic\DatabaseSchemaIntegrityChecker->checkCompleteSchema()
+  .\install\update.php:195                           Update->isUpdatedSchemaConsistent()
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-04 07:19:43] glpi.WARNING:   *** Test logger
+[2026-06-04 07:20:05] glpi.WARNING:   *** Test logger
+[2026-06-04 11:55:16] glpi.WARNING:   *** Test logger
+[2026-06-04 11:55:25] glpi.WARNING:   *** Warning: rmdir(./files/_cache/11.0.7-4a40feec-production/templates/47): Directory not empty at filesystem.php line 1575
+  Backtrace :
+  ...gmachine\safe\generated\8.3\filesystem.php:1575 
+  .\src\Glpi\Cache\CacheManager.php:344              Safe\rmdir()
+  .\src\Glpi\Controller\InstallController.php:133    Glpi\Cache\CacheManager->resetAllCaches()
+  ...ts\AsyncOperationProgressControllerTrait.php:83 Glpi\Controller\InstallController->Glpi\Controller\{closure}()
+  .\vendor\symfony\http-kernel\HttpKernel.php:101    Glpi\Controller\InstallController->Glpi\Controller\Traits\{closure}()
+  ...ymfony\http-foundation\StreamedResponse.php:106 Symfony\Component\HttpKernel\HttpKernel::Symfony\Component\HttpKernel\{closure}()
+  .\vendor\symfony\http-foundation\Response.php:423  Symfony\Component\HttpFoundation\StreamedResponse->sendContent()
+  .\src\Glpi\Kernel\Kernel.php:295                   Symfony\Component\HttpFoundation\Response->send()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-05 08:58:46] glpi.WARNING:   *** Test logger
+[2026-06-06 17:41:14] glpi.WARNING:   *** Test logger
+[2026-06-06 17:46:38] glpi.WARNING:   *** Test logger
+[2026-06-07 18:36:34] glpi.WARNING:   *** Test logger
+[2026-06-07 18:36:36] glpi.WARNING:   *** Test logger
+[2026-06-07 18:36:41] glpi.WARNING:   *** Test logger
+[2026-06-08 03:41:27] glpi.WARNING:   *** Test logger
+[2026-06-08 04:12:05] glpi.WARNING:   *** Test logger
+[2026-06-08 04:12:05] glpi.WARNING:   *** Test logger
+[2026-06-08 04:12:13] glpi.WARNING:   *** Test logger
+[2026-06-08 04:19:26] glpi.WARNING:   *** Test logger
+[2026-06-08 12:31:04] glpi.WARNING:   *** Warning: session_start(): Session ID is too long or contains illegal characters. Only the A-Z, a-z, 0-9, &quot;-&quot;, and &quot;,&quot; characters are allowed at session.php line 500
+  Backtrace :
+  ...odingmachine\safe\generated\8.3\session.php:500 
+  .\src\Session.php:270                              Safe\session_start()
+  .\src\Glpi\Api\API.php:428                         Session::start()
+  .\src\Glpi\Api\APIRest.php:161                     Glpi\Api\API->retrieveSession()
+  .\src\Glpi\Controller\ApiRestController.php:59     Glpi\Api\APIRest->call()
+  .\vendor\symfony\http-kernel\HttpKernel.php:101    Glpi\Controller\ApiRestController->Glpi\Controller\{closure}()
+  ...ymfony\http-foundation\StreamedResponse.php:106 Symfony\Component\HttpKernel\HttpKernel::Symfony\Component\HttpKernel\{closure}()
+  .\vendor\symfony\http-foundation\Response.php:423  Symfony\Component\HttpFoundation\StreamedResponse->sendContent()
+  .\src\Glpi\Kernel\Kernel.php:295                   Symfony\Component\HttpFoundation\Response->send()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-08 12:31:04] glpi.WARNING:   *** Warning: session_start(): Failed to read session data: files (path: ./files/_sessions) at session.php line 500
+  Backtrace :
+  ...odingmachine\safe\generated\8.3\session.php:500 
+  .\src\Session.php:270                              Safe\session_start()
+  .\src\Glpi\Api\API.php:428                         Session::start()
+  .\src\Glpi\Api\APIRest.php:161                     Glpi\Api\API->retrieveSession()
+  .\src\Glpi\Controller\ApiRestController.php:59     Glpi\Api\APIRest->call()
+  .\vendor\symfony\http-kernel\HttpKernel.php:101    Glpi\Controller\ApiRestController->Glpi\Controller\{closure}()
+  ...ymfony\http-foundation\StreamedResponse.php:106 Symfony\Component\HttpKernel\HttpKernel::Symfony\Component\HttpKernel\{closure}()
+  .\vendor\symfony\http-foundation\Response.php:423  Symfony\Component\HttpFoundation\StreamedResponse->sendContent()
+  .\src\Glpi\Kernel\Kernel.php:295                   Symfony\Component\HttpFoundation\Response->send()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-08 12:31:04] glpi.CRITICAL:   *** Uncaught PHP Exception Safe\Exceptions\SessionException: "An error occurred" at SessionException.php line 9
+  Backtrace :
+  ...afe\generated\Exceptions\SessionException.php:9 
+  ...odingmachine\safe\generated\8.3\session.php:502 Safe\Exceptions\SessionException::createFromPhpError()
+  .\src\Session.php:270                              Safe\session_start()
+  .\src\Glpi\Api\API.php:428                         Session::start()
+  .\src\Glpi\Api\APIRest.php:161                     Glpi\Api\API->retrieveSession()
+  .\src\Glpi\Controller\ApiRestController.php:59     Glpi\Api\APIRest->call()
+  .\vendor\symfony\http-kernel\HttpKernel.php:101    Glpi\Controller\ApiRestController->Glpi\Controller\{closure}()
+  ...ymfony\http-foundation\StreamedResponse.php:106 Symfony\Component\HttpKernel\HttpKernel::Symfony\Component\HttpKernel\{closure}()
+  .\vendor\symfony\http-foundation\Response.php:423  Symfony\Component\HttpFoundation\StreamedResponse->sendContent()
+  .\src\Glpi\Kernel\Kernel.php:295                   Symfony\Component\HttpFoundation\Response->send()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-08 12:31:04] glpi.WARNING:   *** Warning: Undefined array key "glpi_use_mode" at Html.php line 1089
+  Backtrace :
+  .\src\Html.php:1089                                
+  .\src\Html.php:1960                                Html::includeHeader()
+  :                                                  Html::nullHeader()
+  ...Application\View\Extension\PhpExtension.php:105 call_user_func_array()
+  ...ates\aa\aa1f8242987b1607de6719c36b671b8e.php:45 Glpi\Application\View\Extension\PhpExtension->call()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_e978c7595d40263b625c6bfca0b4e651->doDisplay()
+  .\vendor\twig\twig\src\Template.php:358            Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:373            Twig\Template->display()
+  .\vendor\twig\twig\src\TemplateWrapper.php:51      Twig\Template->render()
+  ...\Glpi\Application\View\TemplateRenderer.php:170 Twig\TemplateWrapper->render()
+  .\src\Glpi\Controller\AbstractController.php:68    Glpi\Application\View\TemplateRenderer->render()
+  .\src\Glpi\Controller\ErrorController.php:177      Glpi\Controller\AbstractController->render()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\ErrorController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  ...http-kernel\EventListener\ErrorListener.php:117 Symfony\Component\HttpKernel\Kernel->handle()
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Symfony\Component\HttpKernel\EventListener\ErrorListener->onKernelException()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\src\Glpi\Kernel\Kernel.php:300                   Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-08 12:31:04] glpi.WARNING:   *** Warning: Undefined array key "glpi_use_mode" at Html.php line 1231
+  Backtrace :
+  .\src\Html.php:1231                                
+  .\src\Html.php:1960                                Html::includeHeader()
+  :                                                  Html::nullHeader()
+  ...Application\View\Extension\PhpExtension.php:105 call_user_func_array()
+  ...ates\aa\aa1f8242987b1607de6719c36b671b8e.php:45 Glpi\Application\View\Extension\PhpExtension->call()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_e978c7595d40263b625c6bfca0b4e651->doDisplay()
+  .\vendor\twig\twig\src\Template.php:358            Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:373            Twig\Template->display()
+  .\vendor\twig\twig\src\TemplateWrapper.php:51      Twig\Template->render()
+  ...\Glpi\Application\View\TemplateRenderer.php:170 Twig\TemplateWrapper->render()
+  .\src\Glpi\Controller\AbstractController.php:68    Glpi\Application\View\TemplateRenderer->render()
+  .\src\Glpi\Controller\ErrorController.php:177      Glpi\Controller\AbstractController->render()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\ErrorController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  ...http-kernel\EventListener\ErrorListener.php:117 Symfony\Component\HttpKernel\Kernel->handle()
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Symfony\Component\HttpKernel\EventListener\ErrorListener->onKernelException()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\src\Glpi\Kernel\Kernel.php:300                   Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-08 12:31:04] glpi.WARNING:   *** Warning: Undefined array key "glpi_use_mode" at Html.php line 1753
+  Backtrace :
+  .\src\Html.php:1753                                
+  :                                                  Html::footer()
+  ...Application\View\Extension\PhpExtension.php:105 call_user_func_array()
+  ...ates\aa\aa1f8242987b1607de6719c36b671b8e.php:60 Glpi\Application\View\Extension\PhpExtension->call()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_e978c7595d40263b625c6bfca0b4e651->doDisplay()
+  .\vendor\twig\twig\src\Template.php:358            Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:373            Twig\Template->display()
+  .\vendor\twig\twig\src\TemplateWrapper.php:51      Twig\Template->render()
+  ...\Glpi\Application\View\TemplateRenderer.php:170 Twig\TemplateWrapper->render()
+  .\src\Glpi\Controller\AbstractController.php:68    Glpi\Application\View\TemplateRenderer->render()
+  .\src\Glpi\Controller\ErrorController.php:177      Glpi\Controller\AbstractController->render()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\ErrorController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  ...http-kernel\EventListener\ErrorListener.php:117 Symfony\Component\HttpKernel\Kernel->handle()
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Symfony\Component\HttpKernel\EventListener\ErrorListener->onKernelException()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\src\Glpi\Kernel\Kernel.php:300                   Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-08 12:31:10] glpi.WARNING:   *** Warning: session_start(): Session ID is too long or contains illegal characters. Only the A-Z, a-z, 0-9, &quot;-&quot;, and &quot;,&quot; characters are allowed at session.php line 500
+  Backtrace :
+  ...odingmachine\safe\generated\8.3\session.php:500 
+  .\src\Session.php:270                              Safe\session_start()
+  .\src\Glpi\Api\API.php:428                         Session::start()
+  .\src\Glpi\Api\APIRest.php:161                     Glpi\Api\API->retrieveSession()
+  .\src\Glpi\Controller\ApiRestController.php:59     Glpi\Api\APIRest->call()
+  .\vendor\symfony\http-kernel\HttpKernel.php:101    Glpi\Controller\ApiRestController->Glpi\Controller\{closure}()
+  ...ymfony\http-foundation\StreamedResponse.php:106 Symfony\Component\HttpKernel\HttpKernel::Symfony\Component\HttpKernel\{closure}()
+  .\vendor\symfony\http-foundation\Response.php:423  Symfony\Component\HttpFoundation\StreamedResponse->sendContent()
+  .\src\Glpi\Kernel\Kernel.php:295                   Symfony\Component\HttpFoundation\Response->send()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-08 12:31:10] glpi.WARNING:   *** Warning: session_start(): Failed to read session data: files (path: ./files/_sessions) at session.php line 500
+  Backtrace :
+  ...odingmachine\safe\generated\8.3\session.php:500 
+  .\src\Session.php:270                              Safe\session_start()
+  .\src\Glpi\Api\API.php:428                         Session::start()
+  .\src\Glpi\Api\APIRest.php:161                     Glpi\Api\API->retrieveSession()
+  .\src\Glpi\Controller\ApiRestController.php:59     Glpi\Api\APIRest->call()
+  .\vendor\symfony\http-kernel\HttpKernel.php:101    Glpi\Controller\ApiRestController->Glpi\Controller\{closure}()
+  ...ymfony\http-foundation\StreamedResponse.php:106 Symfony\Component\HttpKernel\HttpKernel::Symfony\Component\HttpKernel\{closure}()
+  .\vendor\symfony\http-foundation\Response.php:423  Symfony\Component\HttpFoundation\StreamedResponse->sendContent()
+  .\src\Glpi\Kernel\Kernel.php:295                   Symfony\Component\HttpFoundation\Response->send()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-08 12:31:10] glpi.CRITICAL:   *** Uncaught PHP Exception Safe\Exceptions\SessionException: "An error occurred" at SessionException.php line 9
+  Backtrace :
+  ...afe\generated\Exceptions\SessionException.php:9 
+  ...odingmachine\safe\generated\8.3\session.php:502 Safe\Exceptions\SessionException::createFromPhpError()
+  .\src\Session.php:270                              Safe\session_start()
+  .\src\Glpi\Api\API.php:428                         Session::start()
+  .\src\Glpi\Api\APIRest.php:161                     Glpi\Api\API->retrieveSession()
+  .\src\Glpi\Controller\ApiRestController.php:59     Glpi\Api\APIRest->call()
+  .\vendor\symfony\http-kernel\HttpKernel.php:101    Glpi\Controller\ApiRestController->Glpi\Controller\{closure}()
+  ...ymfony\http-foundation\StreamedResponse.php:106 Symfony\Component\HttpKernel\HttpKernel::Symfony\Component\HttpKernel\{closure}()
+  .\vendor\symfony\http-foundation\Response.php:423  Symfony\Component\HttpFoundation\StreamedResponse->sendContent()
+  .\src\Glpi\Kernel\Kernel.php:295                   Symfony\Component\HttpFoundation\Response->send()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-08 12:31:10] glpi.WARNING:   *** Warning: Undefined array key "glpi_use_mode" at Html.php line 1089
+  Backtrace :
+  .\src\Html.php:1089                                
+  .\src\Html.php:1960                                Html::includeHeader()
+  :                                                  Html::nullHeader()
+  ...Application\View\Extension\PhpExtension.php:105 call_user_func_array()
+  ...ates\aa\aa1f8242987b1607de6719c36b671b8e.php:45 Glpi\Application\View\Extension\PhpExtension->call()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_e978c7595d40263b625c6bfca0b4e651->doDisplay()
+  .\vendor\twig\twig\src\Template.php:358            Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:373            Twig\Template->display()
+  .\vendor\twig\twig\src\TemplateWrapper.php:51      Twig\Template->render()
+  ...\Glpi\Application\View\TemplateRenderer.php:170 Twig\TemplateWrapper->render()
+  .\src\Glpi\Controller\AbstractController.php:68    Glpi\Application\View\TemplateRenderer->render()
+  .\src\Glpi\Controller\ErrorController.php:177      Glpi\Controller\AbstractController->render()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\ErrorController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  ...http-kernel\EventListener\ErrorListener.php:117 Symfony\Component\HttpKernel\Kernel->handle()
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Symfony\Component\HttpKernel\EventListener\ErrorListener->onKernelException()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\src\Glpi\Kernel\Kernel.php:300                   Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-08 12:31:10] glpi.WARNING:   *** Warning: Undefined array key "glpi_use_mode" at Html.php line 1231
+  Backtrace :
+  .\src\Html.php:1231                                
+  .\src\Html.php:1960                                Html::includeHeader()
+  :                                                  Html::nullHeader()
+  ...Application\View\Extension\PhpExtension.php:105 call_user_func_array()
+  ...ates\aa\aa1f8242987b1607de6719c36b671b8e.php:45 Glpi\Application\View\Extension\PhpExtension->call()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_e978c7595d40263b625c6bfca0b4e651->doDisplay()
+  .\vendor\twig\twig\src\Template.php:358            Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:373            Twig\Template->display()
+  .\vendor\twig\twig\src\TemplateWrapper.php:51      Twig\Template->render()
+  ...\Glpi\Application\View\TemplateRenderer.php:170 Twig\TemplateWrapper->render()
+  .\src\Glpi\Controller\AbstractController.php:68    Glpi\Application\View\TemplateRenderer->render()
+  .\src\Glpi\Controller\ErrorController.php:177      Glpi\Controller\AbstractController->render()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\ErrorController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  ...http-kernel\EventListener\ErrorListener.php:117 Symfony\Component\HttpKernel\Kernel->handle()
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Symfony\Component\HttpKernel\EventListener\ErrorListener->onKernelException()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\src\Glpi\Kernel\Kernel.php:300                   Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-08 12:31:11] glpi.WARNING:   *** Warning: Undefined array key "glpi_use_mode" at Html.php line 1753
+  Backtrace :
+  .\src\Html.php:1753                                
+  :                                                  Html::footer()
+  ...Application\View\Extension\PhpExtension.php:105 call_user_func_array()
+  ...ates\aa\aa1f8242987b1607de6719c36b671b8e.php:60 Glpi\Application\View\Extension\PhpExtension->call()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_e978c7595d40263b625c6bfca0b4e651->doDisplay()
+  .\vendor\twig\twig\src\Template.php:358            Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:373            Twig\Template->display()
+  .\vendor\twig\twig\src\TemplateWrapper.php:51      Twig\Template->render()
+  ...\Glpi\Application\View\TemplateRenderer.php:170 Twig\TemplateWrapper->render()
+  .\src\Glpi\Controller\AbstractController.php:68    Glpi\Application\View\TemplateRenderer->render()
+  .\src\Glpi\Controller\ErrorController.php:177      Glpi\Controller\AbstractController->render()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\ErrorController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  ...http-kernel\EventListener\ErrorListener.php:117 Symfony\Component\HttpKernel\Kernel->handle()
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Symfony\Component\HttpKernel\EventListener\ErrorListener->onKernelException()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\src\Glpi\Kernel\Kernel.php:300                   Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-08 12:31:23] glpi.WARNING:   *** Warning: session_start(): Session ID is too long or contains illegal characters. Only the A-Z, a-z, 0-9, &quot;-&quot;, and &quot;,&quot; characters are allowed at session.php line 500
+  Backtrace :
+  ...odingmachine\safe\generated\8.3\session.php:500 
+  .\src\Session.php:270                              Safe\session_start()
+  .\src\Glpi\Api\API.php:428                         Session::start()
+  .\src\Glpi\Api\APIRest.php:161                     Glpi\Api\API->retrieveSession()
+  .\src\Glpi\Controller\ApiRestController.php:59     Glpi\Api\APIRest->call()
+  .\vendor\symfony\http-kernel\HttpKernel.php:101    Glpi\Controller\ApiRestController->Glpi\Controller\{closure}()
+  ...ymfony\http-foundation\StreamedResponse.php:106 Symfony\Component\HttpKernel\HttpKernel::Symfony\Component\HttpKernel\{closure}()
+  .\vendor\symfony\http-foundation\Response.php:423  Symfony\Component\HttpFoundation\StreamedResponse->sendContent()
+  .\src\Glpi\Kernel\Kernel.php:295                   Symfony\Component\HttpFoundation\Response->send()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-08 12:31:23] glpi.WARNING:   *** Warning: session_start(): Failed to read session data: files (path: ./files/_sessions) at session.php line 500
+  Backtrace :
+  ...odingmachine\safe\generated\8.3\session.php:500 
+  .\src\Session.php:270                              Safe\session_start()
+  .\src\Glpi\Api\API.php:428                         Session::start()
+  .\src\Glpi\Api\APIRest.php:161                     Glpi\Api\API->retrieveSession()
+  .\src\Glpi\Controller\ApiRestController.php:59     Glpi\Api\APIRest->call()
+  .\vendor\symfony\http-kernel\HttpKernel.php:101    Glpi\Controller\ApiRestController->Glpi\Controller\{closure}()
+  ...ymfony\http-foundation\StreamedResponse.php:106 Symfony\Component\HttpKernel\HttpKernel::Symfony\Component\HttpKernel\{closure}()
+  .\vendor\symfony\http-foundation\Response.php:423  Symfony\Component\HttpFoundation\StreamedResponse->sendContent()
+  .\src\Glpi\Kernel\Kernel.php:295                   Symfony\Component\HttpFoundation\Response->send()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-08 12:31:23] glpi.CRITICAL:   *** Uncaught PHP Exception Safe\Exceptions\SessionException: "An error occurred" at SessionException.php line 9
+  Backtrace :
+  ...afe\generated\Exceptions\SessionException.php:9 
+  ...odingmachine\safe\generated\8.3\session.php:502 Safe\Exceptions\SessionException::createFromPhpError()
+  .\src\Session.php:270                              Safe\session_start()
+  .\src\Glpi\Api\API.php:428                         Session::start()
+  .\src\Glpi\Api\APIRest.php:161                     Glpi\Api\API->retrieveSession()
+  .\src\Glpi\Controller\ApiRestController.php:59     Glpi\Api\APIRest->call()
+  .\vendor\symfony\http-kernel\HttpKernel.php:101    Glpi\Controller\ApiRestController->Glpi\Controller\{closure}()
+  ...ymfony\http-foundation\StreamedResponse.php:106 Symfony\Component\HttpKernel\HttpKernel::Symfony\Component\HttpKernel\{closure}()
+  .\vendor\symfony\http-foundation\Response.php:423  Symfony\Component\HttpFoundation\StreamedResponse->sendContent()
+  .\src\Glpi\Kernel\Kernel.php:295                   Symfony\Component\HttpFoundation\Response->send()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-08 12:31:23] glpi.WARNING:   *** Warning: Undefined array key "glpi_use_mode" at Html.php line 1089
+  Backtrace :
+  .\src\Html.php:1089                                
+  .\src\Html.php:1960                                Html::includeHeader()
+  :                                                  Html::nullHeader()
+  ...Application\View\Extension\PhpExtension.php:105 call_user_func_array()
+  ...ates\aa\aa1f8242987b1607de6719c36b671b8e.php:45 Glpi\Application\View\Extension\PhpExtension->call()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_e978c7595d40263b625c6bfca0b4e651->doDisplay()
+  .\vendor\twig\twig\src\Template.php:358            Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:373            Twig\Template->display()
+  .\vendor\twig\twig\src\TemplateWrapper.php:51      Twig\Template->render()
+  ...\Glpi\Application\View\TemplateRenderer.php:170 Twig\TemplateWrapper->render()
+  .\src\Glpi\Controller\AbstractController.php:68    Glpi\Application\View\TemplateRenderer->render()
+  .\src\Glpi\Controller\ErrorController.php:177      Glpi\Controller\AbstractController->render()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\ErrorController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  ...http-kernel\EventListener\ErrorListener.php:117 Symfony\Component\HttpKernel\Kernel->handle()
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Symfony\Component\HttpKernel\EventListener\ErrorListener->onKernelException()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\src\Glpi\Kernel\Kernel.php:300                   Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-08 12:31:23] glpi.WARNING:   *** Warning: Undefined array key "glpi_use_mode" at Html.php line 1231
+  Backtrace :
+  .\src\Html.php:1231                                
+  .\src\Html.php:1960                                Html::includeHeader()
+  :                                                  Html::nullHeader()
+  ...Application\View\Extension\PhpExtension.php:105 call_user_func_array()
+  ...ates\aa\aa1f8242987b1607de6719c36b671b8e.php:45 Glpi\Application\View\Extension\PhpExtension->call()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_e978c7595d40263b625c6bfca0b4e651->doDisplay()
+  .\vendor\twig\twig\src\Template.php:358            Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:373            Twig\Template->display()
+  .\vendor\twig\twig\src\TemplateWrapper.php:51      Twig\Template->render()
+  ...\Glpi\Application\View\TemplateRenderer.php:170 Twig\TemplateWrapper->render()
+  .\src\Glpi\Controller\AbstractController.php:68    Glpi\Application\View\TemplateRenderer->render()
+  .\src\Glpi\Controller\ErrorController.php:177      Glpi\Controller\AbstractController->render()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\ErrorController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  ...http-kernel\EventListener\ErrorListener.php:117 Symfony\Component\HttpKernel\Kernel->handle()
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Symfony\Component\HttpKernel\EventListener\ErrorListener->onKernelException()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\src\Glpi\Kernel\Kernel.php:300                   Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-08 12:31:24] glpi.WARNING:   *** Warning: Undefined array key "glpi_use_mode" at Html.php line 1753
+  Backtrace :
+  .\src\Html.php:1753                                
+  :                                                  Html::footer()
+  ...Application\View\Extension\PhpExtension.php:105 call_user_func_array()
+  ...ates\aa\aa1f8242987b1607de6719c36b671b8e.php:60 Glpi\Application\View\Extension\PhpExtension->call()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_e978c7595d40263b625c6bfca0b4e651->doDisplay()
+  .\vendor\twig\twig\src\Template.php:358            Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:373            Twig\Template->display()
+  .\vendor\twig\twig\src\TemplateWrapper.php:51      Twig\Template->render()
+  ...\Glpi\Application\View\TemplateRenderer.php:170 Twig\TemplateWrapper->render()
+  .\src\Glpi\Controller\AbstractController.php:68    Glpi\Application\View\TemplateRenderer->render()
+  .\src\Glpi\Controller\ErrorController.php:177      Glpi\Controller\AbstractController->render()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\ErrorController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  ...http-kernel\EventListener\ErrorListener.php:117 Symfony\Component\HttpKernel\Kernel->handle()
+  ...ymfony\event-dispatcher\EventDispatcher.php:260 Symfony\Component\HttpKernel\EventListener\ErrorListener->onKernelException()
+  ...ymfony\event-dispatcher\EventDispatcher.php:220 Symfony\Component\EventDispatcher\EventDispatcher::Symfony\Component\EventDispatcher\{closure}()
+  ...symfony\event-dispatcher\EventDispatcher.php:56 Symfony\Component\EventDispatcher\EventDispatcher->callListeners()
+  .\src\Glpi\Kernel\Kernel.php:300                   Symfony\Component\EventDispatcher\EventDispatcher->dispatch()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-09 11:05:58] glpi.WARNING:   *** User Warning: Invalid callable `::renderDcBreadcrumb()`. at PhpExtension.php line 101
+  Backtrace :
+  ...Application\View\Extension\PhpExtension.php:101 
+  ...tes\b8\b81d9b5ea9041236a3913b08ce6a1dc2.php:200 Glpi\Application\View\Extension\PhpExtension->call()
+  ...\twig\twig\src\Extension\CoreExtension.php:2116 __TwigTemplate_edb799c2cbcbca0e708b1d99b188e4ae->{closure}()
+  ...tes\b8\b81d9b5ea9041236a3913b08ce6a1dc2.php:190 Twig\Extension\CoreExtension::captureOutput()
+  ...\twig\twig\src\Extension\CoreExtension.php:2116 __TwigTemplate_edb799c2cbcbca0e708b1d99b188e4ae->{closure}()
+  ...ates\b8\b81d9b5ea9041236a3913b08ce6a1dc2.php:93 Twig\Extension\CoreExtension::captureOutput()
+  .\vendor\twig\twig\src\Template.php:446            __TwigTemplate_edb799c2cbcbca0e708b1d99b188e4ae->block_more_fields()
+  ...tes\82\82e22862fe48c8e1a7d0df7171e32d34.php:941 Twig\Template->yieldBlock()
+  .\vendor\twig\twig\src\Template.php:446            __TwigTemplate_c3c4e0839b05ace62582b157b20773d6->block_form_fields()
+  ...tes\82\82e22862fe48c8e1a7d0df7171e32d34.php:119 Twig\Template->yieldBlock()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_c3c4e0839b05ace62582b157b20773d6->doDisplay()
+  ...ates\b8\b81d9b5ea9041236a3913b08ce6a1dc2.php:52 Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_edb799c2cbcbca0e708b1d99b188e4ae->doDisplay()
+  .\vendor\twig\twig\src\Template.php:358            Twig\Template->yield()
+  .\vendor\twig\twig\src\TemplateWrapper.php:61      Twig\Template->display()
+  ...\Glpi\Application\View\TemplateRenderer.php:188 Twig\TemplateWrapper->display()
+  .\src\Cable.php:476                                Glpi\Application\View\TemplateRenderer->display()
+  .\src\CommonGLPI.php:706                           Cable->showForm()
+  .\ajax\common.tabs.php:108                         CommonGLPI::displayStandardTab()
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-09 11:05:58] glpi.WARNING:   *** User Warning: Invalid callable `::renderDcBreadcrumb()`. at PhpExtension.php line 101
+  Backtrace :
+  ...Application\View\Extension\PhpExtension.php:101 
+  ...tes\b8\b81d9b5ea9041236a3913b08ce6a1dc2.php:200 Glpi\Application\View\Extension\PhpExtension->call()
+  ...\twig\twig\src\Extension\CoreExtension.php:2116 __TwigTemplate_edb799c2cbcbca0e708b1d99b188e4ae->{closure}()
+  ...tes\b8\b81d9b5ea9041236a3913b08ce6a1dc2.php:190 Twig\Extension\CoreExtension::captureOutput()
+  ...\twig\twig\src\Extension\CoreExtension.php:2116 __TwigTemplate_edb799c2cbcbca0e708b1d99b188e4ae->{closure}()
+  ...ates\b8\b81d9b5ea9041236a3913b08ce6a1dc2.php:93 Twig\Extension\CoreExtension::captureOutput()
+  .\vendor\twig\twig\src\Template.php:446            __TwigTemplate_edb799c2cbcbca0e708b1d99b188e4ae->block_more_fields()
+  ...tes\82\82e22862fe48c8e1a7d0df7171e32d34.php:941 Twig\Template->yieldBlock()
+  .\vendor\twig\twig\src\Template.php:446            __TwigTemplate_c3c4e0839b05ace62582b157b20773d6->block_form_fields()
+  ...tes\82\82e22862fe48c8e1a7d0df7171e32d34.php:119 Twig\Template->yieldBlock()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_c3c4e0839b05ace62582b157b20773d6->doDisplay()
+  ...ates\b8\b81d9b5ea9041236a3913b08ce6a1dc2.php:52 Twig\Template->yield()
+  .\vendor\twig\twig\src\Template.php:402            __TwigTemplate_edb799c2cbcbca0e708b1d99b188e4ae->doDisplay()
+  .\vendor\twig\twig\src\Template.php:358            Twig\Template->yield()
+  .\vendor\twig\twig\src\TemplateWrapper.php:61      Twig\Template->display()
+  ...\Glpi\Application\View\TemplateRenderer.php:188 Twig\TemplateWrapper->display()
+  .\src\Cable.php:476                                Glpi\Application\View\TemplateRenderer->display()
+  .\src\CommonGLPI.php:706                           Cable->showForm()
+  .\ajax\common.tabs.php:108                         CommonGLPI::displayStandardTab()
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-09 15:41:40] glpi.WARNING:   *** Warning: Undefined array key "id" at CommonItilObject_Item.php line 1573
+  Backtrace :
+  .\src\CommonItilObject_Item.php:1573               
+  .\src\CommonDBTM.php:1402                          CommonItilObject_Item->addMessageOnAddAction()
+  .\src\Glpi\Api\API.php:1940                        CommonDBTM->add()
+  .\src\Glpi\Api\APIRest.php:347                     Glpi\Api\API->createItems()
+  .\src\Glpi\Controller\ApiRestController.php:59     Glpi\Api\APIRest->call()
+  .\vendor\symfony\http-kernel\HttpKernel.php:101    Glpi\Controller\ApiRestController->Glpi\Controller\{closure}()
+  ...ymfony\http-foundation\StreamedResponse.php:106 Symfony\Component\HttpKernel\HttpKernel::Symfony\Component\HttpKernel\{closure}()
+  .\vendor\symfony\http-foundation\Response.php:423  Symfony\Component\HttpFoundation\StreamedResponse->sendContent()
+  .\src\Glpi\Kernel\Kernel.php:295                   Symfony\Component\HttpFoundation\Response->send()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+
+[2026-06-12 04:50:15] glpi.WARNING:   *** Test logger
+[2026-06-12 04:52:29] glpi.ERROR:   *** Caught RuntimeException: Failed to write cache file "./files/_cache/11.0.7-49a93008-production/templates/d4/d48f6fce05d91a7984ece0672ec97d03.php".
+  Backtrace :
+  ...ndor\twig\twig\src\Cache\FilesystemCache.php:76 
+  .\vendor\twig\twig\src\Environment.php:410         Twig\Cache\FilesystemCache->write()
+  .\vendor\twig\twig\src\Environment.php:461         Twig\Environment->loadTemplate()
+  ...\Glpi\Application\View\TemplateRenderer.php:206 Twig\Environment->createTemplate()
+  .\src\Glpi\Dashboard\Widget.php:1287               Glpi\Application\View\TemplateRenderer->renderFromStringTemplate()
+  .\src\Glpi\Dashboard\Widget.php:957                Glpi\Dashboard\Widget::getBarsGraph()
+  .\src\Glpi\Dashboard\Widget.php:969                Glpi\Dashboard\Widget::simpleBar()
+  .\src\Glpi\Dashboard\Grid.php:1104                 Glpi\Dashboard\Widget::simpleHbar()
+  .\ajax\dashboard.php:232                           Glpi\Dashboard\Grid->getCardHtml()
+  ...Glpi\Controller\LegacyFileLoadController.php:64 require()
+  .\vendor\symfony\http-kernel\HttpKernel.php:181    Glpi\Controller\LegacyFileLoadController->__invoke()
+  .\vendor\symfony\http-kernel\HttpKernel.php:76     Symfony\Component\HttpKernel\HttpKernel->handleRaw()
+  .\vendor\symfony\http-kernel\Kernel.php:208        Symfony\Component\HttpKernel\HttpKernel->handle()
+  .\public\index.php:71                              Symfony\Component\HttpKernel\Kernel->handle()
+
+[2026-06-14 15:29:42] glpi.WARNING:   *** Test logger
+[2026-06-14 15:29:49] glpi.WARNING:   *** Warning: rmdir(./files/_cache/11.0.7-49a93008-production/templates/d4): Directory not empty at filesystem.php line 1575
+  Backtrace :
+  ...gmachine\safe\generated\8.3\filesystem.php:1575 
+  .\src\Glpi\Cache\CacheManager.php:344              Safe\rmdir()
+  .\src\Glpi\Controller\InstallController.php:133    Glpi\Cache\CacheManager->resetAllCaches()
+  ...ts\AsyncOperationProgressControllerTrait.php:83 Glpi\Controller\InstallController->Glpi\Controller\{closure}()
+  .\vendor\symfony\http-kernel\HttpKernel.php:101    Glpi\Controller\InstallController->Glpi\Controller\Traits\{closure}()
+  ...ymfony\http-foundation\StreamedResponse.php:106 Symfony\Component\HttpKernel\HttpKernel::Symfony\Component\HttpKernel\{closure}()
+  .\vendor\symfony\http-foundation\Response.php:423  Symfony\Component\HttpFoundation\StreamedResponse->sendContent()
+  .\src\Glpi\Kernel\Kernel.php:295                   Symfony\Component\HttpFoundation\Response->send()
+  .\public\index.php:73                              Glpi\Kernel\Kernel->sendResponse()
+

@@ -1,0 +1,403 @@
+/* src/styles/ParcDashboard.css */
+
+.parc-dashboard {
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  box-sizing: border-box;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
+}
+
+.header-title-area h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+  margin: 0 0 4px 0;
+}
+
+.header-title-area p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Badges */
+.total-items-badge {
+  background-color: rgba(37, 99, 235, 0.05);
+  border: 1px solid rgba(37, 99, 235, 0.15);
+  padding: 8px 16px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.total-items-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.total-items-value {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.badge-live {
+  background-color: rgba(37, 99, 235, 0.05);
+  color: var(--color-primary);
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(37, 99, 235, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-error {
+  background-color: rgba(239, 68, 68, 0.06);
+  color: var(--color-danger);
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.9); opacity: 1; box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
+  70% { transform: scale(1.1); opacity: 0.8; box-shadow: 0 0 0 8px rgba(37, 99, 235, 0); }
+  100% { transform: scale(0.9); opacity: 1; box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+}
+
+/* Refresh Button */
+.btn-refresh {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-refresh:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  background-color: #f8fafc;
+  color: var(--color-primary);
+}
+
+.btn-refresh:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.refresh-icon {
+  transition: transform 0.3s;
+}
+
+.refresh-icon.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Main Cards Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px;
+}
+
+/* Custom resource colors mapped to variables for counts and names coloring */
+.stat-card.computers { --card-color: #3b82f6; }
+.stat-card.software { --card-color: #8b5cf6; }
+.stat-card.printers { --card-color: #06b6d4; }
+.stat-card.pdus { --card-color: #14b8a6; }
+.stat-card.racks { --card-color: #6366f1; }
+.stat-card.phones { --card-color: #f97316; }
+.stat-card.chassis { --card-color: #84cc16; }
+.stat-card.network { --card-color: #f59e0b; }
+.stat-card.licenses { --card-color: #dc2626; }
+.stat-card.monitors { --card-color: #10b981; }
+.stat-card.peripherals { --card-color: #ec4899; }
+.stat-card.passive-equipment { --card-color: #0ea5e9; }
+.stat-card.cartridges { --card-color: #64748b; }
+.stat-card.consumables { --card-color: #a855f7; }
+.stat-card.cables { --card-color: #f43f5e; }
+.stat-card.databaseInstances { --card-color: #0d9488; }
+.stat-card.dcRooms { --card-color: #d97706; }
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: #cbd5e1;
+}
+
+.stat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.stat-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--card-color, var(--text-secondary)); /* Colored name */
+}
+
+.stat-icon-wrapper {
+  padding: 8px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(37, 99, 235, 0.06);
+  color: var(--color-primary);
+}
+
+.stat-card-body {
+  margin-top: auto;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--card-color, var(--text-primary)); /* Colored number */
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+/* Tickets Section */
+.tickets-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.tickets-header h3 {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+
+.total-elements-card,
+.total-tickets-card {
+  background: var(--bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+}
+
+.total-elements-label,
+.total-tickets-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.total-elements-value,
+.total-tickets-value {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+/* Ticket Cards Grid */
+.ticket-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.ticket-card {
+  background: var(--bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.ticket-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: #cbd5e1;
+}
+
+.ticket-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.ticket-card-count {
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--card-color, var(--text-primary)); /* Colored number */
+}
+
+.ticket-card-icon {
+  color: var(--card-color, var(--color-primary)); /* Colored icon */
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ticket-card-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--card-color, var(--text-secondary)); /* Colored name */
+}
+
+/* Loader and Error Banner */
+.dashboard-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 350px;
+  width: 100%;
+  gap: 16px;
+}
+
+.loader-icon {
+  color: var(--color-primary);
+  animation: spin 1.2s linear infinite;
+}
+
+.loader-text {
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.error-banner {
+  background-color: rgba(239, 68, 68, 0.05);
+  border: 1px dashed rgba(239, 68, 68, 0.3);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  color: var(--color-danger);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   RESPONSIVE LAYOUT BREAKPOINTS
+   ────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1400px) {
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1200px) {
+  .ticket-cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .ticket-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
