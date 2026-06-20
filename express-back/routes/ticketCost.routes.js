@@ -8,7 +8,7 @@ router.get('/:ticket_id', ticketCostController.getSuperCost);
 router.delete('/:ticket_id', ticketCostController.deleteSuperCost);
 router.post('/reopen', ticketCostController.saveReopenCost);
 router.get('/reopen/all', ticketCostController.getAllReopenCosts);
-
-
+router.get('/calculate-base/:ticket_id/:mode', ticketCostController.calculateBaseCost);
+router.post('/reopen-custom', ticketCostController.saveCustomReopenCost);
 
 module.exports = router;

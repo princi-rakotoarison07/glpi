@@ -576,7 +576,71 @@ const TicketKanban = () => {
       setLoading(false);
     }
   };
+  const fileInputRef = React.useRef(null);
 
+  const handleImportFile = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        setLoading(true);
+        const text = event.target.result;
+        const lines = text.split('\n');
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          const [ticketIdStr, action, valueStr, modeStr] = line.split(',');
+          const ticketId = parseInt(ticketIdStr, 10);
+          const value = parseFloat(valueStr);
+          const mode = parseInt(modeStr, 10);
+
+          if (isNaN(ticketId) || isNaN(value) || isNaN(mode)) continue;
+
+          if (action.trim().toLowerCase() === 'open') {
+            // Calculate base cost based on mode
+            let baseCost = 0;
+            try {
+               const res = await TicketCostService.calculateBaseCost(ticketId, mode);
+               baseCost = res.base_cost || 0;
+            } catch(err) {
+               console.error("Error calculating base cost for ticket", ticketId, err);
+               continue;
+            }
+
+            const calculatedCost = baseCost * (value / 100);
+
+            // Fetch linked items and save reopen cost
+            const linkedItems = await ItemTicketService.getItemsForTicket(ticketId);
+            const groupId = Date.now().toString() + Math.random().toString(36).substr(2, 5);
+
+            if (linkedItems && linkedItems.length > 0) {
+              const dividedCost = calculatedCost / linkedItems.length;
+              for (const item of linkedItems) {
+                await TicketCostService.saveCustomReopenCost(ticketId, dividedCost, item.items_id, item.itemtype, groupId);
+              }
+            } else {
+              await TicketCostService.saveCustomReopenCost(ticketId, calculatedCost, null, null, groupId);
+            }
+
+            // Update ticket status to In Progress (assigné) which is 2
+            await TicketService.updateTicket(ticketId, { status: 2 });
+          }
+        }
+        await fetchTickets();
+        alert('Import terminé avec succès !');
+      } catch (err) {
+        console.error('Erreur lors de l\'import:', err);
+        alert('Erreur lors de l\'import.');
+      } finally {
+        setLoading(false);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+      }
+    };
+    reader.readAsText(file);
+  };
 
 
   // Group tickets into columns
@@ -640,6 +704,10 @@ const TicketKanban = () => {
             <h1>Tableau de suivi (Kanban)</h1>
           </div>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <label className="add-ticket-btn" style={{ cursor: 'pointer', backgroundColor: '#475569' }}>
+              Importer
+              <input type="file" accept=".csv,.txt" style={{ display: 'none' }} ref={fileInputRef} onChange={handleImportFile} />
+            </label>
             <Link to="/admin" className="cancel-modal-btn" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 16px', margin: 0 }}>
               <Settings size={16} />
               Configuration

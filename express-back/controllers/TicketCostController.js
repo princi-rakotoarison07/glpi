@@ -93,4 +93,70 @@ exports.getAllReopenCosts = (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Failed to load ' });
   }
-}
+};
+
+exports.calculateBaseCost = (req, res) => {
+  const { ticket_id, mode } = req.params;
+  const modeInt = parseInt(mode, 10);
+  
+  try {
+    let base_cost = 0;
+    
+    if (modeInt === 1) { // Dernier super cost
+      const lastRow = db.prepare("SELECT group_id, cout FROM ticket_costs WHERE id_ticket = ? AND type_cout = 'super_cost' ORDER BY id DESC LIMIT 1").get(ticket_id);
+      if (lastRow) {
+        if (lastRow.group_id) {
+          base_cost = db.prepare("SELECT SUM(cout) as total FROM ticket_costs WHERE group_id = ? AND type_cout = 'super_cost'").get(lastRow.group_id).total;
+        } else {
+          base_cost = lastRow.cout;
+        }
+      }
+    } else if (modeInt === 2) { // Premier super cost
+      const firstRow = db.prepare("SELECT group_id, cout FROM ticket_costs WHERE id_ticket = ? AND type_cout = 'super_cost' ORDER BY id ASC LIMIT 1").get(ticket_id);
+      if (firstRow) {
+        if (firstRow.group_id) {
+          base_cost = db.prepare("SELECT SUM(cout) as total FROM ticket_costs WHERE group_id = ? AND type_cout = 'super_cost'").get(firstRow.group_id).total;
+        } else {
+          base_cost = firstRow.cout;
+        }
+      }
+    } else if (modeInt === 3) { // Moyenne des supercosts
+      const allRows = db.prepare("SELECT id, group_id, cout FROM ticket_costs WHERE id_ticket = ? AND type_cout = 'super_cost'").all(ticket_id);
+      let totalSum = 0;
+      let groups = new Set();
+      let nullGroupCount = 0;
+      for (const row of allRows) {
+        totalSum += row.cout;
+        if (row.group_id) {
+          groups.add(row.group_id);
+        } else {
+          nullGroupCount++;
+        }
+      }
+      const count = groups.size + nullGroupCount;
+      base_cost = count > 0 ? totalSum / count : 0;
+    } else if (modeInt === 4) { // Somme des supercosts
+      const sumRow = db.prepare("SELECT SUM(cout) as total FROM ticket_costs WHERE id_ticket = ? AND type_cout = 'super_cost'").get(ticket_id);
+      base_cost = sumRow ? sumRow.total || 0 : 0;
+    } else {
+      return res.status(400).json({ error: 'Invalid mode' });
+    }
+    
+    res.status(200).json({ base_cost });
+  } catch (error) {
+    console.error('Error calculating base cost:', error);
+    res.status(500).json({ error: 'Failed to calculate base cost' });
+  }
+};
+
+exports.saveCustomReopenCost = (req, res) => {
+  const { ticket_id, calculated_cost, id_item, id_category, group_id } = req.body;
+  try {
+    const insertStmt = db.prepare('INSERT INTO ticket_costs (id_ticket, type_cout, cout, id_item, id_category, group_id) VALUES (?, ?, ?, ?, ?, ?)');
+    insertStmt.run(ticket_id, 'reopen_cost', calculated_cost, id_item || null, id_category || null, group_id || null);
+    res.status(200).json({ reopen_cost: calculated_cost });
+  } catch (error) {
+    console.error('Error saving custom reopen cost:', error);
+    res.status(500).json({ error: 'Failed to save custom reopen cost' });
+  }
+};

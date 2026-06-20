@@ -142,6 +142,26 @@ const TicketCostService = {
     } catch (error) {
       throw error;
     }
+  },
+
+  calculateBaseCost: async (ticket_id, mode) => {
+    try {
+      const response = await axios.get(`${TICKETCOST_API_URL}/calculate-base/${ticket_id}/${mode}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error calculating base cost:', error);
+      throw error;
+    }
+  },
+
+  saveCustomReopenCost: async (ticket_id, calculated_cost, id_item = null, id_category = null, group_id = null) => {
+    try {
+      const response = await axios.post(`${TICKETCOST_API_URL}/reopen-custom`, { ticket_id, calculated_cost, id_item, id_category, group_id });
+      return response.data;
+    } catch (error) {
+      console.error('Error saving custom reopen cost:', error);
+      throw error;
+    }
   }
 };
 
