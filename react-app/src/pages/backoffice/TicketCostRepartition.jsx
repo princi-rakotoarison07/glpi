@@ -134,6 +134,11 @@ const TicketCostRepartition = () => {
     fetchAllData();
   }, []);
 
+  const totalGlpi = elements.reduce((acc, el) => acc + el.coutTotal, 0);
+  const totalSuper = elements.reduce((acc, el) => acc + el.superCost, 0);
+  const totalReopen = elements.reduce((acc, el) => acc + el.reopenCost, 0);
+  const grandTotal = totalGlpi + totalSuper + totalReopen;
+
   return (
     <div className="cost-repartition-container">
       <div className="repartition-header">
@@ -179,27 +184,52 @@ const TicketCostRepartition = () => {
                       <td className="item-id">{el.name}</td>
                       <td>
                         <span className="cost-badge green">
-                          {el.coutTotal > 0 ? el.coutTotal.toFixed(2) : '-'}
+                          {el.coutTotal > 0 ? el.coutTotal.toFixed(3) : '-'}
                         </span>
                       </td>
                       <td>
                         <span className="cost-badge purple">
-                          {el.superCost > 0 ? el.superCost.toFixed(2) : '-'}
+                          {el.superCost > 0 ? el.superCost.toFixed(3) : '-'}
                         </span>
                       </td>
                       <td>
                         <span className="cost-badge" style={{ backgroundColor: '#fdf4ff', color: '#c026d3', border: '1px solid #f0abfc' }}>
-                          {el.reopenCost > 0 ? el.reopenCost.toFixed(2) : '-'}
+                          {el.reopenCost > 0 ? el.reopenCost.toFixed(3) : '-'}
                         </span>
                       </td>
                       <td>
                         <span className="cost-badge" style={{ backgroundColor: '#f8fafc', color: '#0f172a', border: '1px solid #94a3b8', fontWeight: 'bold' }}>
-                          {somme > 0 ? somme.toFixed(2) : '-'}
+                          {somme > 0 ? somme.toFixed(3) : '-'}
                         </span>
                       </td>
                     </tr>
                   )})}
                 </tbody>
+                <tfoot>
+                  <tr style={{ backgroundColor: '#e2e8f0' }}>
+                    <td colSpan="2" style={{ textAlign: 'right', fontWeight: 'bold', paddingRight: '20px', color: '#1e293b', fontSize: '1.1rem' }}>Total général</td>
+                    <td>
+                      <span className="cost-badge green" style={{ fontWeight: 'bold', fontSize: '1rem' }}>
+                        {totalGlpi > 0 ? totalGlpi.toFixed(3) : '-'}
+                      </span>
+                    </td>
+                    <td>
+                      <span className="cost-badge purple" style={{ fontWeight: 'bold', fontSize: '1rem' }}>
+                        {totalSuper > 0 ? totalSuper.toFixed(3) : '-'}
+                      </span>
+                    </td>
+                    <td>
+                      <span className="cost-badge" style={{ backgroundColor: '#fdf4ff', color: '#c026d3', border: '1px solid #f0abfc', fontWeight: 'bold', fontSize: '1rem' }}>
+                        {totalReopen > 0 ? totalReopen.toFixed(3) : '-'}
+                      </span>
+                    </td>
+                    <td>
+                      <span className="cost-badge" style={{ backgroundColor: '#0f172a', color: '#ffffff', border: '1px solid #0f172a', fontWeight: 'bold', fontSize: '1rem' }}>
+                        {grandTotal > 0 ? grandTotal.toFixed(3) : '-'}
+                      </span>
+                    </td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
           </>

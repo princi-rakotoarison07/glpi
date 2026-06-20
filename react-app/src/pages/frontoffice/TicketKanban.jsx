@@ -64,7 +64,8 @@ const TicketKanban = () => {
     ticketId: null,
     targetColumnId: null,
     showPercentage: false,
-    percentage: ''
+    percentage: '',
+    mode: 1
   });
   const [assignModalData, setAssignModalData] = useState({
     isOpen: false,
@@ -408,19 +409,31 @@ const TicketKanban = () => {
     }
   };
 
-  const handleReopenTicket = async (ticketId, percentage, targetColumnId) => {
+  const handleReopenTicket = async (ticketId, percentage, mode, targetColumnId) => {
     try {
       setLoading(true);
       if (percentage) {
+        const modeInt = mode || 1;
+        let baseCost = 0;
+        try {
+           const res = await TicketCostService.calculateBaseCost(ticketId, modeInt);
+           baseCost = res.base_cost || 0;
+        } catch(err) {
+           console.error("Error calculating base cost for ticket", ticketId, err);
+        }
+        
+        const calculatedCost = baseCost * (parseFloat(percentage) / 100);
+
         const linkedItems = await ItemTicketService.getItemsForTicket(ticketId);
-        const groupId = Date.now().toString();
+        const groupId = Date.now().toString() + Math.random().toString(36).substr(2, 5);
 
         if (linkedItems && linkedItems.length > 0) {
+          const dividedCost = calculatedCost / linkedItems.length;
           for (const item of linkedItems) {
-            await TicketCostService.saveReopenCost(ticketId, parseFloat(percentage), item.items_id, item.itemtype, groupId);
+            await TicketCostService.saveCustomReopenCost(ticketId, dividedCost, item.items_id, item.itemtype, groupId);
           }
         } else {
-          await TicketCostService.saveReopenCost(ticketId, parseFloat(percentage), null, null, groupId);
+          await TicketCostService.saveCustomReopenCost(ticketId, calculatedCost, null, null, groupId);
         }
       }
       setReopenModalData(prev => ({ ...prev, isOpen: false }));
@@ -451,7 +464,8 @@ const TicketKanban = () => {
         ticketId: ticketId,
         targetColumnId: targetColumnId,
         showPercentage: false,
-        percentage: ''
+        percentage: '',
+        mode: 1
       });
       return;
     }
@@ -588,17 +602,40 @@ const TicketKanban = () => {
         setLoading(true);
         const text = event.target.result;
         const lines = text.split('\n');
+        
         for (const line of lines) {
           if (!line.trim()) continue;
-          const [ticketIdStr, action, valueStr, modeStr] = line.split(',');
+          
+          // Handle both comma and semicolon separators
+          const separator = line.includes(';') ? ';' : ',';
+          const parts = line.split(separator);
+          
+          // Skip header row if it contains 'ticket'
+          if (parts[0].toLowerCase().includes('ticket')) continue;
+
+          const ticketIdStr = parts[0];
+          const action = parts[1] ? parts[1].trim().toLowerCase() : '';
+          const valueStr = parts[2] ? parts[2].trim().replace(',', '.') : '0';
+          const modeStr = parts[3] ? parts[3].trim() : '0';
+
           const ticketId = parseInt(ticketIdStr, 10);
           const value = parseFloat(valueStr);
           const mode = parseInt(modeStr, 10);
 
-          if (isNaN(ticketId) || isNaN(value) || isNaN(mode)) continue;
+          if (isNaN(ticketId) || !action) continue;
 
-          if (action.trim().toLowerCase() === 'open') {
-            // Calculate base cost based on mode
+          // Fetch linked items for distributing costs (for both open and close)
+          let linkedItems = [];
+          try {
+            linkedItems = await ItemTicketService.getItemsForTicket(ticketId);
+          } catch (e) {
+            console.error("Could not fetch items for ticket", ticketId);
+          }
+          const groupId = Date.now().toString() + Math.random().toString(36).substr(2, 5);
+
+          if (action === 'open') {
+            if (isNaN(value) || isNaN(mode)) continue;
+
             let baseCost = 0;
             try {
                const res = await TicketCostService.calculateBaseCost(ticketId, mode);
@@ -609,10 +646,6 @@ const TicketKanban = () => {
             }
 
             const calculatedCost = baseCost * (value / 100);
-
-            // Fetch linked items and save reopen cost
-            const linkedItems = await ItemTicketService.getItemsForTicket(ticketId);
-            const groupId = Date.now().toString() + Math.random().toString(36).substr(2, 5);
 
             if (linkedItems && linkedItems.length > 0) {
               const dividedCost = calculatedCost / linkedItems.length;
@@ -625,6 +658,35 @@ const TicketKanban = () => {
 
             // Update ticket status to In Progress (assigné) which is 2
             await TicketService.updateTicket(ticketId, { status: 2 });
+          } else if (action === 'close') {
+            // If value >= 0, we save a super cost (even if it's 0)
+            if (!isNaN(value) && value >= 0) {
+              if (linkedItems && linkedItems.length > 0) {
+                const dividedCost = value / linkedItems.length;
+                for (const item of linkedItems) {
+                  await TicketCostService.saveSuperCost(ticketId, dividedCost, item.items_id, item.itemtype, groupId);
+                }
+              } else {
+                await TicketCostService.saveSuperCost(ticketId, value, null, null, groupId);
+              }
+            }
+
+            // Update ticket status to Terminé (6) and add a closing note
+            try {
+              const ticketObj = await TicketService.getTicket(ticketId);
+              const currentContent = ticketObj.content || '';
+              const formattedDate = new Date().toLocaleDateString('fr-FR');
+              const closingNote = `\n\n[Clôture par Import - Date : ${formattedDate}]`;
+              const updatedContent = currentContent + closingNote;
+              
+              await TicketService.updateTicket(ticketId, { 
+                status: 6, 
+                content: updatedContent 
+              });
+            } catch (err) {
+              // Fallback if we can't get current content
+              await TicketService.updateTicket(ticketId, { status: 6 });
+            }
           }
         }
         await fetchTickets();
@@ -1394,6 +1456,18 @@ const TicketReopenModal = ({ isOpen, onClose, data, setData, onCancelSuperCost, 
 
           {data.showPercentage && (
             <div className="form-group" style={{ marginTop: '16px', padding: '16px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#334155' }}>Mode de calcul</label>
+              <select
+                style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #cbd5e1', marginBottom: '12px' }}
+                value={data.mode || 1}
+                onChange={e => setData(prev => ({ ...prev, mode: parseInt(e.target.value, 10) }))}
+              >
+                <option value={1}>1 - Calcul par le dernier super coût</option>
+                <option value={2}>2 - Calcul par le premier super coût</option>
+                <option value={3}>3 - Moyenne de tous les super coûts</option>
+                <option value={4}>4 - Somme des super coûts</option>
+              </select>
+
               <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#334155' }}>Pourcentage du coût (%)</label>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <input
@@ -1408,7 +1482,7 @@ const TicketReopenModal = ({ isOpen, onClose, data, setData, onCancelSuperCost, 
                   type="button" 
                   className="edit-nav-btn"
                   style={{ backgroundColor: '#10b981', margin: 0 }}
-                  onClick={() => onReopenTicket(data.ticketId, data.percentage, data.targetColumnId)}
+                  onClick={() => onReopenTicket(data.ticketId, data.percentage, data.mode, data.targetColumnId)}
                 >
                   Valider
                 </button>
